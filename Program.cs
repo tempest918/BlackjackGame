@@ -96,120 +96,167 @@ namespace BlackjackGame
             {
                 card.Display();
             }
+            Console.WriteLine();
             Console.WriteLine($"Score: {Score}");
-        }
-    }
-
-    class Dealer : Player
-    {
-        public Dealer() : base("Dealer") { }
-
-        public void DisplayPartialHand()
-        {
-            Console.WriteLine($"{Name}'s hand:");
-            Console.WriteLine("Face down card");
-            Hand[1].Display();
-        }
-    }
-
-    class BlackjackGame
-    {
-        // Deck property to store the deck of cards
-        public Deck Deck { get; set; }
-
-        // Constructor to initialize the deck
-        public BlackjackGame()
-        {
-            Deck = new Deck();
+            Console.WriteLine();
         }
 
-        // Method to start the game
-        public void StartGame()
+        class Dealer : Player
         {
-            Player player = new Player("Player");
-            Dealer dealer = new Dealer();
+            public Dealer() : base("Dealer") { }
 
-            // Shuffle the deck
-            Deck.Shuffle();
-
-            // Draw two cards for the player and dealer
-            player.DrawCard(Deck);
-            player.DrawCard(Deck);
-            dealer.DrawCard(Deck);
-            dealer.DrawCard(Deck);
-
-            // Display the player's hand
-            player.DisplayHand();
-
-            // Display the dealer's partial hand
-            dealer.DisplayPartialHand();
-
-            // Check if the player has won
-            if (HasPlayerWon(player, dealer))
+            public void DisplayPartialHand()
             {
-                return;
+                Console.WriteLine($"{Name}'s hand:");
+                Console.WriteLine("Face down card");
+                Hand[1].Display();
+                Console.WriteLine();
             }
         }
 
-        // Method to check if the player has won
-        public bool HasPlayerWon(Player player, Dealer dealer)
+        class BlackjackGame
         {
-            if (player.Score == 21)
+            // Deck property to store the deck of cards
+            public Deck Deck { get; set; }
+
+            // Constructor to initialize the game
+            public BlackjackGame()
             {
-                Console.WriteLine("Player has won!");
-                return true;
+                Console.Clear();
+                Console.WriteLine("Welcome to Blackjack!");
+                Console.WriteLine("----------------------");
+
+                Deck = new Deck();
+                StartGame();
+
             }
-            else if (player.Score > 21)
+
+            // Method to start the game
+            public void StartGame()
             {
-                Console.WriteLine("Player has lost!");
-                return true;
+                // Create a player and dealer object, and set the game state to not over
+                Player player = new Player("Player");
+                Dealer dealer = new Dealer();
+                bool gameOver = false;
+
+                // Shuffle the deck
+                Deck.Shuffle();
+
+                // Draw two cards for the player and dealer
+                player.DrawCard(Deck);
+                player.DrawCard(Deck);
+                dealer.DrawCard(Deck);
+                dealer.DrawCard(Deck);
+
+                // Display the player's hand
+                player.DisplayHand();
+
+                // Display the dealer's partial hand
+                dealer.DisplayPartialHand();
+
+                // Game loop
+                while (!gameOver)
+                {
+                    Console.WriteLine("Choose an option:");
+                    Console.WriteLine("1. Hit");
+                    Console.WriteLine("2. Stay");
+
+                    string choice = Console.ReadLine();
+                    Console.Clear();
+
+                    switch (choice)
+                    {
+                        case "1":
+                            player.DrawCard(Deck);
+                            player.DisplayHand();
+                            dealer.DisplayPartialHand();
+                            if (player.Score > 21)
+                            {
+                                Console.WriteLine("***BUST!***");
+                                gameOver = true;
+                            }
+                            break;
+                        case "2":
+                            while (dealer.Score < 17)
+                            {
+                                dealer.DrawCard(Deck);
+                            }
+                            player.DisplayHand();
+                            dealer.DisplayHand();
+
+                            gameOver = true;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
+                }
+
+                // Check if the You Win
+                if (HasPlayerWon(player, dealer))
+                {
+                    return;
+                }
             }
-            else if (dealer.Score > 21)
+
+            // Method to check if the player has won
+            public bool HasPlayerWon(Player player, Dealer dealer)
             {
-                Console.WriteLine("Player has won!");
-                return true;
-            }
-            else if (dealer.Score == 21)
-            {
-                Console.WriteLine("Player has lost!");
-                return true;
-            }
-            else if (player.Score > dealer.Score)
-            {
-                Console.WriteLine("Player has won!");
-                return true;
-            }
-            else if (player.Score < dealer.Score)
-            {
-                Console.WriteLine("Player has lost!");
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("It's a tie!");
-                return true;
+                if (player.Score == 21)
+                {
+                    Console.WriteLine("You Win!");
+                    return true;
+                }
+                else if (player.Score > 21)
+                {
+                    Console.WriteLine("You Lose!");
+                    return true;
+                }
+                else if (dealer.Score > 21)
+                {
+                    Console.WriteLine("You Win!");
+                    return true;
+                }
+                else if (dealer.Score == 21)
+                {
+                    Console.WriteLine("You Lose!");
+                    return true;
+                }
+                else if (player.Score > dealer.Score)
+                {
+                    Console.WriteLine("You Win!");
+                    return true;
+                }
+                else if (player.Score < dealer.Score)
+                {
+                    Console.WriteLine("You Lose!");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("It's a tie!");
+                    return true;
+                }
             }
         }
-    }
 
-    class Program
-    {
-        // Main method to test the Deck class
-        static void Main(string[] args)
+        class Program
         {
-            BlackjackGame game = new BlackjackGame();
+            static void Main(string[] args)
+            {
+                BlackjackGame game = new BlackjackGame();
 
-        /*             
-            Console.WriteLine("Deck Order (Initial)");
-            game.Deck.DisplayDeck();
+                // Stuff to test the Deck class
+                /*             
+                    Console.WriteLine("Deck Order (Initial)");
+                    game.Deck.DisplayDeck();
 
-            game.Deck.Shuffle();
-            Console.WriteLine("\nDeck Order (After Shuffling)");
-            game.Deck.DisplayDeck();
-        */
+                    game.Deck.Shuffle();
+                    Console.WriteLine("\nDeck Order (After Shuffling)");
+                    game.Deck.DisplayDeck();
+                */
 
-            game.StartGame();
-
+            }
         }
     }
 }
