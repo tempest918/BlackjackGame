@@ -69,6 +69,49 @@ namespace BlackjackGame
         }
     }
 
+    class Player
+    {
+        public string Name { get; set; }
+        public List<Card> Hand { get; set; }
+        public int Score { get; set; }
+
+        public Player(string name)
+        {
+            Name = name;
+            Hand = new List<Card>();
+            Score = 0;
+        }
+
+        public void DrawCard(Deck deck)
+        {
+            Card drawnCard = deck.Draw();
+            Hand.Add(drawnCard);
+            Score += drawnCard.Value;
+        }
+
+        public void DisplayHand()
+        {
+            Console.WriteLine($"{Name}'s hand:");
+            foreach (Card card in Hand)
+            {
+                card.Display();
+            }
+            Console.WriteLine($"Score: {Score}");
+        }
+    }
+
+    class Dealer : Player
+    {
+        public Dealer() : base("Dealer") { }
+
+        public void DisplayPartialHand()
+        {
+            Console.WriteLine($"{Name}'s hand:");
+            Console.WriteLine("Face down card");
+            Hand[1].Display();
+        }
+    }
+
     class BlackjackGame
     {
         // Deck property to store the deck of cards
@@ -79,6 +122,74 @@ namespace BlackjackGame
         {
             Deck = new Deck();
         }
+
+        // Method to start the game
+        public void StartGame()
+        {
+            Player player = new Player("Player");
+            Dealer dealer = new Dealer();
+
+            // Shuffle the deck
+            Deck.Shuffle();
+
+            // Draw two cards for the player and dealer
+            player.DrawCard(Deck);
+            player.DrawCard(Deck);
+            dealer.DrawCard(Deck);
+            dealer.DrawCard(Deck);
+
+            // Display the player's hand
+            player.DisplayHand();
+
+            // Display the dealer's partial hand
+            dealer.DisplayPartialHand();
+
+            // Check if the player has won
+            if (HasPlayerWon(player, dealer))
+            {
+                return;
+            }
+        }
+
+        // Method to check if the player has won
+        public bool HasPlayerWon(Player player, Dealer dealer)
+        {
+            if (player.Score == 21)
+            {
+                Console.WriteLine("Player has won!");
+                return true;
+            }
+            else if (player.Score > 21)
+            {
+                Console.WriteLine("Player has lost!");
+                return true;
+            }
+            else if (dealer.Score > 21)
+            {
+                Console.WriteLine("Player has won!");
+                return true;
+            }
+            else if (dealer.Score == 21)
+            {
+                Console.WriteLine("Player has lost!");
+                return true;
+            }
+            else if (player.Score > dealer.Score)
+            {
+                Console.WriteLine("Player has won!");
+                return true;
+            }
+            else if (player.Score < dealer.Score)
+            {
+                Console.WriteLine("Player has lost!");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("It's a tie!");
+                return true;
+            }
+        }
     }
 
     class Program
@@ -88,12 +199,17 @@ namespace BlackjackGame
         {
             BlackjackGame game = new BlackjackGame();
 
+        /*             
             Console.WriteLine("Deck Order (Initial)");
             game.Deck.DisplayDeck();
 
             game.Deck.Shuffle();
             Console.WriteLine("\nDeck Order (After Shuffling)");
             game.Deck.DisplayDeck();
+        */
+
+            game.StartGame();
+
         }
     }
 }
