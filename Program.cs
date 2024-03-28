@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BlackjackGame
 {
@@ -88,32 +89,60 @@ namespace BlackjackGame
             public string Name { get; set; }
             public List<Card> Hand { get; set; }
             public int Score { get; set; }
+        public int AceCount { get; set; }
 
             public Player(string name)
             {
                 Name = name;
                 Hand = new List<Card>();
                 Score = 0;
+            AceCount = 0;
             }
 
             public void DrawCard(Deck deck)
             {
                 Card drawnCard = deck.Draw();
                 Hand.Add(drawnCard);
-                Score += drawnCard.Value;
+                if (drawnCard.Face == "Ace")
+            {
+                AceCount++;
+            }
+        }
+
+        // Calculate the score of the provided hand
+        public int CalculateScore()
+        {
+            Score = 0;
+
+            foreach (Card card in Hand)
+            {
+                Score += card.Value;
+                if (card.Face == "Ace")
+                {
+                    AceCount++;
+                }
             }
 
-            public void DisplayHand()
+            while (Score > 21 && AceCount > 0)
             {
-                Console.WriteLine($"{Name}'s hand:");
-                foreach (Card card in Hand)
-                {
-                    card.Display();
-                }
-                Console.WriteLine();
-                Console.WriteLine($"Score: {Score}");
-                Console.WriteLine();
+                Score -= 10;
+                AceCount--;
             }
+
+            return Score;
+            }
+
+        public void DisplayHand()
+        {
+            Console.WriteLine($"{Name}'s hand:");
+            foreach (Card card in Hand)
+            {
+                card.Display();
+            }
+            Console.WriteLine();
+            Console.WriteLine($"Score: {CalculateScore()}");
+            Console.WriteLine();
+        }
 
             class Dealer : Player
             {
@@ -184,25 +213,26 @@ namespace BlackjackGame
                         string choice = Console.ReadLine();
                         Console.Clear();
 
-                        switch (choice)
-                        {
-                            case "1":
-                                player.DrawCard(Deck);
-                                player.DisplayHand();
-                                dealer.DisplayPartialHand();
-                                if (player.Score > 21)
-                                {
-                                    Console.WriteLine("***BUST!***");
-                                    gameOver = true;
-                                }
-                                break;
-                            case "2":
-                                while (dealer.Score < 17)
-                                {
-                                    dealer.DrawCard(Deck);
-                                }
-                                player.DisplayHand();
-                                dealer.DisplayHand();
+                    switch (choice)
+                    {
+                        case "1":
+                            player.DrawCard(Deck);
+                            player.DisplayHand();
+                            dealer.DisplayPartialHand();
+                            if (player.CalculateScore() > 21)
+                            {
+                                Console.WriteLine("***BUST!***");
+                                Console.WriteLine();
+                                gameOver = true;
+                            }
+                            break;
+                        case "2":
+                            while (dealer.CalculateScore() < 17)
+                            {
+                                dealer.DrawCard(Deck);
+                            }
+                            player.DisplayHand();
+                            dealer.DisplayHand();
 
                                 gameOver = true;
                                 break;
@@ -219,46 +249,46 @@ namespace BlackjackGame
                     }
                 }
 
-                // Method to check if the player has won
-                public bool HasPlayerWon(Player player, Dealer dealer)
+            // Method to check if the player has won
+            public bool HasPlayerWon(Player player, Dealer dealer)
+            {
+                if (player.CalculateScore() == 21)
                 {
-                    if (player.Score == 21)
-                    {
-                        Console.WriteLine("You Win!");
-                        return true;
-                    }
-                    else if (player.Score > 21)
-                    {
-                        Console.WriteLine("You Lose!");
-                        return true;
-                    }
-                    else if (dealer.Score > 21)
-                    {
-                        Console.WriteLine("You Win!");
-                        return true;
-                    }
-                    else if (dealer.Score == 21)
-                    {
-                        Console.WriteLine("You Lose!");
-                        return true;
-                    }
-                    else if (player.Score > dealer.Score)
-                    {
-                        Console.WriteLine("You Win!");
-                        return true;
-                    }
-                    else if (player.Score < dealer.Score)
-                    {
-                        Console.WriteLine("You Lose!");
-                        return true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("It's a tie!");
-                        return true;
-                    }
+                    Console.WriteLine("You Win!");
+                    return true;
+                }
+                else if (player.CalculateScore() > 21)
+                {
+                    Console.WriteLine("You Lose!");
+                    return true;
+                }
+                else if (dealer.CalculateScore() > 21)
+                {
+                    Console.WriteLine("You Win!");
+                    return true;
+                }
+                else if (dealer.CalculateScore() == 21)
+                {
+                    Console.WriteLine("You Lose!");
+                    return true;
+                }
+                else if (player.CalculateScore() > dealer.Score)
+                {
+                    Console.WriteLine("You Win!");
+                    return true;
+                }
+                else if (player.CalculateScore() < dealer.Score)
+                {
+                    Console.WriteLine("You Lose!");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("It's a tie!");
+                    return true;
                 }
             }
+        }
 
             class Program
             {
