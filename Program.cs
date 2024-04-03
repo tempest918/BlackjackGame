@@ -89,14 +89,14 @@ namespace BlackjackGame
             public string Name { get; set; }
             public List<Card> Hand { get; set; }
             public int Score { get; set; }
-        public int AceCount { get; set; }
+            public int AceCount { get; set; }
 
             public Player(string name)
             {
                 Name = name;
                 Hand = new List<Card>();
                 Score = 0;
-            AceCount = 0;
+                AceCount = 0;
             }
 
             public void DrawCard(Deck deck)
@@ -104,45 +104,45 @@ namespace BlackjackGame
                 Card drawnCard = deck.Draw();
                 Hand.Add(drawnCard);
                 if (drawnCard.Face == "Ace")
-            {
-                AceCount++;
-            }
-        }
-
-        // Calculate the score of the provided hand
-        public int CalculateScore()
-        {
-            Score = 0;
-
-            foreach (Card card in Hand)
-            {
-                Score += card.Value;
-                if (card.Face == "Ace")
                 {
                     AceCount++;
                 }
             }
 
-            while (Score > 21 && AceCount > 0)
+            // Calculate the score of the provided hand
+            public int CalculateScore()
             {
-                Score -= 10;
-                AceCount--;
+                Score = 0;
+
+                foreach (Card card in Hand)
+                {
+                    Score += card.Value;
+                    if (card.Face == "Ace")
+                    {
+                        AceCount++;
+                    }
+                }
+
+                while (Score > 21 && AceCount > 0)
+                {
+                    Score -= 10;
+                    AceCount--;
+                }
+
+                return Score;
             }
 
-            return Score;
-            }
-
-        public void DisplayHand()
-        {
-            Console.WriteLine($"{Name}'s hand:");
-            foreach (Card card in Hand)
+            public void DisplayHand()
             {
-                card.Display();
+                Console.WriteLine($"{Name}'s hand:");
+                foreach (Card card in Hand)
+                {
+                    card.Display();
+                }
+                Console.WriteLine();
+                Console.WriteLine($"Score: {CalculateScore()}");
+                Console.WriteLine();
             }
-            Console.WriteLine();
-            Console.WriteLine($"Score: {CalculateScore()}");
-            Console.WriteLine();
-        }
 
             class Dealer : Player
             {
@@ -213,26 +213,26 @@ namespace BlackjackGame
                         string choice = Console.ReadLine();
                         Console.Clear();
 
-                    switch (choice)
-                    {
-                        case "1":
-                            player.DrawCard(Deck);
-                            player.DisplayHand();
-                            dealer.DisplayPartialHand();
-                            if (player.CalculateScore() > 21)
-                            {
-                                Console.WriteLine("***BUST!***");
-                                Console.WriteLine();
-                                gameOver = true;
-                            }
-                            break;
-                        case "2":
-                            while (dealer.CalculateScore() < 17)
-                            {
-                                dealer.DrawCard(Deck);
-                            }
-                            player.DisplayHand();
-                            dealer.DisplayHand();
+                        switch (choice)
+                        {
+                            case "1":
+                                player.DrawCard(Deck);
+                                player.DisplayHand();
+                                dealer.DisplayPartialHand();
+                                if (player.CalculateScore() > 21)
+                                {
+                                    Console.WriteLine("***BUST!***");
+                                    Console.WriteLine();
+                                    gameOver = true;
+                                }
+                                break;
+                            case "2":
+                                while (dealer.CalculateScore() < 17)
+                                {
+                                    dealer.DrawCard(Deck);
+                                }
+                                player.DisplayHand();
+                                dealer.DisplayHand();
 
                                 gameOver = true;
                                 break;
@@ -249,53 +249,62 @@ namespace BlackjackGame
                     }
                 }
 
-            // Method to check if the player has won
-            public bool HasPlayerWon(Player player, Dealer dealer)
-            {
-                if (player.CalculateScore() == 21)
+                // Method to check if the player has won
+                public bool HasPlayerWon(Player player, Dealer dealer)
                 {
-                    Console.WriteLine("You Win!");
-                    return true;
-                }
-                else if (player.CalculateScore() > 21)
-                {
-                    Console.WriteLine("You Lose!");
-                    return true;
-                }
-                else if (dealer.CalculateScore() > 21)
-                {
-                    Console.WriteLine("You Win!");
-                    return true;
-                }
-                else if (dealer.CalculateScore() == 21)
-                {
-                    Console.WriteLine("You Lose!");
-                    return true;
-                }
-                else if (player.CalculateScore() > dealer.Score)
-                {
-                    Console.WriteLine("You Win!");
-                    return true;
-                }
-                else if (player.CalculateScore() < dealer.Score)
-                {
-                    Console.WriteLine("You Lose!");
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("It's a tie!");
-                    return true;
+                    if (player.CalculateScore() == 21)
+                    {
+                        Console.WriteLine("You Win!");
+                        return true;
+                    }
+                    else if (player.CalculateScore() > 21)
+                    {
+                        Console.WriteLine("You Lose!");
+                        return true;
+                    }
+                    else if (dealer.CalculateScore() > 21)
+                    {
+                        Console.WriteLine("You Win!");
+                        return true;
+                    }
+                    else if (dealer.CalculateScore() == 21)
+                    {
+                        Console.WriteLine("You Lose!");
+                        return true;
+                    }
+                    else if (player.CalculateScore() > dealer.Score)
+                    {
+                        Console.WriteLine("You Win!");
+                        return true;
+                    }
+                    else if (player.CalculateScore() < dealer.Score)
+                    {
+                        Console.WriteLine("You Lose!");
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("It's a tie!");
+                        return true;
+                    }
                 }
             }
-        }
 
             class Program
             {
                 static void Main(string[] args)
                 {
-                    BlackjackGame game = new BlackjackGame();
+                    bool playAgain = true;
 
+                    while (playAgain)
+                    {
+                        BlackjackGame game = new BlackjackGame();
+
+                        // Prompt user if they want to play again at the end
+                        Console.WriteLine("Would you like to play again? (yes/no)");
+                        string playAgainInput = Console.ReadLine();
+                        playAgain = playAgainInput.ToLower() == "yes";
+                    }
                     // Stuff to test the Deck class
                     /*             
                         Console.WriteLine("Deck Order (Initial)");
