@@ -1,6 +1,22 @@
-﻿using System;
+﻿/*
+ * File Name: Program.cs
+ * Author: Anthony Barnes and Lucian Craft
+ * Date Created: 03/25/2024
+ * Date Modified: 04/08/2024
+ * Description: This is a simple blackjack game. The player will play against the dealer and try to get as close to 21 as possible without going over. The player will start with $100 and can bet any amount on each round. The player will win 1.5 times their bet if they get blackjack. 
+ * The player will lose their bet if they go over 21 or have a lower score than the dealer. The game will continue until the player runs out of money or chooses to quit.
+ * Modifications:
+ * - created classes to represent cards, deck, player, and dealer
+ * - added more comments
+ * - added basic victory conditions
+ * - added interactive menu with options to hit or stay
+ * - reworked Ace logic
+ * - added card art
+ * - added logic to restart the game
+ * - added player money and betting system
+ */
+using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 
 namespace BlackjackGame
 {
@@ -90,13 +106,15 @@ namespace BlackjackGame
             public List<Card> Hand { get; set; }
             public int Score { get; set; }
             public int AceCount { get; set; }
+            public int Money { get; set; }
 
-            public Player(string name)
+            public Player(string name, int startingMoney = 100)
             {
                 Name = name;
                 Hand = new List<Card>();
                 Score = 0;
                 AceCount = 0;
+                Money = startingMoney;
             }
 
             public void DrawCard(Deck deck)
@@ -144,6 +162,17 @@ namespace BlackjackGame
                 Console.WriteLine();
             }
 
+            public void ClearHand()
+            {
+                Hand.Clear();
+            }
+
+            public void ResetScore()
+            {
+                Score = 0;
+            }
+
+
             class Dealer : Player
             {
                 public Dealer() : base("Dealer") { }
@@ -173,20 +202,66 @@ namespace BlackjackGame
                 {
                     Console.Clear();
                     Console.WriteLine("Welcome to Blackjack!");
-                    Console.WriteLine("----------------------");
+                    Console.WriteLine("----------------------\r\n");
 
                     Deck = new Deck();
                     StartGame();
 
                 }
 
-                // Method to start the game
+                // Method to start the game and execute the game loop
                 public void StartGame()
                 {
                     // Create a player and dealer object, and set the game state to not over
                     Player player = new Player("Player");
                     Dealer dealer = new Dealer();
+
                     bool gameOver = false;
+
+                    while (!gameOver)
+                    {
+                        PlayRound(player, dealer);
+
+                        // Reset the player and dealer hands and scores
+                        player.ClearHand();
+                        player.ResetScore();
+                        dealer.ClearHand();
+                        dealer.ResetScore();
+
+                        // Check if the player is out of money
+                        if (player.Money <= 0)
+                        {
+                            Console.WriteLine("Game Over! You're out of money.");
+                            gameOver = true;
+                        }
+                        else
+                        {
+                            // Ask the player if they want to play another round
+                            Console.WriteLine("Do you want to play another round? (y/n)");
+                            string choice = Console.ReadLine();
+                            if (choice.ToLower() != "y")
+                            {
+                                gameOver = true;
+                            }
+
+                        }
+                    }
+
+                    // Display the player's final money amount
+                    if (player.Money > 0)
+                    {
+                        Console.WriteLine($"You finished with ${player.Money}.");
+                    }
+                    Console.WriteLine("Thanks for playing!");
+
+                }
+
+                // Method to play a round of blackjack
+                public void PlayRound(Player player, Dealer dealer)
+                {
+                    bool handOver = false;
+                    // Get the bet amount from the player
+                    int bet = GetBetAmount(player);
 
                     // Shuffle the deck
                     Deck.Shuffle();
@@ -203,50 +278,97 @@ namespace BlackjackGame
                     // Display the dealer's partial hand
                     dealer.DisplayPartialHand();
 
-                    // Game loop
-                    while (!gameOver)
+                    // Check if the player has blackjack
+                    if (player.CalculateScore() == 21)
                     {
-                        Console.WriteLine("Choose an option:");
-                        Console.WriteLine("1. Hit");
-                        Console.WriteLine("2. Stay");
-
-                        string choice = Console.ReadLine();
-                        Console.Clear();
-
-                        switch (choice)
+                        Console.WriteLine("Blackjack! You win!");
+                        // player wins 1.5 times the bet when they get blackjack
+                        player.Money += (int)(1.5 * bet);
+                        handOver = true;
+                    }
+                    else
+                    {
+                        // Game Loop
+                        while (!handOver)
                         {
-                            case "1":
-                                player.DrawCard(Deck);
-                                player.DisplayHand();
-                                dealer.DisplayPartialHand();
-                                if (player.CalculateScore() > 21)
-                                {
-                                    Console.WriteLine("***BUST!***");
-                                    Console.WriteLine();
-                                    gameOver = true;
-                                }
-                                break;
-                            case "2":
-                                while (dealer.CalculateScore() < 17)
-                                {
-                                    dealer.DrawCard(Deck);
-                                }
-                                player.DisplayHand();
-                                dealer.DisplayHand();
+                            Console.WriteLine("Choose an option:");
+                            Console.WriteLine("1. Hit");
+                            Console.WriteLine("2. Stay");
 
-                                gameOver = true;
-                                break;
-                            default:
-                                Console.WriteLine("Invalid choice. Please try again.");
-                                break;
+                            string choice = Console.ReadLine();
+                            Console.Clear();
+
+                            switch (choice)
+                            {
+                                case "1":
+                                    player.DrawCard(Deck);
+                                    player.DisplayHand();
+                                    dealer.DisplayPartialHand();
+                                    if (player.CalculateScore() > 21)
+                                    {
+                                        Console.WriteLine("***BUST!***");
+                                        Console.WriteLine();
+                                        handOver = true;
+                                    }
+                                    break;
+                                case "2":
+                                    while (dealer.CalculateScore() < 17)
+                                    {
+                                        dealer.DrawCard(Deck);
+                                    }
+                                    player.DisplayHand();
+                                    dealer.DisplayHand();
+
+                                    handOver = true;
+                                    break;
+                                default:
+                                    Console.WriteLine("Invalid choice. Please try again.");
+                                    break;
+                            }
+                        }
+
+                        // Check if the player has won
+                        if (HasPlayerWon(player, dealer))
+                        {
+                            player.Money += bet;
+                        }
+                        else
+                        {
+                            player.Money -= bet;
+                        }
+                    }
+                }
+                private int GetBetAmount(Player player)
+                {
+                    // set up vars
+                    int betAmount = 0;
+                    bool validBet = false;
+
+                    // loop until valid bet
+                    while (!validBet)
+                    {
+                        // get bet amount from player
+                        Console.WriteLine($"You have ${player.Money}. How much would you like to bet?\r\n");
+                        string betInput = Console.ReadLine();
+
+                        if (int.TryParse(betInput, out betAmount))
+                        {
+                            if (betAmount > player.Money)
+                            {
+                                Console.WriteLine("You don't have enough money to make that bet. Please try again.");
+                            }
+                            else
+                            {
+                                validBet = true;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid input. Please enter a valid number.");
                         }
                     }
 
-                    // Check if the You Win
-                    if (HasPlayerWon(player, dealer))
-                    {
-                        return;
-                    }
+                    return betAmount;
                 }
 
                 // Method to check if the player has won
@@ -260,7 +382,7 @@ namespace BlackjackGame
                     else if (player.CalculateScore() > 21)
                     {
                         Console.WriteLine("You Lose!");
-                        return true;
+                        return false;
                     }
                     else if (dealer.CalculateScore() > 21)
                     {
@@ -270,7 +392,7 @@ namespace BlackjackGame
                     else if (dealer.CalculateScore() == 21)
                     {
                         Console.WriteLine("You Lose!");
-                        return true;
+                        return false;
                     }
                     else if (player.CalculateScore() > dealer.Score)
                     {
@@ -280,7 +402,7 @@ namespace BlackjackGame
                     else if (player.CalculateScore() < dealer.Score)
                     {
                         Console.WriteLine("You Lose!");
-                        return true;
+                        return false;
                     }
                     else
                     {
@@ -294,17 +416,9 @@ namespace BlackjackGame
             {
                 static void Main(string[] args)
                 {
-                    bool playAgain = true;
 
-                    while (playAgain)
-                    {
-                        BlackjackGame game = new BlackjackGame();
+                    BlackjackGame game = new BlackjackGame();
 
-                        // Prompt user if they want to play again at the end
-                        Console.WriteLine("Would you like to play again? (yes/no)");
-                        string playAgainInput = Console.ReadLine();
-                        playAgain = playAgainInput.ToLower() == "yes";
-                    }
                     // Stuff to test the Deck class
                     /*             
                         Console.WriteLine("Deck Order (Initial)");
