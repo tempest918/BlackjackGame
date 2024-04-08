@@ -1,6 +1,6 @@
 ﻿/*
  * File Name: Program.cs
- * Author: Anthony Barnes and Lucian Craft
+ * Author: Anthony Barnes and Lou Craft
  * Date Created: 03/25/2024
  * Date Modified: 04/08/2024
  * Description: This is a simple blackjack game. The player will play against the dealer and try to get as close to 21 as possible without going over. The player will start with $100 and can bet any amount on each round. The player will win 1.5 times their bet if they get blackjack. 
@@ -172,7 +172,6 @@ namespace BlackjackGame
                 Score = 0;
             }
 
-
             class Dealer : Player
             {
                 public Dealer() : base("Dealer") { }
@@ -200,11 +199,10 @@ namespace BlackjackGame
                 // Constructor to initialize the game
                 public BlackjackGame()
                 {
-                    Console.Clear();
+                    //Console.Clear();
                     Console.WriteLine("Welcome to Blackjack!");
                     Console.WriteLine("----------------------\r\n");
 
-                    Deck = new Deck();
                     StartGame();
 
                 }
@@ -259,7 +257,10 @@ namespace BlackjackGame
                 // Method to play a round of blackjack
                 public void PlayRound(Player player, Dealer dealer)
                 {
+                    // Create a new deck and set the handOver flag to false
+                    Deck = new Deck();
                     bool handOver = false;
+
                     // Get the bet amount from the player
                     int bet = GetBetAmount(player);
 
@@ -283,7 +284,7 @@ namespace BlackjackGame
                     {
                         Console.WriteLine("Blackjack! You win!");
                         // player wins 1.5 times the bet when they get blackjack
-                        player.Money += (int)(1.5 * bet);
+                        player.Money += (int)(2.5 * bet);
                         handOver = true;
                     }
                     else
@@ -296,7 +297,7 @@ namespace BlackjackGame
                             Console.WriteLine("2. Stay");
 
                             string choice = Console.ReadLine();
-                            Console.Clear();
+                            //Console.Clear();
 
                             switch (choice)
                             {
@@ -330,7 +331,15 @@ namespace BlackjackGame
                         // Check if the player has won
                         if (HasPlayerWon(player, dealer))
                         {
-                            player.Money += bet;
+                            // player wins 2 times the bet when they win, 1 times the bet when they tie
+                            if(player.CalculateScore() == dealer.CalculateScore())
+                            {
+                                player.Money += bet;
+                            }
+                            else
+                            {
+                                player.Money += 2 * bet;
+                            }
                         }
                         else
                         {
@@ -394,12 +403,12 @@ namespace BlackjackGame
                         Console.WriteLine("You Lose!");
                         return false;
                     }
-                    else if (player.CalculateScore() > dealer.Score)
+                    else if (player.CalculateScore() > dealer.CalculateScore())
                     {
                         Console.WriteLine("You Win!");
                         return true;
                     }
-                    else if (player.CalculateScore() < dealer.Score)
+                    else if (player.CalculateScore() < dealer.CalculateScore())
                     {
                         Console.WriteLine("You Lose!");
                         return false;
