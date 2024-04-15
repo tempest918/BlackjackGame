@@ -14,6 +14,7 @@
  * - added card art
  * - added logic to restart the game
  * - added player money and betting system
+ * - changed winnings to switch statement
  */
 using System;
 using System.Collections.Generic;
@@ -329,21 +330,19 @@ namespace BlackjackGame
                         }
 
                         // Check if the player has won
-                        if (HasPlayerWon(player, dealer))
-                        {
-                            // player wins 2 times the bet when they win, 1 times the bet when they tie
-                            if(player.CalculateScore() == dealer.CalculateScore())
-                            {
-                                player.Money += bet;
-                            }
-                            else
-                            {
+                        switch (HasPlayerWon(player, dealer))
+                        {   case 0: 
+                            //typical win
                                 player.Money += 2 * bet;
-                            }
-                        }
-                        else
-                        {
-                            player.Money -= bet;
+                                break;
+                            case 1:
+                                //typical loss
+                                player.Money -= bet;
+                                break;
+                            case 2:
+                                //tie
+                                player.Money += bet;
+                                break;
                         }
                     }
                 }
@@ -381,42 +380,27 @@ namespace BlackjackGame
                 }
 
                 // Method to check if the player has won
-                public bool HasPlayerWon(Player player, Dealer dealer)
+                public int HasPlayerWon(Player player, Dealer dealer)
                 {
-                    if (player.CalculateScore() == 21)
+                    if(player.CalculateScore() == 21 ||
+                        dealer.CalculateScore() > 21 ||
+                        player.CalculateScore() < 21 &&
+                        player.CalculateScore() > dealer.CalculateScore())
                     {
                         Console.WriteLine("You Win!");
-                        return true;
+                        return 0;
                     }
-                    else if (player.CalculateScore() > 21)
+                    else if (player.CalculateScore() > 21 ||
+                            dealer.CalculateScore() == 21 ||
+                            player.CalculateScore() < dealer.CalculateScore())
                     {
                         Console.WriteLine("You Lose!");
-                        return false;
-                    }
-                    else if (dealer.CalculateScore() > 21)
-                    {
-                        Console.WriteLine("You Win!");
-                        return true;
-                    }
-                    else if (dealer.CalculateScore() == 21)
-                    {
-                        Console.WriteLine("You Lose!");
-                        return false;
-                    }
-                    else if (player.CalculateScore() > dealer.CalculateScore())
-                    {
-                        Console.WriteLine("You Win!");
-                        return true;
-                    }
-                    else if (player.CalculateScore() < dealer.CalculateScore())
-                    {
-                        Console.WriteLine("You Lose!");
-                        return false;
+                        return 1;
                     }
                     else
                     {
                         Console.WriteLine("It's a tie!");
-                        return true;
+                        return 2;
                     }
                 }
             }
