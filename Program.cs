@@ -15,6 +15,7 @@
  * - added logic to restart the game
  * - added player money and betting system
  * - changed winnings to switch statement
+ * - fix Ace logic after renaming face string to "A"
  */
 using System;
 using System.Collections.Generic;
@@ -122,7 +123,7 @@ namespace BlackjackGame
             {
                 Card drawnCard = deck.Draw();
                 Hand.Add(drawnCard);
-                if (drawnCard.Face == "Ace")
+                if (drawnCard.Face == "A")
                 {
                     AceCount++;
                 }
@@ -136,7 +137,7 @@ namespace BlackjackGame
                 foreach (Card card in Hand)
                 {
                     Score += card.Value;
-                    if (card.Face == "Ace")
+                    if (card.Face == "A")
                     {
                         AceCount++;
                     }
@@ -307,7 +308,7 @@ namespace BlackjackGame
                                     player.DisplayHand();
                                     dealer.DisplayPartialHand();
                                     if (player.CalculateScore() > 21)
-                                    {
+                                        {
                                         Console.WriteLine("***BUST!***");
                                         Console.WriteLine();
                                         handOver = true;
