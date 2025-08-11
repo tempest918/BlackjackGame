@@ -1,0 +1,113 @@
+﻿<ContentPage
+    x:Class="MyBlackjackMAUI.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Grid Padding="10" RowDefinitions="Auto,*,Auto">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label
+                x:Name="lblDealerScore"
+                FontSize="18"
+                HorizontalOptions="Center"
+                Text="Dealer Score: 0" />
+            <FlexLayout
+                x:Name="pnlDealerHand"
+                JustifyContent="Center"
+                MinimumHeightRequest="130"
+                Wrap="Wrap" />
+        </VerticalStackLayout>
+
+        <VerticalStackLayout
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            Spacing="10"
+            VerticalOptions="Center">
+
+            <Label
+                x:Name="lblStatus"
+                FontAttributes="Bold"
+                FontSize="24"
+                HorizontalOptions="Center"
+                Text="Place your bet!"
+                VerticalOptions="Center" />
+
+            <FlexLayout
+                x:Name="pnlPlayerHand"
+                JustifyContent="Center"
+                MinimumHeightRequest="130"
+                Wrap="Wrap" />
+        </VerticalStackLayout>
+
+
+        <VerticalStackLayout Grid.Row="2" Spacing="15">
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Label
+                    x:Name="lblPlayerScore"
+                    FontSize="18"
+                    Text="Player Score: 0" />
+                <Label
+                    x:Name="lblPlayerMoney"
+                    FontSize="18"
+                    Text="Player Money: $100" />
+            </HorizontalStackLayout>
+
+            <VerticalStackLayout x:Name="ControlPanels" HorizontalOptions="Center">
+
+                <HorizontalStackLayout x:Name="BettingControls" Spacing="10">
+                    <Label Text="Bet:" VerticalOptions="Center" />
+                    <Entry
+                        x:Name="txtBet"
+                        Keyboard="Numeric"
+                        Placeholder="Amount"
+                        WidthRequest="100" />
+                    <Button
+                        x:Name="btnBet"
+                        Clicked="btnBet_Click"
+                        Text="Bet" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout
+                    x:Name="ActionControls"
+                    IsVisible="False"
+                    Spacing="10">
+                    <Button
+                        x:Name="btnHit"
+                        Clicked="btnHit_Click"
+                        Text="Hit" />
+                    <Button
+                        x:Name="btnStay"
+                        Clicked="btnStay_Click"
+                        Text="Stay" />
+                </HorizontalStackLayout>
+
+                <VerticalStackLayout
+                    x:Name="GameOverControls"
+                    Margin="0,20,0,0"
+                    IsVisible="False"
+                    Spacing="10">
+
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        HorizontalOptions="Center"
+                        Text="Game Over! You're out of money." />
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                        <Button
+                            x:Name="btnNewGame"
+                            Clicked="btnNewGame_Click"
+                            Text="Start New Game" />
+                        <Button
+                            x:Name="btnQuit"
+                            Clicked="btnQuit_Click"
+                            Text="Quit Game" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>
