@@ -13,6 +13,15 @@ public partial class MainPage : ContentPage
         UpdateUI();
     }
 
+    public BlackjackGameLogic LoadedGame
+    {
+        set
+        {
+            _game = value;
+            UpdateUI();
+        }
+    }
+
     private void btnBet_Click(object sender, EventArgs e)
     {
         if (int.TryParse(txtBet.Text, out int betAmount))
@@ -134,7 +143,7 @@ public partial class MainPage : ContentPage
 
         if (isHidden)
         {
-            border.BackgroundColor = Colors.DarkGreen;
+            border.BackgroundColor = (Color)Application.Current.Resources["FeltGreenDark"];
         }
         else
         {
@@ -179,5 +188,11 @@ public partial class MainPage : ContentPage
     private void btnQuit_Click(object sender, EventArgs e)
     {
         Application.Current.Quit();
+    }
+
+    private async void btnSaveQuit_Click(object sender, EventArgs e)
+    {
+        GameSaves.SaveGame(_game);
+        await Shell.Current.GoToAsync("..");
     }
 }

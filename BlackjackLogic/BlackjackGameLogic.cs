@@ -17,11 +17,11 @@ namespace BlackjackLogic
 
     public class BlackjackGameLogic
     {
-        public Player Player { get; private set; }
-        public Dealer Dealer { get; private set; }
-        public Deck Deck { get; private set; }
-        public GameState CurrentState { get; private set; }
-        public int CurrentBet { get; private set; }
+        public Player Player { get; set; }
+        public Dealer Dealer { get; set; }
+        public Deck Deck { get; set; }
+        public GameState CurrentState { get; set; }
+        public int CurrentBet { get; set; }
 
         public BlackjackGameLogic()
         {
