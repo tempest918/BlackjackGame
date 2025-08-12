@@ -4,7 +4,9 @@ namespace BlackjackLogic
 {
     public static class GameSaves
     {
-        private static string SaveFilePath => Path.Combine(FileSystem.AppDataDirectory, "blackjack_save.json");
+        private static string SaveFilePath => Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "blackjack_save.json");
 
         public static void SaveGame(BlackjackGameLogic game)
         {

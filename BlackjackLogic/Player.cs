@@ -9,6 +9,8 @@ namespace BlackjackLogic
         public List<Card> Hand { get; set; }
         public int Money { get; set; }
 
+        public Player() { }
+
         public Player(string name, int startingMoney = 100)
         {
             Name = name;
