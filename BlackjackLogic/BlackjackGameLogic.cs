@@ -210,6 +210,7 @@ namespace BlackjackLogic
             }
 
             int dealerScore = Dealer.CalculateScore(0);
+            HandResult? insuranceOutcome = null;
 
             // First, resolve insurance bet if one was made
             if (InsuranceBet > 0)
@@ -217,11 +218,11 @@ namespace BlackjackLogic
                 if (dealerScore == 21)
                 {
                     Player.Money += InsuranceBet * 3; // Insurance pays 2:1, player gets bet back + winnings
-                    result.InsuranceResult = HandResult.InsuranceWin;
+                    insuranceOutcome = HandResult.InsuranceWin;
                 }
                 else
                 {
-                    result.InsuranceResult = HandResult.InsuranceLoss;
+                    insuranceOutcome = HandResult.InsuranceLoss;
                 }
             }
 
@@ -259,9 +260,9 @@ namespace BlackjackLogic
             }
 
             // Assign insurance result to the first hand's info for display purposes
-            if (results.Count > 0 && result.InsuranceResult.HasValue)
+            if (results.Count > 0 && insuranceOutcome.HasValue)
             {
-                results[0].InsuranceResult = result.InsuranceResult;
+                results[0].InsuranceResult = insuranceOutcome;
             }
 
             return results;
