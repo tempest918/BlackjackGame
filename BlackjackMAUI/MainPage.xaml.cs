@@ -9,7 +9,6 @@ public partial class MainPage : ContentPage
 {
     private BlackjackGameLogic _game;
     private readonly IAudioManager _audioManager;
-    private IAudioPlayer _bgmPlayer;
 
     public MainPage(IAudioManager audioManager)
     {
@@ -25,13 +24,6 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
         ApplySettings();
-        PlayBgm();
-    }
-
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        _bgmPlayer?.Stop();
     }
 
     public BlackjackGameLogic LoadedGame
@@ -73,30 +65,7 @@ public partial class MainPage : ContentPage
             _ => "#FF1B5E20" // Green
         });
 
-        // BGM Volume
-        if (_bgmPlayer != null)
-        {
-            _bgmPlayer.Volume = Settings.BgmVolume;
-        }
-
         UpdateUI(); // Re-draw cards with new backs
-    }
-
-    private async void PlayBgm()
-    {
-        if (_bgmPlayer?.IsPlaying == true) return;
-
-        try
-        {
-            _bgmPlayer = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("bgm.mp3"));
-            _bgmPlayer.Loop = true;
-            _bgmPlayer.Volume = Settings.BgmVolume;
-            _bgmPlayer.Play();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error playing BGM: {ex.Message}");
-        }
     }
 
     private void btnBet_Click(object sender, EventArgs e)
@@ -356,6 +325,11 @@ public partial class MainPage : ContentPage
 
         // Update all labels and button visibility for a fresh start
         UpdateUI();
+    }
+
+    private async void btnSettings_Click(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(SettingsPage));
     }
 
     private void btnQuit_Click(object sender, EventArgs e)

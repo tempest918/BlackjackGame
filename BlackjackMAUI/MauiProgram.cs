@@ -20,6 +20,9 @@ namespace MyBlackjackMAUI
     		builder.Logging.AddDebug();
 #endif
             builder.Services.AddSingleton(AudioManager.Current);
+            builder.Services.AddSingleton<AppShell>();
+            builder.Services.AddSingleton<MainPage>();
+
             return builder.Build();
         }
     }

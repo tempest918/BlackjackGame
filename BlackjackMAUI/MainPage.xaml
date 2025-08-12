@@ -6,6 +6,8 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Clicked="btnSaveQuit_Click" Text="Save and Quit" />
+        <ToolbarItem Clicked="btnSettings_Click" Text="Settings" />
+        <ToolbarItem Clicked="btnQuit_Click" Text="Quit" />
     </ContentPage.ToolbarItems>
 
     <Grid Padding="10" RowDefinitions="Auto,*,Auto">

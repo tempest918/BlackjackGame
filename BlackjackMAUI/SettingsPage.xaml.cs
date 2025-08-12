@@ -33,6 +33,14 @@ public partial class SettingsPage : ContentPage
         lblDecksValue.Text = ((int)e.NewValue).ToString();
     }
 
+    private void sliderBgmVolume_ValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        if (AppShell.BgmPlayer is not null)
+        {
+            AppShell.BgmPlayer.Volume = e.NewValue;
+        }
+    }
+
     private async void btnSave_Click(object sender, EventArgs e)
     {
         Settings.NumberOfDecks = (int)sliderDecks.Value;
@@ -41,6 +49,11 @@ public partial class SettingsPage : ContentPage
         Settings.SoundEffectsEnabled = switchSoundEffects.IsToggled;
         Settings.BgmVolume = sliderBgmVolume.Value;
         Settings.SoundEffectsVolume = sliderSfxVolume.Value;
+
+        if (AppShell.BgmPlayer is not null)
+        {
+            AppShell.BgmPlayer.Volume = Settings.BgmVolume;
+        }
 
         await Shell.Current.GoToAsync("..");
     }
