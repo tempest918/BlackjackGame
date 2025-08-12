@@ -2,6 +2,7 @@
 
 namespace MyBlackjackMAUI;
 
+[QueryProperty(nameof(LoadedGame), "LoadedGame")]
 public partial class MainPage : ContentPage
 {
     private BlackjackGameLogic _game;
@@ -17,7 +18,10 @@ public partial class MainPage : ContentPage
     {
         set
         {
-            _game = value;
+            if (value != null)
+            {
+                _game = value;
+            }
             UpdateUI();
         }
     }
