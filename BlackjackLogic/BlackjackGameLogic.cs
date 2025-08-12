@@ -45,7 +45,7 @@ namespace BlackjackLogic
             CurrentState = GameState.HandOver;
         }
 
-        public void StartNewHand(int bet)
+        public void StartNewHand(int bet, int numberOfDecks)
         {
             if (bet <= 0 || bet > Player.Money)
             {
@@ -55,7 +55,7 @@ namespace BlackjackLogic
             Bets = new List<int> { bet };
             Player.Money -= bet;
 
-            Deck = new Deck();
+            Deck = new Deck(numberOfDecks);
             Deck.Shuffle();
 
             Player.ClearHands();

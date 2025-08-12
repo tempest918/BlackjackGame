@@ -8,7 +8,7 @@ namespace BlackjackLogic
     {
         public List<Card> Cards { get; set; }
 
-        public Deck()
+        public Deck(int numDecks = 1)
         {
             // Initialize variables and create a new list of cards
             Cards = new List<Card>();
@@ -16,12 +16,15 @@ namespace BlackjackLogic
             string[] faces = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
             int[] values = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
 
-            // Add all cards to the deck
-            for (int i = 0; i < suits.Length; i++)
+            for (int k = 0; k < numDecks; k++)
             {
-                for (int j = 0; j < faces.Length; j++)
+                // Add all cards to the deck
+                for (int i = 0; i < suits.Length; i++)
                 {
-                    Cards.Add(new Card(suits[i], faces[j], values[j]));
+                    for (int j = 0; j < faces.Length; j++)
+                    {
+                        Cards.Add(new Card(suits[i], faces[j], values[j]));
+                    }
                 }
             }
         }

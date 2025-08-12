@@ -15,7 +15,15 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         _audioManager = audioManager;
         _game = new BlackjackGameLogic();
+
+        ApplySettings();
         UpdateUI();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ApplySettings();
     }
 
     public BlackjackGameLogic LoadedGame
@@ -32,9 +40,12 @@ public partial class MainPage : ContentPage
 
     private async void PlaySound(string fileName)
     {
+        if (!Settings.SoundEffectsEnabled) return;
+
         try
         {
             var player = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(fileName));
+            player.Volume = Settings.SoundEffectsVolume;
             player.Play();
         }
         catch (Exception ex)
@@ -44,13 +55,26 @@ public partial class MainPage : ContentPage
         }
     }
 
+    private void ApplySettings()
+    {
+        // Felt Color
+        this.BackgroundColor = Color.FromArgb(Settings.FeltColor switch
+        {
+            "Blue" => "#FF0D47A1",
+            "Red" => "#FFB71C1C",
+            _ => "#FF1B5E20" // Green
+        });
+
+        UpdateUI(); // Re-draw cards with new backs
+    }
+
     private void btnBet_Click(object sender, EventArgs e)
     {
         if (int.TryParse(txtBet.Text, out int betAmount))
         {
             try
             {
-                _game.StartNewHand(betAmount);
+                _game.StartNewHand(betAmount, Settings.NumberOfDecks);
                 lblStatus.Text = "Player's Turn";
                 PlaySound("deal.wav");
                 UpdateUI();
@@ -256,7 +280,11 @@ public partial class MainPage : ContentPage
 
         if (isHidden)
         {
-            border.BackgroundColor = (Color)Application.Current.Resources["FeltGreenDark"];
+            border.BackgroundColor = Color.FromArgb(Settings.CardBack switch
+            {
+                "Blue" => "#FF1565C0",
+                _ => "#FFD32F2F" // Red
+            });
         }
         else
         {
@@ -297,6 +325,11 @@ public partial class MainPage : ContentPage
 
         // Update all labels and button visibility for a fresh start
         UpdateUI();
+    }
+
+    private async void btnSettings_Click(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(SettingsPage));
     }
 
     private void btnQuit_Click(object sender, EventArgs e)
