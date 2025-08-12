@@ -176,15 +176,16 @@ public partial class MainPage : ContentPage
         await Task.Delay(350);
 
         // Dealer draws cards
-        while (_game.CurrentState == GameState.DealerTurn)
+        while (_game.Dealer.ShouldHit())
         {
-            _game.DealerHits(); // This now exists
-            // We need to find the new card, which isn't necessarily the last one if logic changes
-            // But for now, Last() is fine.
+            _game.DealerHits();
             var newCard = _game.Dealer.Hands[0].Last();
             await AddSingleCardToUI(pnlDealerHand, newCard);
-            UpdateUI();
+            lblDealerScore.Text = $"Dealer Score: {_game.Dealer.CalculateScore(0)}";
+            await Task.Delay(350); // Wait a bit after each card
         }
+
+        _game.CurrentState = GameState.HandOver; // Manually update state after loop
     }
 
     private async void btnStay_Click(object sender, EventArgs e)
@@ -296,7 +297,12 @@ public partial class MainPage : ContentPage
         bool playerWon = results.Any(r => r.MainHandResult == HandResult.Win || r.MainHandResult == HandResult.Blackjack || r.InsuranceResult == HandResult.InsuranceWin);
         bool playerLost = results.Any(r => r.MainHandResult == HandResult.Loss);
 
-        if (playerWon && !playerLost) // Play win sound only if there's a win and no loss (e.g. split hands)
+        if (results.Any(r => r.MainHandResult == HandResult.Blackjack))
+        {
+            PlaySound("win.wav"); // Still play win sound, but also do special effect
+            DisplaySpecialMessage(lblStatus.Text, Colors.Gold);
+        }
+        else if (playerWon && !playerLost) // Play win sound only if there's a win and no loss (e.g. split hands)
         {
             PlaySound("win.wav");
         }
@@ -351,7 +357,7 @@ public partial class MainPage : ContentPage
                 HandResult.Win => $"Win (${_game.Bets[i]})",
                 HandResult.Loss => "Loss",
                 HandResult.Push => "Push",
-                HandResult.Blackjack => $"Blackjack! Win (${_game.Bets[i] * 1.5})",
+                HandResult.Blackjack => $"Blackjack! You win (${_game.Bets[i] * 1.5 + _game.Bets[i]})",
                 _ => ""
             });
             if (i < results.Count - 1) message.Append(" | ");
@@ -366,6 +372,23 @@ public partial class MainPage : ContentPage
         cardView.TranslationY = -50;
         await cardView.FadeTo(1, 250, Easing.SinIn);
         await cardView.TranslateTo(0, 0, 250, Easing.SinOut);
+    }
+
+    private async void DisplaySpecialMessage(string message, Color color)
+    {
+        lblStatus.Text = message;
+        lblStatus.TextColor = color;
+        lblStatus.FontSize = 24;
+        lblStatus.FontAttributes = FontAttributes.Bold;
+
+        await lblStatus.ScaleTo(1.2, 500, Easing.CubicOut);
+        await Task.Delay(1500);
+        await lblStatus.ScaleTo(1.0, 500, Easing.CubicIn);
+
+        // Reset to default style
+        lblStatus.TextColor = Colors.Default;
+        lblStatus.FontSize = 14;
+        lblStatus.FontAttributes = FontAttributes.None;
     }
 
 
@@ -417,7 +440,7 @@ public partial class MainPage : ContentPage
 
     private void btnNewGame_Click(object sender, EventArgs e)
     {
-        _game.Stats.Reset();
+        _game.Stats.ArchiveAndReset();
         PersistenceService.SaveStats(_game.Stats);
         _game = new BlackjackGameLogic();
 

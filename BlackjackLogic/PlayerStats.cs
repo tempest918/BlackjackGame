@@ -1,24 +1,30 @@
+using System.Collections.Generic;
+
 namespace BlackjackLogic
 {
     public class PlayerStats
     {
         public int PlayerMoney { get; set; } = 100;
-        public int HandsPlayed { get; set; } = 0;
-        public int Wins { get; set; } = 0;
-        public int Losses { get; set; } = 0;
-        public int Pushes { get; set; } = 0;
-        public int Blackjacks { get; set; } = 0;
-        public int LargestPotWon { get; set; } = 0;
+        public List<GameRunStats> History { get; set; } = new List<GameRunStats>();
+        public GameRunStats CurrentRun { get; set; } = new GameRunStats();
 
-        public void Reset()
+        public void ArchiveAndReset()
         {
+            // Set final money and end time for the current run
+            CurrentRun.FinalMoney = PlayerMoney;
+            CurrentRun.EndTime = System.DateTime.UtcNow;
+
+            // Add the completed run to history
+            if (CurrentRun.HandsPlayed > 0)
+            {
+                History.Add(CurrentRun);
+            }
+
+            // Start a new run
+            CurrentRun = new GameRunStats();
+
+            // Reset player's money for the new run
             PlayerMoney = 100;
-            HandsPlayed = 0;
-            Wins = 0;
-            Losses = 0;
-            Pushes = 0;
-            Blackjacks = 0;
-            LargestPotWon = 0;
         }
     }
 }

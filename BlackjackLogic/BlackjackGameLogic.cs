@@ -283,33 +283,34 @@ namespace BlackjackLogic
 
         public void UpdateStatsAndSave(List<HandResultInfo> results)
         {
-            Stats.HandsPlayed += results.Count;
+            Stats.CurrentRun.HandsPlayed += results.Count;
             int totalWinnings = 0;
 
             foreach (var result in results)
             {
+                int betAmount = Bets[results.IndexOf(result)];
                 switch (result.MainHandResult)
                 {
                     case HandResult.Win:
-                        Stats.Wins++;
-                        totalWinnings += Bets[results.IndexOf(result)];
+                        Stats.CurrentRun.Wins++;
+                        totalWinnings += betAmount;
                         break;
                     case HandResult.Loss:
-                        Stats.Losses++;
+                        Stats.CurrentRun.Losses++;
                         break;
                     case HandResult.Push:
-                        Stats.Pushes++;
+                        Stats.CurrentRun.Pushes++;
                         break;
                     case HandResult.Blackjack:
-                        Stats.Blackjacks++;
-                        totalWinnings += (int)(Bets[results.IndexOf(result)] * 1.5);
+                        Stats.CurrentRun.Blackjacks++;
+                        totalWinnings += (int)(betAmount * 1.5);
                         break;
                 }
             }
 
-            if (totalWinnings > Stats.LargestPotWon)
+            if (totalWinnings > Stats.CurrentRun.LargestPotWon)
             {
-                Stats.LargestPotWon = totalWinnings;
+                Stats.CurrentRun.LargestPotWon = totalWinnings;
             }
 
             Stats.PlayerMoney = Player.Money;

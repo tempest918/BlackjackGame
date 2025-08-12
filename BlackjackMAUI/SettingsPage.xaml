@@ -52,14 +52,14 @@
                 </Picker.ItemsSource>
             </Picker>
 
-            <!--  Sound Effects  -->
+            <!--  Sound Enable/Disable  -->
             <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                 <Label
                     FontAttributes="Bold"
                     FontSize="18"
-                    Text="Sound Effects"
+                    Text="Enable Sound"
                     VerticalOptions="Center" />
-                <Switch x:Name="switchSoundEffects" />
+                <Switch x:Name="switchSoundEnabled" />
             </HorizontalStackLayout>
 
             <!--  BGM Volume  -->
@@ -67,21 +67,30 @@
                 FontAttributes="Bold"
                 FontSize="18"
                 Text="BGM Volume" />
-            <Slider
-                x:Name="sliderBgmVolume"
-                Maximum="1"
-                Minimum="0"
-                ValueChanged="sliderBgmVolume_ValueChanged" />
+            <HorizontalStackLayout Spacing="10">
+                <Slider
+                    x:Name="sliderBgmVolume"
+                    Maximum="1"
+                    Minimum="0"
+                    HorizontalOptions="FillAndExpand"
+                    ValueChanged="sliderBgmVolume_ValueChanged" />
+                <Button x:Name="btnMuteBgm" Text="Mute" Clicked="btnMuteBgm_Click" />
+            </HorizontalStackLayout>
+
 
             <!--  Sound Effects Volume  -->
             <Label
                 FontAttributes="Bold"
                 FontSize="18"
                 Text="Sound Effects Volume" />
-            <Slider
-                x:Name="sliderSfxVolume"
-                Maximum="1"
-                Minimum="0" />
+            <HorizontalStackLayout Spacing="10">
+                <Slider
+                    x:Name="sliderSfxVolume"
+                    Maximum="1"
+                    Minimum="0"
+                    HorizontalOptions="FillAndExpand" />
+                <Button x:Name="btnMuteSfx" Text="Mute" Clicked="btnMuteSfx_Click" />
+            </HorizontalStackLayout>
 
             <!--  Action Buttons  -->
             <HorizontalStackLayout
