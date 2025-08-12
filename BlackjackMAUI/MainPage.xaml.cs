@@ -9,8 +9,6 @@ public partial class MainPage : ContentPage
 {
     private BlackjackGameLogic _game;
     private readonly IAudioManager _audioManager;
-    private Dictionary<Card, View> _cardViewCache = new Dictionary<Card, View>();
-
 
     public MainPage(IAudioManager audioManager)
     {
@@ -27,7 +25,6 @@ public partial class MainPage : ContentPage
             if (value != null)
             {
                 _game = value;
-                _cardViewCache.Clear();
                 UpdateUI();
             }
         }
@@ -53,7 +50,6 @@ public partial class MainPage : ContentPage
         {
             try
             {
-                _cardViewCache.Clear();
                 _game.StartNewHand(betAmount);
                 lblStatus.Text = "Player's Turn";
                 PlaySound("deal.wav");
@@ -112,12 +108,9 @@ public partial class MainPage : ContentPage
 
             foreach (var card in _game.Player.Hands[i])
             {
-                var cardView = GetOrCreateCardView(card);
-                if (!cardFlexLayout.Children.Contains(cardView))
-                {
-                    cardFlexLayout.Children.Add(cardView);
-                    AnimateCard(cardView);
-                }
+                var cardView = CreateCardView(card);
+                cardFlexLayout.Children.Add(cardView);
+                AnimateCard(cardView);
             }
 
             handContainer.Children.Add(handLabel);
@@ -133,14 +126,12 @@ public partial class MainPage : ContentPage
         {
             foreach (var card in _game.Dealer.Hands[0])
             {
-                var cardView = GetOrCreateCardView(card, hideFirstCard && card == _game.Dealer.Hands[0].First());
-                if (!pnlDealerHand.Children.Contains(cardView))
+                var isHidden = hideFirstCard && card == _game.Dealer.Hands[0].First();
+                var cardView = CreateCardView(card, isHidden);
+                pnlDealerHand.Children.Add(cardView);
+                if (!isHidden)
                 {
-                    pnlDealerHand.Children.Add(cardView);
-                    if (!hideFirstCard || card != _game.Dealer.Hands[0].First())
-                    {
-                        AnimateCard(cardView);
-                    }
+                    AnimateCard(cardView);
                 }
             }
         }
@@ -237,41 +228,6 @@ public partial class MainPage : ContentPage
         }
 
         return message.ToString();
-    }
-
-    private View GetOrCreateCardView(Card card, bool isHidden = false)
-    {
-        if (!_cardViewCache.TryGetValue(card, out var view))
-        {
-            view = CreateCardView(card, isHidden);
-            _cardViewCache[card] = view;
-        }
-        // Update visibility for dealer's hidden card
-        else if (isHidden)
-        {
-            if (view is Border border)
-            {
-                border.Content = null;
-                border.BackgroundColor = (Color)Application.Current.Resources["FeltGreenDark"];
-            }
-        }
-        else
-        {
-            // Ensure the card is visible if it was previously hidden
-            if (view is Border border && border.Content == null)
-            {
-                border.BackgroundColor = Colors.White;
-                var grid = new Grid { Padding = 5 };
-                var suitColor = (card.Suit == "Hearts" || card.Suit == "Diamonds") ? Colors.Red : Colors.Black;
-                grid.Children.Add(new Label { Text = card.Face, FontSize = 18, FontAttributes = FontAttributes.Bold, TextColor = suitColor, HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Start });
-                grid.Children.Add(new Label { Text = card.GetSuitSymbol(), FontSize = 24, TextColor = suitColor, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center });
-                grid.Children.Add(new Label { Text = card.Face, FontSize = 18, FontAttributes = FontAttributes.Bold, TextColor = suitColor, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.End, Rotation = 180 });
-                border.Content = grid;
-            }
-        }
-
-
-        return view;
     }
 
     private async void AnimateCard(View cardView)
