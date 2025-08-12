@@ -76,6 +76,20 @@ public partial class MainPage : ContentPage
                 _game.StartNewHand(betAmount, Settings.NumberOfDecks);
                 lblStatus.Text = "Player's Turn";
                 await DealCardsWithAnimation();
+
+                if (_game.CurrentState == GameState.HandOver)
+                {
+                    // Player has Blackjack, or some other immediate hand-over condition.
+                    // We need to reveal the dealer's card and then end the hand.
+                    var revealedCard = _game.Dealer.Hands[0][0];
+                    var cardView = CreateCardView(revealedCard);
+                    pnlDealerHand.Children.RemoveAt(0);
+                    pnlDealerHand.Children.Insert(0, cardView);
+                    AnimateCard(cardView);
+                    await Task.Delay(350);
+
+                    EndHand();
+                }
             }
             catch (ArgumentException ex)
             {
