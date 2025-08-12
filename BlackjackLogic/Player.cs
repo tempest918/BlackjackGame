@@ -6,8 +6,10 @@ namespace BlackjackLogic
     public class Player
     {
         public string Name { get; set; }
-        public List<Card> Hand { get; private set; }
+        public List<Card> Hand { get; set; }
         public int Money { get; set; }
+
+        public Player() { }
 
         public Player(string name, int startingMoney = 100)
         {

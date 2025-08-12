@@ -42,4 +42,9 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
+    <Color x:Key="FeltGreen">#006A4E</Color>
+    <Color x:Key="FeltGreenDark">#004B3B</Color>
+    <SolidColorBrush x:Key="FeltGreenBrush" Color="{StaticResource FeltGreen}"/>
+    <SolidColorBrush x:Key="FeltGreenDarkBrush" Color="{StaticResource FeltGreenDark}"/>
 </ResourceDictionary>
