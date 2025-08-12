@@ -32,6 +32,7 @@ namespace MyBlackjackMAUI
         {
             if (sender is IAudioPlayer player)
             {
+                player.Seek(0);
                 player.Play();
             }
         }
