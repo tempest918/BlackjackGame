@@ -81,7 +81,10 @@ public partial class MainPage : ContentPage
     {
         _game.PlayerStays();
         UpdateUI();
-        EndHand();
+        if (_game.CurrentState == GameState.HandOver)
+        {
+            EndHand();
+        }
     }
 
     private void UpdateUI()
