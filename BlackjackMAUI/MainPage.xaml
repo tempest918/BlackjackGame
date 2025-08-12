@@ -133,8 +133,8 @@
 
                 <Grid
                     x:Name="ActionControls"
-                    ColumnDefinitions="*,*,*,*"
-                    HorizontalOptions="Fill"
+                    ColumnDefinitions="Auto,Auto,Auto,Auto"
+                    HorizontalOptions="Center"
                     IsVisible="False"
                     ColumnSpacing="10">
                     <Button
