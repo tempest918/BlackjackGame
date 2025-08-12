@@ -240,22 +240,34 @@ namespace BlackjackLogic
             }
 
             // Then, resolve each hand
+            bool dealerHasBlackjack = Dealer.Hands.Count > 0 && Dealer.Hands[0].Count == 2 && dealerScore == 21;
+
             for (int i = 0; i < Player.Hands.Count; i++)
             {
                 var handResult = new HandResultInfo();
                 int playerScore = Player.CalculateScore(i);
                 int currentHandBet = Bets[i];
+                bool playerHasBlackjack = Player.Hands[i].Count == 2 && playerScore == 21;
 
                 if (playerScore > 21)
                 {
                     handResult.MainHandResult = HandResult.Loss;
                 }
-                else if (playerScore == 21 && Player.Hands[i].Count == 2 && dealerScore != 21)
+                else if (playerHasBlackjack && !dealerHasBlackjack)
                 {
                     Player.Money += (int)(currentHandBet * 2.5); // Blackjack pays 3:2
                     handResult.MainHandResult = HandResult.Blackjack;
                 }
-                else if (dealerScore > 21 || playerScore > dealerScore)
+                else if (dealerHasBlackjack && !playerHasBlackjack)
+                {
+                    handResult.MainHandResult = HandResult.Loss; // Dealer's Blackjack wins
+                }
+                else if (dealerScore > 21)
+                {
+                    Player.Money += currentHandBet * 2; // Win pays 1:1
+                    handResult.MainHandResult = HandResult.Win;
+                }
+                else if (playerScore > dealerScore)
                 {
                     Player.Money += currentHandBet * 2; // Win pays 1:1
                     handResult.MainHandResult = HandResult.Win;
@@ -264,7 +276,7 @@ namespace BlackjackLogic
                 {
                     handResult.MainHandResult = HandResult.Loss;
                 }
-                else
+                else // Scores are equal
                 {
                     Player.Money += currentHandBet; // Push
                     handResult.MainHandResult = HandResult.Push;
