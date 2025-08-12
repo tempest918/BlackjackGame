@@ -98,9 +98,9 @@ public partial class MainPage : ContentPage
 
         pnlDealerHand.Clear();
         bool hideFirstCard = _game.CurrentState == GameState.PlayerTurn || _game.CurrentState == GameState.AwaitingInsurance;
-        if (_game.Dealer.Hand != null)
+        if (_game.Dealer.Hands != null && _game.Dealer.Hands.Count > 0)
         {
-            foreach (var card in _game.Dealer.Hand)
+            foreach (var card in _game.Dealer.Hands[0])
             {
                 pnlDealerHand.Children.Add(CreateCardView(card, hideFirstCard));
                 hideFirstCard = false; // only hide the first one
