@@ -21,6 +21,11 @@
             Text="Continue" />
 
         <Button
+            x:Name="btnSettings"
+            Clicked="btnSettings_Click"
+            Text="Settings" />
+
+        <Button
             x:Name="btnQuit"
             Clicked="btnQuit_Click"
             Text="Quit Game" />

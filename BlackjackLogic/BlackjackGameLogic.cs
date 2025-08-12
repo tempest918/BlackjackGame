@@ -55,7 +55,7 @@ namespace BlackjackLogic
             Bets = new List<int> { bet };
             Player.Money -= bet;
 
-            Deck = new Deck();
+            Deck = new Deck(Settings.NumberOfDecks);
             Deck.Shuffle();
 
             Player.ClearHands();

@@ -9,13 +9,29 @@ public partial class MainPage : ContentPage
 {
     private BlackjackGameLogic _game;
     private readonly IAudioManager _audioManager;
+    private IAudioPlayer _bgmPlayer;
 
     public MainPage(IAudioManager audioManager)
     {
         InitializeComponent();
         _audioManager = audioManager;
         _game = new BlackjackGameLogic();
+
+        ApplySettings();
         UpdateUI();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ApplySettings();
+        PlayBgm();
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        _bgmPlayer?.Stop();
     }
 
     public BlackjackGameLogic LoadedGame
@@ -32,15 +48,54 @@ public partial class MainPage : ContentPage
 
     private async void PlaySound(string fileName)
     {
+        if (!Settings.SoundEffectsEnabled) return;
+
         try
         {
             var player = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(fileName));
+            player.Volume = Settings.SoundEffectsVolume;
             player.Play();
         }
         catch (Exception ex)
         {
             // Log or handle the exception
             Console.WriteLine($"Error playing sound: {ex.Message}");
+        }
+    }
+
+    private void ApplySettings()
+    {
+        // Felt Color
+        this.BackgroundColor = Color.FromArgb(Settings.FeltColor switch
+        {
+            "Blue" => "#FF0D47A1",
+            "Red" => "#FFB71C1C",
+            _ => "#FF1B5E20" // Green
+        });
+
+        // BGM Volume
+        if (_bgmPlayer != null)
+        {
+            _bgmPlayer.Volume = Settings.BgmVolume;
+        }
+
+        UpdateUI(); // Re-draw cards with new backs
+    }
+
+    private async void PlayBgm()
+    {
+        if (_bgmPlayer?.IsPlaying == true) return;
+
+        try
+        {
+            _bgmPlayer = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("BGM.mp3"));
+            _bgmPlayer.Loop = true;
+            _bgmPlayer.Volume = Settings.BgmVolume;
+            _bgmPlayer.Play();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error playing BGM: {ex.Message}");
         }
     }
 
@@ -256,7 +311,11 @@ public partial class MainPage : ContentPage
 
         if (isHidden)
         {
-            border.BackgroundColor = (Color)Application.Current.Resources["FeltGreenDark"];
+            border.BackgroundColor = Color.FromArgb(Settings.CardBack switch
+            {
+                "Blue" => "#FF1565C0",
+                _ => "#FFD32F2F" // Red
+            });
         }
         else
         {

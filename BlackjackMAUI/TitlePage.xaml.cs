@@ -28,4 +28,9 @@ public partial class TitlePage : ContentPage
     {
         Application.Current.Quit();
     }
+
+    private async void btnSettings_Click(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(SettingsPage));
+    }
 }

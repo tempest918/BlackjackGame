@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyBlackjackMAUI.SettingsPage"
+             Title="Settings">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- Number of Decks -->
+            <Label Text="Number of Decks" FontSize="18" FontAttributes="Bold"/>
+            <Label x:Name="lblDecksValue" Text="1" HorizontalOptions="Center"/>
+            <Slider x:Name="sliderDecks" Minimum="1" Maximum="8" Step="1" ValueChanged="sliderDecks_ValueChanged"/>
+
+            <!-- Felt Color -->
+            <Label Text="Felt Color" FontSize="18" FontAttributes="Bold"/>
+            <Picker x:Name="pickerFeltColor" Title="Select Felt Color">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Green</x:String>
+                        <x:String>Blue</x:String>
+                        <x:String>Red</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Card Back Design -->
+            <Label Text="Card Back Design" FontSize="18" FontAttributes="Bold"/>
+            <Picker x:Name="pickerCardBack" Title="Select Card Back">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Red</x:String>
+                        <x:String>Blue</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Sound Effects -->
+            <HorizontalStackLayout VerticalOptions="Center" Spacing="10">
+                <Label Text="Sound Effects" FontSize="18" FontAttributes="Bold" VerticalOptions="Center"/>
+                <Switch x:Name="switchSoundEffects"/>
+            </HorizontalStackLayout>
+
+            <!-- BGM Volume -->
+            <Label Text="BGM Volume" FontSize="18" FontAttributes="Bold"/>
+            <Slider x:Name="sliderBgmVolume" Minimum="0" Maximum="1" />
+
+            <!-- Sound Effects Volume -->
+            <Label Text="Sound Effects Volume" FontSize="18" FontAttributes="Bold"/>
+            <Slider x:Name="sliderSfxVolume" Minimum="0" Maximum="1" />
+
+            <!-- Action Buttons -->
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="0,20,0,0">
+                <Button x:Name="btnSave" Text="Save" Clicked="btnSave_Click"/>
+                <Button x:Name="btnCancel" Text="Cancel" Clicked="btnCancel_Click"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
