@@ -31,7 +31,7 @@ This is a standard .NET MAUI project. To build and run it, you will need the .NE
 
 1.  **Clone the repository:**
     ```bash
-    git clone [repository-url]
+    git clone https://github.com/tempest918/BlackjackGame
     ```
 2.  **Open the solution:** Open `Blackjack.sln` in Visual Studio 2022 (or later) or your preferred editor.
 3.  **Build and Run:** Select your target platform (Android, iOS, macOS, or Windows) and run the application.
