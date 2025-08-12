@@ -8,7 +8,8 @@ namespace BlackjackLogic
 
         public bool ShouldHit()
         {
-            return CalculateScore() < 17;
+            // Dealer only ever has one hand at index 0
+            return CalculateScore(0) < 17;
         }
     }
 }

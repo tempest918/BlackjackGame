@@ -2,6 +2,7 @@
 
 namespace MyBlackjackMAUI;
 
+[QueryProperty(nameof(LoadedGame), "LoadedGame")]
 public partial class MainPage : ContentPage
 {
     private BlackjackGameLogic _game;
@@ -11,6 +12,18 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         _game = new BlackjackGameLogic();
         UpdateUI();
+    }
+
+    public BlackjackGameLogic LoadedGame
+    {
+        set
+        {
+            if (value != null)
+            {
+                _game = value;
+            }
+            UpdateUI();
+        }
     }
 
     private void btnBet_Click(object sender, EventArgs e)
@@ -54,21 +67,37 @@ public partial class MainPage : ContentPage
     private void UpdateUI()
     {
         // Scores
-        lblPlayerScore.Text = $"Player Score: {_game.Player.CalculateScore()}";
-        lblDealerScore.Text = $"Dealer Score: {(_game.CurrentState == GameState.PlayerTurn ? "?" : _game.Dealer.CalculateScore().ToString())}";
+        lblPlayerScore.Text = $"Player Score: {_game.Player.CalculateScore()}"; // Shows score of active hand
+        lblDealerScore.Text = $"Dealer Score: {(_game.CurrentState == GameState.PlayerTurn || _game.CurrentState == GameState.AwaitingInsurance ? "?" : _game.Dealer.CalculateScore(0).ToString())}";
 
         // Money
         lblPlayerMoney.Text = $"Player Money: ${_game.Player.Money}";
 
         // Hands
         pnlPlayerHand.Clear();
-        foreach (var card in _game.Player.Hand)
+        for (int i = 0; i < _game.Player.Hands.Count; i++)
         {
-            pnlPlayerHand.Children.Add(CreateCardView(card));
+            var handContainer = new VerticalStackLayout { Spacing = 5, Margin = new Thickness(10) };
+            if (i == _game.Player.ActiveHandIndex && _game.CurrentState == GameState.PlayerTurn)
+            {
+                handContainer.BackgroundColor = Colors.DarkGoldenrod; // Highlight active hand
+            }
+
+            var handLabel = new Label { Text = $"Hand {i + 1} Score: {_game.Player.CalculateScore(i)}", FontAttributes = FontAttributes.Bold };
+            var cardFlexLayout = new FlexLayout { JustifyContent = FlexJustify.Center, Wrap = FlexWrap.Wrap };
+
+            foreach (var card in _game.Player.Hands[i])
+            {
+                cardFlexLayout.Children.Add(CreateCardView(card));
+            }
+
+            handContainer.Children.Add(handLabel);
+            handContainer.Children.Add(cardFlexLayout);
+            pnlPlayerHand.Children.Add(handContainer);
         }
 
         pnlDealerHand.Clear();
-        bool hideFirstCard = _game.CurrentState == GameState.PlayerTurn;
+        bool hideFirstCard = _game.CurrentState == GameState.PlayerTurn || _game.CurrentState == GameState.AwaitingInsurance;
         if (_game.Dealer.Hand != null)
         {
             foreach (var card in _game.Dealer.Hand)
@@ -80,14 +109,29 @@ public partial class MainPage : ContentPage
 
         // Button states
         bool handInProgress = _game.CurrentState == GameState.PlayerTurn;
+        bool awaitingInsurance = _game.CurrentState == GameState.AwaitingInsurance;
+
         ActionControls.IsVisible = handInProgress;
-        BettingControls.IsVisible = !handInProgress;
+        BettingControls.IsVisible = !handInProgress && !awaitingInsurance;
+        InsuranceControls.IsVisible = awaitingInsurance;
+
+        // Button visibility
+        bool canDoubleDown = handInProgress && _game.Player.CurrentHand.Count == 2 && _game.Player.Money >= _game.CurrentBet;
+        bool canSplit = handInProgress && _game.Player.CurrentHand.Count == 2 && _game.Player.CurrentHand[0].Value == _game.Player.CurrentHand[1].Value && _game.Player.Money >= _game.CurrentBet;
+
+        btnDoubleDown.IsVisible = canDoubleDown;
+        btnSplit.IsVisible = canSplit;
+
+        if (awaitingInsurance)
+        {
+            lblStatus.Text = "Insurance?";
+        }
     }
 
     private void EndHand()
     {
-        HandResult result = _game.DetermineHandResult();
-        lblStatus.Text = GetResultMessage(result);
+        List<HandResultInfo> results = _game.DetermineHandResult();
+        lblStatus.Text = GetResultMessage(results);
 
         UpdateUI(); // Final update to show dealer's full hand and final scores
 
@@ -108,16 +152,38 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private string GetResultMessage(HandResult result)
+    private string GetResultMessage(List<HandResultInfo> results)
     {
-        return result switch
+        var message = new System.Text.StringBuilder();
+
+        if (results.Count > 0 && results[0].InsuranceResult.HasValue)
         {
-            HandResult.Win => $"You win ${_game.CurrentBet}!",
-            HandResult.Loss => "You lose!",
-            HandResult.Push => "Push (Tie)!",
-            HandResult.Blackjack => $"Blackjack! You win ${_game.CurrentBet * 1.5}!",
-            _ => ""
-        };
+            if (results[0].InsuranceResult == HandResult.InsuranceWin)
+            {
+                message.AppendLine($"Insurance wins! You get ${_game.InsuranceBet * 2}.");
+            }
+            else
+            {
+                message.AppendLine("Insurance loses.");
+            }
+        }
+
+        for (int i = 0; i < results.Count; i++)
+        {
+            string handIdentifier = results.Count > 1 ? $"Hand {i + 1}: " : "";
+            message.Append(handIdentifier);
+            message.Append(results[i].MainHandResult switch
+            {
+                HandResult.Win => $"Win (${_game.Bets[i]})",
+                HandResult.Loss => "Loss",
+                HandResult.Push => "Push",
+                HandResult.Blackjack => $"Blackjack! Win (${_game.Bets[i] * 1.5})",
+                _ => ""
+            });
+            if (i < results.Count - 1) message.Append(" | ");
+        }
+
+        return message.ToString();
     }
 
     private View CreateCardView(Card card, bool isHidden = false)
@@ -134,7 +200,7 @@ public partial class MainPage : ContentPage
 
         if (isHidden)
         {
-            border.BackgroundColor = Colors.DarkGreen;
+            border.BackgroundColor = (Color)Application.Current.Resources["FeltGreenDark"];
         }
         else
         {
@@ -179,5 +245,67 @@ public partial class MainPage : ContentPage
     private void btnQuit_Click(object sender, EventArgs e)
     {
         Application.Current.Quit();
+    }
+
+    private async void btnSaveQuit_Click(object sender, EventArgs e)
+    {
+        GameSaves.SaveGame(_game);
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private void btnDoubleDown_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            _game.PlayerDoublesDown();
+            UpdateUI();
+            EndHand();
+        }
+        catch (InvalidOperationException ex)
+        {
+            DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
+    private void btnInsuranceYes_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            _game.ResolveInsurance(true);
+            // If dealer has blackjack, hand might be over
+            if (_game.CurrentState == GameState.HandOver)
+            {
+                EndHand();
+            }
+            UpdateUI();
+        }
+        catch (InvalidOperationException ex)
+        {
+            DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
+    private void btnInsuranceNo_Click(object sender, EventArgs e)
+    {
+        _game.ResolveInsurance(false);
+        // If dealer has blackjack, hand might be over
+        if (_game.CurrentState == GameState.HandOver)
+        {
+            EndHand();
+        }
+        UpdateUI();
+    }
+
+    private void btnSplit_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            _game.PlayerSplits();
+            UpdateUI();
+        }
+        catch (InvalidOperationException ex)
+        {
+            DisplayAlert("Error", ex.Message, "OK");
+        }
     }
 }

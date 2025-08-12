@@ -6,6 +6,6 @@
     xmlns:local="clr-namespace:MyBlackjackMAUI"
     Title="MyBlackjackMAUI">
 
-    <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" />
+    <ShellContent ContentTemplate="{DataTemplate local:TitlePage}" Route="TitlePage" />
 
 </Shell>
