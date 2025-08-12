@@ -170,7 +170,9 @@ public partial class MainPage : ContentPage
         // Dealer draws cards
         while (_game.CurrentState == GameState.DealerTurn)
         {
-            _game.DealerHits();
+            _game.DealerHits(); // This now exists
+            // We need to find the new card, which isn't necessarily the last one if logic changes
+            // But for now, Last() is fine.
             var newCard = _game.Dealer.Hands[0].Last();
             await AddSingleCardToUI(pnlDealerHand, newCard);
             UpdateUI();

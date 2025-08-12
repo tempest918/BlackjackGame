@@ -123,10 +123,20 @@ namespace BlackjackLogic
             {
                 // Last hand has been played, move to dealer's turn
                 CurrentState = GameState.DealerTurn;
-                while (Dealer.ShouldHit())
-                {
-                    Dealer.DrawCard(Deck);
-                }
+            }
+        }
+
+        public void DealerHits()
+        {
+            if (CurrentState != GameState.DealerTurn) return;
+
+            if (Dealer.ShouldHit())
+            {
+                Dealer.DrawCard(Deck);
+            }
+
+            if (!Dealer.ShouldHit())
+            {
                 CurrentState = GameState.HandOver;
             }
         }
