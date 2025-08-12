@@ -98,6 +98,7 @@
                         IsVisible="False"
                         Text="Double Down" />
                     <Button
+
                         x:Name="btnSaveQuit"
                         Clicked="btnSaveQuit_Click"
                         Text="Save and Quit" />
