@@ -114,7 +114,7 @@ public partial class MainPage : ContentPage
         bool awaitingInsurance = _game.CurrentState == GameState.AwaitingInsurance;
 
         ActionControls.IsVisible = handInProgress;
-        BettingControls.IsVisible = !handInProgress && !awaitingInsurance;
+        BettingPanel.IsVisible = !handInProgress && !awaitingInsurance;
         InsuranceControls.IsVisible = awaitingInsurance;
 
         // Button visibility
@@ -148,7 +148,7 @@ public partial class MainPage : ContentPage
             ActionControls.IsVisible = false;
 
             // Show the betting controls for the next hand
-            BettingControls.IsVisible = true;
+            BettingPanel.IsVisible = true;
 
             // Clear the previous bet amount
             txtBet.Text = "";
@@ -224,7 +224,7 @@ public partial class MainPage : ContentPage
     {
         // Hide all other controls
         ActionControls.IsVisible = false;
-        BettingControls.IsVisible = false;
+        BettingPanel.IsVisible = false;
 
         // Show the new Game Over panel
         GameOverControls.IsVisible = true;

@@ -56,26 +56,28 @@
 
             <VerticalStackLayout x:Name="ControlPanels" HorizontalOptions="Center">
 
-                <HorizontalStackLayout x:Name="BettingControls" Spacing="10">
-                    <Label Text="Bet:" VerticalOptions="Center" />
-                    <Entry
-                        x:Name="txtBet"
-                        Keyboard="Numeric"
-                        Placeholder="Amount"
-                        WidthRequest="100" />
-                    <Button
-                        x:Name="btnBet"
-                        Clicked="btnBet_Click"
-                        Text="Bet" />
-                </HorizontalStackLayout>
+                <VerticalStackLayout x:Name="BettingPanel" Spacing="10">
+                    <HorizontalStackLayout x:Name="BettingControls" Spacing="10" HorizontalOptions="Center">
+                        <Label Text="Bet:" VerticalOptions="Center" />
+                        <Entry
+                            x:Name="txtBet"
+                            Keyboard="Numeric"
+                            Placeholder="Amount"
+                            WidthRequest="100" />
+                        <Button
+                            x:Name="btnBet"
+                            Clicked="btnBet_Click"
+                            Text="Bet" />
+                    </HorizontalStackLayout>
 
-                <HorizontalStackLayout x:Name="BettingShortcuts" HorizontalOptions="Center" Spacing="10" Margin="0,5,0,0">
-                    <Button Text="$5" Clicked="ChipButton_Click" CommandParameter="5" />
-                    <Button Text="$10" Clicked="ChipButton_Click" CommandParameter="10" />
-                    <Button Text="$25" Clicked="ChipButton_Click" CommandParameter="25" />
-                    <Button Text="$100" Clicked="ChipButton_Click" CommandParameter="100" />
-                    <Button Text="Clear" Clicked="ClearBetButton_Click" />
-                </HorizontalStackLayout>
+                    <HorizontalStackLayout x:Name="BettingShortcuts" HorizontalOptions="Center" Spacing="10">
+                        <Button Text="$5" Clicked="ChipButton_Click" CommandParameter="5" />
+                        <Button Text="$10" Clicked="ChipButton_Click" CommandParameter="10" />
+                        <Button Text="$25" Clicked="ChipButton_Click" CommandParameter="25" />
+                        <Button Text="$100" Clicked="ChipButton_Click" CommandParameter="100" />
+                        <Button Text="Clear" Clicked="ClearBetButton_Click" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
 
                 <VerticalStackLayout
                     x:Name="InsuranceControls"
