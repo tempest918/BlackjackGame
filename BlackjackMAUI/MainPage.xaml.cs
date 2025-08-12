@@ -88,7 +88,7 @@ public partial class MainPage : ContentPage
 
         try
         {
-            _bgmPlayer = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("BGM.mp3"));
+            _bgmPlayer = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("bgm.mp3"));
             _bgmPlayer.Loop = true;
             _bgmPlayer.Volume = Settings.BgmVolume;
             _bgmPlayer.Play();
