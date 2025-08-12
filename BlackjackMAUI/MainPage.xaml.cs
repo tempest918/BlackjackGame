@@ -311,4 +311,24 @@ public partial class MainPage : ContentPage
             DisplayAlert("Error", ex.Message, "OK");
         }
     }
+
+    private void ChipButton_Click(object sender, EventArgs e)
+    {
+        if (sender is Button button && int.TryParse(button.CommandParameter?.ToString(), out int chipValue))
+        {
+            if (int.TryParse(txtBet.Text, out int currentBet))
+            {
+                txtBet.Text = (currentBet + chipValue).ToString();
+            }
+            else
+            {
+                txtBet.Text = chipValue.ToString();
+            }
+        }
+    }
+
+    private void ClearBetButton_Click(object sender, EventArgs e)
+    {
+        txtBet.Text = "";
+    }
 }
