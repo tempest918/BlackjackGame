@@ -114,7 +114,7 @@ public partial class MainPage : ContentPage
         bool awaitingInsurance = _game.CurrentState == GameState.AwaitingInsurance;
 
         ActionControls.IsVisible = handInProgress;
-        BettingControls.IsVisible = !handInProgress && !awaitingInsurance;
+        BettingPanel.IsVisible = !handInProgress && !awaitingInsurance;
         InsuranceControls.IsVisible = awaitingInsurance;
 
         // Button visibility
@@ -148,7 +148,7 @@ public partial class MainPage : ContentPage
             ActionControls.IsVisible = false;
 
             // Show the betting controls for the next hand
-            BettingControls.IsVisible = true;
+            BettingPanel.IsVisible = true;
 
             // Clear the previous bet amount
             txtBet.Text = "";
@@ -224,7 +224,7 @@ public partial class MainPage : ContentPage
     {
         // Hide all other controls
         ActionControls.IsVisible = false;
-        BettingControls.IsVisible = false;
+        BettingPanel.IsVisible = false;
 
         // Show the new Game Over panel
         GameOverControls.IsVisible = true;
@@ -310,5 +310,25 @@ public partial class MainPage : ContentPage
         {
             DisplayAlert("Error", ex.Message, "OK");
         }
+    }
+
+    private void ChipButton_Click(object sender, EventArgs e)
+    {
+        if (sender is Button button && int.TryParse(button.CommandParameter?.ToString(), out int chipValue))
+        {
+            int.TryParse(txtBet.Text, out int currentBet); // Defaults to 0 if parsing fails
+
+            int newBet = currentBet + chipValue;
+
+            if (newBet <= _game.Player.Money)
+            {
+                txtBet.Text = newBet.ToString();
+            }
+        }
+    }
+
+    private void ClearBetButton_Click(object sender, EventArgs e)
+    {
+        txtBet.Text = "";
     }
 }

@@ -15,8 +15,6 @@ namespace BlackjackLogic
 
         public Player() { }
 
-        public Player() { }
-
         public Player(string name, int startingMoney = 100)
         {
             Name = name;
