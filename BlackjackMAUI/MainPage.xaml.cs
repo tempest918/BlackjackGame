@@ -81,7 +81,7 @@ public partial class MainPage : ContentPage
         }
 
         pnlDealerHand.Clear();
-        bool hideFirstCard = _game.CurrentState == GameState.PlayerTurn;
+        bool hideFirstCard = _game.CurrentState == GameState.PlayerTurn || _game.CurrentState == GameState.AwaitingInsurance;
         if (_game.Dealer.Hand != null)
         {
             foreach (var card in _game.Dealer.Hand)
@@ -93,13 +93,24 @@ public partial class MainPage : ContentPage
 
         // Button states
         bool handInProgress = _game.CurrentState == GameState.PlayerTurn;
+        bool awaitingInsurance = _game.CurrentState == GameState.AwaitingInsurance;
+
         ActionControls.IsVisible = handInProgress;
-        BettingControls.IsVisible = !handInProgress;
+        BettingControls.IsVisible = !handInProgress && !awaitingInsurance;
+        InsuranceControls.IsVisible = awaitingInsurance;
+
+        // Double down button visibility
+        btnDoubleDown.IsVisible = handInProgress && _game.Player.Hand.Count == 2 && _game.Player.Money >= _game.CurrentBet;
+
+        if (awaitingInsurance)
+        {
+            lblStatus.Text = "Insurance?";
+        }
     }
 
     private void EndHand()
     {
-        HandResult result = _game.DetermineHandResult();
+        HandResultInfo result = _game.DetermineHandResult();
         lblStatus.Text = GetResultMessage(result);
 
         UpdateUI(); // Final update to show dealer's full hand and final scores
@@ -121,16 +132,33 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private string GetResultMessage(HandResult result)
+    private string GetResultMessage(HandResultInfo result)
     {
-        return result switch
+        var message = new System.Text.StringBuilder();
+
+        if (result.InsuranceResult.HasValue)
+        {
+            if (result.InsuranceResult == HandResult.InsuranceWin)
+            {
+                message.AppendLine($"Insurance wins! You get ${_game.InsuranceBet * 2}.");
+            }
+            else
+            {
+                message.AppendLine("Insurance loses.");
+            }
+        }
+
+        message.Append("Hand result: ");
+        message.Append(result.MainHandResult switch
         {
             HandResult.Win => $"You win ${_game.CurrentBet}!",
             HandResult.Loss => "You lose!",
             HandResult.Push => "Push (Tie)!",
             HandResult.Blackjack => $"Blackjack! You win ${_game.CurrentBet * 1.5}!",
             _ => ""
-        };
+        });
+
+        return message.ToString();
     }
 
     private View CreateCardView(Card card, bool isHidden = false)
@@ -198,5 +226,48 @@ public partial class MainPage : ContentPage
     {
         GameSaves.SaveGame(_game);
         await Shell.Current.GoToAsync("..");
+    }
+
+    private void btnDoubleDown_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            _game.PlayerDoublesDown();
+            UpdateUI();
+            EndHand();
+        }
+        catch (InvalidOperationException ex)
+        {
+            DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
+    private void btnInsuranceYes_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            _game.ResolveInsurance(true);
+            // If dealer has blackjack, hand might be over
+            if (_game.CurrentState == GameState.HandOver)
+            {
+                EndHand();
+            }
+            UpdateUI();
+        }
+        catch (InvalidOperationException ex)
+        {
+            DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
+    private void btnInsuranceNo_Click(object sender, EventArgs e)
+    {
+        _game.ResolveInsurance(false);
+        // If dealer has blackjack, hand might be over
+        if (_game.CurrentState == GameState.HandOver)
+        {
+            EndHand();
+        }
+        UpdateUI();
     }
 }

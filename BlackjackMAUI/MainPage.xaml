@@ -69,6 +69,17 @@
                         Text="Bet" />
                 </HorizontalStackLayout>
 
+                <VerticalStackLayout
+                    x:Name="InsuranceControls"
+                    IsVisible="False"
+                    Spacing="10">
+                    <Label Text="Dealer has an Ace. Insurance?" HorizontalOptions="Center" />
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Button x:Name="btnInsuranceYes" Text="Yes" Clicked="btnInsuranceYes_Click" />
+                        <Button x:Name="btnInsuranceNo" Text="No" Clicked="btnInsuranceNo_Click" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
                 <HorizontalStackLayout
                     x:Name="ActionControls"
                     IsVisible="False"
@@ -82,6 +93,12 @@
                         Clicked="btnStay_Click"
                         Text="Stay" />
                     <Button
+                        x:Name="btnDoubleDown"
+                        Clicked="btnDoubleDown_Click"
+                        IsVisible="False"
+                        Text="Double Down" />
+                    <Button
+
                         x:Name="btnSaveQuit"
                         Clicked="btnSaveQuit_Click"
                         Text="Save and Quit" />
