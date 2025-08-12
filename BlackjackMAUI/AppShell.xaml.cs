@@ -1,12 +1,11 @@
-﻿using Plugin.Maui.Audio;
+﻿using MyBlackjackMAUI.Services;
+using Plugin.Maui.Audio;
 
 namespace MyBlackjackMAUI
 {
     public partial class AppShell : Shell
     {
-        public static IAudioPlayer BgmPlayer { get; private set; }
-
-        public AppShell(IAudioManager audioManager)
+        public AppShell(BgmManagerService bgmManager)
         {
             InitializeComponent();
 
@@ -15,26 +14,14 @@ namespace MyBlackjackMAUI
             Routing.RegisterRoute(nameof(StatsPage), typeof(StatsPage));
 
             // Start BGM
-            _ = InitializeBgm(audioManager);
+            _ = StartBgm(bgmManager);
         }
 
-        private async Task InitializeBgm(IAudioManager audioManager)
+        private async Task StartBgm(BgmManagerService bgmManager)
         {
-            if (BgmPlayer is not null) return;
-
-            BgmPlayer = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("bgm.mp3"));
-            BgmPlayer.PlaybackEnded += BgmPlayer_PlaybackEnded;
-            BgmPlayer.Volume = Settings.BgmVolume;
-            BgmPlayer.Play();
-        }
-
-        private void BgmPlayer_PlaybackEnded(object sender, EventArgs e)
-        {
-            if (sender is IAudioPlayer player)
-            {
-                player.Seek(0);
-                player.Play();
-            }
+            await bgmManager.InitializeAsync();
+            bgmManager.SetVolume(Settings.BgmVolume);
+            bgmManager.Play();
         }
     }
 }

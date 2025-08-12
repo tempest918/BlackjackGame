@@ -1,12 +1,15 @@
 using BlackjackLogic;
+using MyBlackjackMAUI.Services;
 
 namespace MyBlackjackMAUI;
 
 public partial class SettingsPage : ContentPage
 {
-    public SettingsPage()
+    private readonly BgmManagerService _bgmManager;
+    public SettingsPage(BgmManagerService bgmManager)
     {
         InitializeComponent();
+        _bgmManager = bgmManager;
         LoadSettings();
     }
 
@@ -37,10 +40,7 @@ public partial class SettingsPage : ContentPage
 
     private void sliderBgmVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
-        if (AppShell.BgmPlayer is not null)
-        {
-            AppShell.BgmPlayer.Volume = e.NewValue;
-        }
+        _bgmManager.SetVolume(e.NewValue);
         // If user manually changes volume, update the pre-mute setting
         if (e.NewValue > 0)
         {
@@ -78,10 +78,7 @@ public partial class SettingsPage : ContentPage
     private async void btnCancel_Click(object sender, EventArgs e)
     {
         // Revert BGM volume to its state when the page was opened
-        if (AppShell.BgmPlayer is not null)
-        {
-            AppShell.BgmPlayer.Volume = Settings.BgmVolume;
-        }
+        _bgmManager.SetVolume(Settings.BgmVolume);
         await Shell.Current.GoToAsync("..");
     }
 
@@ -125,15 +122,17 @@ public partial class SettingsPage : ContentPage
 
     private void switchSoundEnabled_Toggled(object sender, ToggledEventArgs e)
     {
-        if (AppShell.BgmPlayer is null) return;
-
+        // This switch now only controls sound effects, not BGM.
+        // The BGM is controlled by its own volume slider and mute button.
+        // We leave the method here in case we want to add a global mute in the future,
+        // but for now, it does nothing to the BGM.
         if (e.Value)
         {
-            AppShell.BgmPlayer.Play();
+            // _bgmManager.Play(); // BGM should play unless muted
         }
         else
         {
-            AppShell.BgmPlayer.Stop();
+            // _bgmManager.Stop(); // Don't stop BGM, just mute SFX
         }
     }
 }
