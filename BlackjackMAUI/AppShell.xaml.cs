@@ -23,9 +23,17 @@ namespace MyBlackjackMAUI
             if (BgmPlayer is not null) return;
 
             BgmPlayer = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("bgm.mp3"));
-            BgmPlayer.Loop = true;
+            BgmPlayer.PlaybackEnded += BgmPlayer_PlaybackEnded;
             BgmPlayer.Volume = Settings.BgmVolume;
             BgmPlayer.Play();
+        }
+
+        private void BgmPlayer_PlaybackEnded(object sender, EventArgs e)
+        {
+            if (sender is IAudioPlayer player)
+            {
+                player.Play();
+            }
         }
     }
 }
