@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyBlackjackMAUI.StatsPage"
+             Title="Player Statistics">
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="Player Statistics" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" />
+
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+            <Label Text="Hands Played:" Grid.Row="0" Grid.Column="0" />
+            <Label x:Name="lblHandsPlayed" Grid.Row="0" Grid.Column="1" />
+
+            <Label Text="Wins:" Grid.Row="1" Grid.Column="0" />
+            <Label x:Name="lblWins" Grid.Row="1" Grid.Column="1" />
+
+            <Label Text="Losses:" Grid.Row="2" Grid.Column="0" />
+            <Label x:Name="lblLosses" Grid.Row="2" Grid.Column="1" />
+
+            <Label Text="Pushes:" Grid.Row="3" Grid.Column="0" />
+            <Label x:Name="lblPushes" Grid.Row="3" Grid.Column="1" />
+
+            <Label Text="Blackjacks:" Grid.Row="4" Grid.Column="0" />
+            <Label x:Name="lblBlackjacks" Grid.Row="4" Grid.Column="1" />
+
+            <Label Text="Win/Loss %:" Grid.Row="5" Grid.Column="0" />
+            <Label x:Name="lblWinLossPercentage" Grid.Row="5" Grid.Column="1" />
+
+            <Label Text="Largest Pot Won:" Grid.Row="6" Grid.Column="0" />
+            <Label x:Name="lblLargestPotWon" Grid.Row="6" Grid.Column="1" />
+        </Grid>
+
+        <Button Text="Back to Game" Clicked="BackButton_Click" HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>
