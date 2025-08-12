@@ -90,19 +90,26 @@ public partial class MainPage : ContentPage
 
     private async void btnHit_Click(object sender, EventArgs e)
     {
+        int handIndexBeforeHit = _game.Player.ActiveHandIndex;
         _game.PlayerHits();
 
-        // Find the correct hand container to add the card to
-        var playerHandContainer = (VerticalStackLayout)pnlPlayerHand.Children[_game.Player.ActiveHandIndex];
+        var handThatWasHit = _game.Player.Hands[handIndexBeforeHit];
+        var newCard = handThatWasHit.Last();
+
+        var playerHandContainer = (VerticalStackLayout)pnlPlayerHand.Children[handIndexBeforeHit];
         var cardFlexLayout = (FlexLayout)playerHandContainer.Children[1];
-        var newCard = _game.Player.CurrentHand.Last();
 
         await AddSingleCardToUI(cardFlexLayout, newCard);
 
         var handLabel = (Label)playerHandContainer.Children[0];
-        handLabel.Text = $"Hand {_game.Player.ActiveHandIndex + 1} Score: {_game.Player.CalculateScore()}";
+        handLabel.Text = $"Hand {handIndexBeforeHit + 1} Score: {_game.Player.CalculateScore(handIndexBeforeHit)}";
 
         UpdateUI();
+
+        if (_game.Player.ActiveHandIndex != handIndexBeforeHit)
+        {
+            DrawHands(false);
+        }
 
         if (_game.CurrentState == GameState.HandOver)
         {
