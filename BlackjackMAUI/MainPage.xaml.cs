@@ -105,7 +105,7 @@ public partial class MainPage : ContentPage
         {
             try
             {
-                _game.StartNewHand(betAmount);
+                _game.StartNewHand(betAmount, Settings.NumberOfDecks);
                 lblStatus.Text = "Player's Turn";
                 PlaySound("deal.wav");
                 UpdateUI();

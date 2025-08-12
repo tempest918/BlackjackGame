@@ -1,6 +1,6 @@
 using Microsoft.Maui.Storage;
 
-namespace BlackjackLogic
+namespace MyBlackjackMAUI
 {
     public static class Settings
     {
