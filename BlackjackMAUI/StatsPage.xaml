@@ -1,34 +1,85 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MyBlackjackMAUI.StatsPage"
-             Title="Player Statistics">
+<ContentPage
+    x:Class="MyBlackjackMAUI.StatsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Player Statistics"
+    BackgroundColor="{StaticResource FeltGreen}">
     <VerticalStackLayout Padding="20" Spacing="15">
-        <Label Text="Player Statistics" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" />
+        <Label
+            FontAttributes="Bold"
+            FontSize="Large"
+            HorizontalOptions="Center"
+            Text="Player Statistics" />
 
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
-            <Label Text="Hands Played:" Grid.Row="0" Grid.Column="0" />
-            <Label x:Name="lblHandsPlayed" Grid.Row="0" Grid.Column="1" />
+        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="Hands Played:" />
+            <Label
+                x:Name="lblHandsPlayed"
+                Grid.Row="0"
+                Grid.Column="1" />
 
-            <Label Text="Wins:" Grid.Row="1" Grid.Column="0" />
-            <Label x:Name="lblWins" Grid.Row="1" Grid.Column="1" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="Wins:" />
+            <Label
+                x:Name="lblWins"
+                Grid.Row="1"
+                Grid.Column="1" />
 
-            <Label Text="Losses:" Grid.Row="2" Grid.Column="0" />
-            <Label x:Name="lblLosses" Grid.Row="2" Grid.Column="1" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                Text="Losses:" />
+            <Label
+                x:Name="lblLosses"
+                Grid.Row="2"
+                Grid.Column="1" />
 
-            <Label Text="Pushes:" Grid.Row="3" Grid.Column="0" />
-            <Label x:Name="lblPushes" Grid.Row="3" Grid.Column="1" />
+            <Label
+                Grid.Row="3"
+                Grid.Column="0"
+                Text="Pushes:" />
+            <Label
+                x:Name="lblPushes"
+                Grid.Row="3"
+                Grid.Column="1" />
 
-            <Label Text="Blackjacks:" Grid.Row="4" Grid.Column="0" />
-            <Label x:Name="lblBlackjacks" Grid.Row="4" Grid.Column="1" />
+            <Label
+                Grid.Row="4"
+                Grid.Column="0"
+                Text="Blackjacks:" />
+            <Label
+                x:Name="lblBlackjacks"
+                Grid.Row="4"
+                Grid.Column="1" />
 
-            <Label Text="Win/Loss %:" Grid.Row="5" Grid.Column="0" />
-            <Label x:Name="lblWinLossPercentage" Grid.Row="5" Grid.Column="1" />
+            <Label
+                Grid.Row="5"
+                Grid.Column="0"
+                Text="Win/Loss %:" />
+            <Label
+                x:Name="lblWinLossPercentage"
+                Grid.Row="5"
+                Grid.Column="1" />
 
-            <Label Text="Largest Pot Won:" Grid.Row="6" Grid.Column="0" />
-            <Label x:Name="lblLargestPotWon" Grid.Row="6" Grid.Column="1" />
+            <Label
+                Grid.Row="6"
+                Grid.Column="0"
+                Text="Largest Pot Won:" />
+            <Label
+                x:Name="lblLargestPotWon"
+                Grid.Row="6"
+                Grid.Column="1" />
         </Grid>
 
-        <Button Text="Back to Game" Clicked="BackButton_Click" HorizontalOptions="Center" />
+        <Button
+            Clicked="BackButton_Click"
+            HorizontalOptions="Center"
+            Text="Back to Game" />
     </VerticalStackLayout>
 </ContentPage>
