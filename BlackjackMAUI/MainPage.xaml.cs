@@ -399,8 +399,8 @@ public partial class MainPage : ContentPage
 
         // Reset to default style
         lblStatus.ClearValue(Label.TextColorProperty);
-        lblStatus.FontSize = 14;
-        lblStatus.FontAttributes = FontAttributes.None;
+        lblStatus.ClearValue(Label.FontSizeProperty);
+        lblStatus.ClearValue(Label.FontAttributesProperty);
     }
 
 
