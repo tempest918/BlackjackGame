@@ -110,7 +110,7 @@ public partial class MainPage : ContentPage
             {
                 var cardView = CreateCardView(card);
                 cardFlexLayout.Children.Add(cardView);
-                AnimateCard(cardView);
+                // AnimateCard(cardView);
             }
 
             handContainer.Children.Add(handLabel);
@@ -131,7 +131,7 @@ public partial class MainPage : ContentPage
                 pnlDealerHand.Children.Add(cardView);
                 if (!isHidden)
                 {
-                    AnimateCard(cardView);
+                    // AnimateCard(cardView);
                 }
             }
         }
