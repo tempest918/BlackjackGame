@@ -90,16 +90,26 @@ public partial class MainPage : ContentPage
 
     private async void btnHit_Click(object sender, EventArgs e)
     {
+        int handIndexBeforeHit = _game.Player.ActiveHandIndex;
         _game.PlayerHits();
 
-        // Find the correct hand container to add the card to
-        var playerHandContainer = (VerticalStackLayout)pnlPlayerHand.Children[_game.Player.ActiveHandIndex];
+        var handThatWasHit = _game.Player.Hands[handIndexBeforeHit];
+        var newCard = handThatWasHit.Last();
+
+        var playerHandContainer = (VerticalStackLayout)pnlPlayerHand.Children[handIndexBeforeHit];
         var cardFlexLayout = (FlexLayout)playerHandContainer.Children[1];
-        var newCard = _game.Player.CurrentHand.Last();
 
         await AddSingleCardToUI(cardFlexLayout, newCard);
 
+        var handLabel = (Label)playerHandContainer.Children[0];
+        handLabel.Text = $"Hand {handIndexBeforeHit + 1} Score: {_game.Player.CalculateScore(handIndexBeforeHit)}";
+
         UpdateUI();
+
+        if (_game.Player.ActiveHandIndex != handIndexBeforeHit)
+        {
+            DrawHands(false);
+        }
 
         if (_game.CurrentState == GameState.HandOver)
         {
@@ -180,11 +190,19 @@ public partial class MainPage : ContentPage
     private async void btnStay_Click(object sender, EventArgs e)
     {
         _game.PlayerStays();
-        await AnimateDealerTurn();
 
-        if (_game.CurrentState == GameState.HandOver)
+        // After staying, check if the turn is over or if we moved to a new hand.
+        if (_game.CurrentState == GameState.DealerTurn)
         {
+            // Player's turn is over, start dealer's turn.
+            await AnimateDealerTurn();
             EndHand();
+        }
+        else
+        {
+            // Still player's turn, but on a different hand. Update UI to reflect this.
+            UpdateUI();
+            DrawHands(false); // No animation needed for just switching focus
         }
     }
 
@@ -434,20 +452,27 @@ public partial class MainPage : ContentPage
     {
         try
         {
+            int activeHandIndex = _game.Player.ActiveHandIndex;
             _game.PlayerDoublesDown();
 
-            // Animate the new card for the player
-            var playerHandContainer = (VerticalStackLayout)pnlPlayerHand.Children[_game.Player.ActiveHandIndex];
+            var playerHandContainer = (VerticalStackLayout)pnlPlayerHand.Children[activeHandIndex];
             var cardFlexLayout = (FlexLayout)playerHandContainer.Children[1];
-            var newCard = _game.Player.CurrentHand.Last();
+            var newCard = _game.Player.Hands[activeHandIndex].Last();
             await AddSingleCardToUI(cardFlexLayout, newCard);
+
+            var handLabel = (Label)playerHandContainer.Children[0];
+            handLabel.Text = $"Hand {activeHandIndex + 1} Score: {_game.Player.CalculateScore(activeHandIndex)}";
+
             UpdateUI();
 
-            await AnimateDealerTurn();
-
-            if (_game.CurrentState == GameState.HandOver)
+            if (_game.CurrentState == GameState.DealerTurn)
             {
+                await AnimateDealerTurn();
                 EndHand();
+            }
+            else
+            {
+                DrawHands(false);
             }
         }
         catch (InvalidOperationException ex)
