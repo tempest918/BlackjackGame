@@ -18,7 +18,7 @@ public partial class MainPage : ContentPage
 
         ApplySettings();
         UpdateUI();
-        DrawHands();
+        DrawHands(false);
     }
 
     protected override void OnAppearing()
@@ -26,7 +26,7 @@ public partial class MainPage : ContentPage
         base.OnAppearing();
         _game = new BlackjackGameLogic();
         UpdateUI();
-        DrawHands();
+        DrawHands(false);
         ApplySettings();
     }
 
@@ -64,7 +64,7 @@ public partial class MainPage : ContentPage
         });
 
         UpdateUI(); // Re-draw cards with new backs
-        DrawHands();
+        DrawHands(false);
     }
 
     private async void btnBet_Click(object sender, EventArgs e)
@@ -154,10 +154,8 @@ public partial class MainPage : ContentPage
         await Task.Delay(350); // Animation delay
     }
 
-    private async void btnStay_Click(object sender, EventArgs e)
+    private async Task AnimateDealerTurn()
     {
-        _game.PlayerStays();
-
         // Reveal dealer's first card
         var revealedCard = _game.Dealer.Hands[0][0];
         var cardView = CreateCardView(revealedCard);
@@ -177,6 +175,12 @@ public partial class MainPage : ContentPage
             await AddSingleCardToUI(pnlDealerHand, newCard);
             UpdateUI();
         }
+    }
+
+    private async void btnStay_Click(object sender, EventArgs e)
+    {
+        _game.PlayerStays();
+        await AnimateDealerTurn();
 
         if (_game.CurrentState == GameState.HandOver)
         {
@@ -214,7 +218,7 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void DrawHands()
+    private void DrawHands(bool animate = true)
     {
         // Player's Hands
         pnlPlayerHand.Clear();
@@ -233,7 +237,10 @@ public partial class MainPage : ContentPage
             {
                 var cardView = CreateCardView(card);
                 cardFlexLayout.Children.Add(cardView);
-                AnimateCard(cardView);
+                if (animate)
+                {
+                    AnimateCard(cardView);
+                }
             }
 
             handContainer.Children.Add(handLabel);
@@ -252,7 +259,7 @@ public partial class MainPage : ContentPage
                 var isHidden = hideFirstCard && card == _game.Dealer.Hands[0].First();
                 var cardView = CreateCardView(card, isHidden);
                 pnlDealerHand.Children.Add(cardView);
-                if (!isHidden)
+                if (!isHidden && animate)
                 {
                     AnimateCard(cardView);
                 }
@@ -282,7 +289,7 @@ public partial class MainPage : ContentPage
 
 
         UpdateUI(); // Final update to show dealer's full hand and final scores
-        DrawHands();
+        DrawHands(false);
 
         if (_game.Player.Money <= 0)
         {
@@ -405,7 +412,7 @@ public partial class MainPage : ContentPage
 
         // Update all labels and button visibility for a fresh start
         UpdateUI();
-        DrawHands();
+        DrawHands(false);
     }
 
     private async void btnSettings_Click(object sender, EventArgs e)
@@ -423,14 +430,25 @@ public partial class MainPage : ContentPage
         Application.Current.Quit();
     }
 
-    private void btnDoubleDown_Click(object sender, EventArgs e)
+    private async void btnDoubleDown_Click(object sender, EventArgs e)
     {
         try
         {
             _game.PlayerDoublesDown();
+
+            // Animate the new card for the player
+            var playerHandContainer = (VerticalStackLayout)pnlPlayerHand.Children[_game.Player.ActiveHandIndex];
+            var cardFlexLayout = (FlexLayout)playerHandContainer.Children[1];
+            var newCard = _game.Player.CurrentHand.Last();
+            await AddSingleCardToUI(cardFlexLayout, newCard);
             UpdateUI();
-            DrawHands();
-            EndHand();
+
+            await AnimateDealerTurn();
+
+            if (_game.CurrentState == GameState.HandOver)
+            {
+                EndHand();
+            }
         }
         catch (InvalidOperationException ex)
         {
@@ -449,7 +467,7 @@ public partial class MainPage : ContentPage
                 EndHand();
             }
             UpdateUI();
-            DrawHands();
+            DrawHands(false);
         }
         catch (InvalidOperationException ex)
         {
@@ -466,7 +484,7 @@ public partial class MainPage : ContentPage
             EndHand();
         }
         UpdateUI();
-        DrawHands();
+        DrawHands(false);
     }
 
     private void btnSplit_Click(object sender, EventArgs e)
@@ -475,7 +493,7 @@ public partial class MainPage : ContentPage
         {
             _game.PlayerSplits();
             UpdateUI();
-            DrawHands();
+            DrawHands(); // Should this be animated? A split is a big event. I'll leave it as true.
         }
         catch (InvalidOperationException ex)
         {
