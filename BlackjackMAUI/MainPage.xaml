@@ -67,7 +67,7 @@
                         x:Name="BettingControls"
                         ColumnDefinitions="Auto,*,Auto,Auto"
                         HorizontalOptions="Fill"
-                        Spacing="10">
+                        ColumnSpacing="10">
                         <Label Grid.Column="0" Text="Bet:" VerticalOptions="Center" />
                         <Entry
                             x:Name="txtBet"
@@ -90,7 +90,7 @@
                         x:Name="BettingShortcuts"
                         ColumnDefinitions="*,*,*,*"
                         HorizontalOptions="Fill"
-                        Spacing="10">
+                        ColumnSpacing="10">
                         <Button
                             Grid.Column="0"
                             Clicked="ChipButton_Click"
@@ -136,7 +136,7 @@
                     ColumnDefinitions="*,*,*,*"
                     HorizontalOptions="Fill"
                     IsVisible="False"
-                    Spacing="10">
+                    ColumnSpacing="10">
                     <Button
                         x:Name="btnHit"
                         Grid.Column="0"
