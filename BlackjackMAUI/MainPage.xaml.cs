@@ -8,6 +8,7 @@ public partial class MainPage : ContentPage
 {
     private BlackjackGameLogic _game;
     private readonly IAudioManager _audioManager;
+    private readonly Random _random = new();
 
     public MainPage(IAudioManager audioManager)
     {
@@ -17,6 +18,7 @@ public partial class MainPage : ContentPage
 
         ApplySettings();
         UpdateUI();
+        DrawHands();
     }
 
     protected override void OnAppearing()
@@ -24,6 +26,7 @@ public partial class MainPage : ContentPage
         base.OnAppearing();
         _game = new BlackjackGameLogic();
         UpdateUI();
+        DrawHands();
         ApplySettings();
     }
 
@@ -44,6 +47,12 @@ public partial class MainPage : ContentPage
         }
     }
 
+    private void PlayDealSound()
+    {
+        int soundNumber = _random.Next(1, 7); // 1 to 6
+        PlaySound($"deal_{soundNumber}.wav");
+    }
+
     private void ApplySettings()
     {
         // Felt Color
@@ -55,9 +64,10 @@ public partial class MainPage : ContentPage
         });
 
         UpdateUI(); // Re-draw cards with new backs
+        DrawHands();
     }
 
-    private void btnBet_Click(object sender, EventArgs e)
+    private async void btnBet_Click(object sender, EventArgs e)
     {
         if (int.TryParse(txtBet.Text, out int betAmount))
         {
@@ -65,8 +75,7 @@ public partial class MainPage : ContentPage
             {
                 _game.StartNewHand(betAmount, Settings.NumberOfDecks);
                 lblStatus.Text = "Player's Turn";
-                PlaySound("deal.wav");
-                UpdateUI();
+                await DealCardsWithAnimation();
             }
             catch (ArgumentException ex)
             {
@@ -79,21 +88,94 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void btnHit_Click(object sender, EventArgs e)
+    private async void btnHit_Click(object sender, EventArgs e)
     {
         _game.PlayerHits();
-        PlaySound("deal.wav");
+
+        // Find the correct hand container to add the card to
+        var playerHandContainer = (VerticalStackLayout)pnlPlayerHand.Children[_game.Player.ActiveHandIndex];
+        var cardFlexLayout = (FlexLayout)playerHandContainer.Children[1];
+        var newCard = _game.Player.CurrentHand.Last();
+
+        await AddSingleCardToUI(cardFlexLayout, newCard);
+
         UpdateUI();
+
         if (_game.CurrentState == GameState.HandOver)
         {
             EndHand();
         }
     }
 
-    private void btnStay_Click(object sender, EventArgs e)
+    private async Task DealCardsWithAnimation()
+    {
+        // 1. Clear everything from previous hands
+        pnlPlayerHand.Clear();
+        pnlDealerHand.Clear();
+
+        // 2. Set up player hand container since UpdateUI won't be doing it initially
+        var playerHandContainer = new VerticalStackLayout { Spacing = 5, Margin = new Thickness(10) };
+        var handLabel = new Label { FontAttributes = FontAttributes.Bold };
+        var cardFlexLayout = new FlexLayout { JustifyContent = FlexJustify.Center, Wrap = FlexWrap.Wrap };
+        playerHandContainer.Children.Add(handLabel);
+        playerHandContainer.Children.Add(cardFlexLayout);
+        pnlPlayerHand.Children.Add(playerHandContainer);
+
+        // 3. Deal cards one by one with delays and sounds
+        await AddSingleCardToUI(cardFlexLayout, _game.Player.Hands[0][0]);
+        handLabel.Text = $"Hand 1 Score: {_game.Player.CalculateScore(0)}";
+
+        await AddSingleCardToUI(pnlDealerHand, _game.Dealer.Hands[0][0], true);
+
+        await AddSingleCardToUI(cardFlexLayout, _game.Player.Hands[0][1]);
+        handLabel.Text = $"Hand 1 Score: {_game.Player.CalculateScore(0)}";
+
+        await AddSingleCardToUI(pnlDealerHand, _game.Dealer.Hands[0][1]);
+
+        // 4. Final UI update to refresh scores and button states
+        UpdateUI();
+    }
+
+    private async Task AddSingleCardToUI(Layout parentLayout, Card card, bool isHidden = false)
+    {
+        var cardView = CreateCardView(card, isHidden);
+
+        if (parentLayout is FlexLayout flex)
+        {
+            flex.Children.Add(cardView);
+        }
+        else if (parentLayout is StackLayout stack)
+        {
+            stack.Children.Add(cardView);
+        }
+
+        PlayDealSound();
+        AnimateCard(cardView);
+        await Task.Delay(350); // Animation delay
+    }
+
+    private async void btnStay_Click(object sender, EventArgs e)
     {
         _game.PlayerStays();
+
+        // Reveal dealer's first card
+        var revealedCard = _game.Dealer.Hands[0][0];
+        var cardView = CreateCardView(revealedCard);
+        pnlDealerHand.Children.RemoveAt(0);
+        pnlDealerHand.Children.Insert(0, cardView);
+        AnimateCard(cardView);
         UpdateUI();
+        await Task.Delay(350);
+
+        // Dealer draws cards
+        while (_game.CurrentState == GameState.DealerTurn)
+        {
+            _game.DealerHits();
+            var newCard = _game.Dealer.Hands[0].Last();
+            await AddSingleCardToUI(pnlDealerHand, newCard);
+            UpdateUI();
+        }
+
         if (_game.CurrentState == GameState.HandOver)
         {
             EndHand();
@@ -109,6 +191,29 @@ public partial class MainPage : ContentPage
         // Money
         lblPlayerMoney.Text = $"Player Money: ${_game.Player.Money}";
 
+        // Button states
+        bool handInProgress = _game.CurrentState == GameState.PlayerTurn;
+        bool awaitingInsurance = _game.CurrentState == GameState.AwaitingInsurance;
+
+        ActionControls.IsVisible = handInProgress;
+        BettingPanel.IsVisible = !handInProgress && !awaitingInsurance;
+        InsuranceControls.IsVisible = awaitingInsurance;
+
+        // Button visibility
+        bool canDoubleDown = handInProgress && _game.Player.CurrentHand.Count == 2 && _game.Player.Money >= _game.CurrentBet;
+        bool canSplit = handInProgress && _game.Player.CurrentHand.Count == 2 && _game.Player.CurrentHand[0].Value == _game.Player.CurrentHand[1].Value && _game.Player.Money >= _game.CurrentBet;
+
+        btnDoubleDown.IsVisible = canDoubleDown;
+        btnSplit.IsVisible = canSplit;
+
+        if (awaitingInsurance)
+        {
+            lblStatus.Text = "Insurance?";
+        }
+    }
+
+    private void DrawHands()
+    {
         // Player's Hands
         pnlPlayerHand.Clear();
         for (int i = 0; i < _game.Player.Hands.Count; i++)
@@ -126,7 +231,7 @@ public partial class MainPage : ContentPage
             {
                 var cardView = CreateCardView(card);
                 cardFlexLayout.Children.Add(cardView);
-                // AnimateCard(cardView);
+                AnimateCard(cardView);
             }
 
             handContainer.Children.Add(handLabel);
@@ -147,30 +252,9 @@ public partial class MainPage : ContentPage
                 pnlDealerHand.Children.Add(cardView);
                 if (!isHidden)
                 {
-                    // AnimateCard(cardView);
+                    AnimateCard(cardView);
                 }
             }
-        }
-
-
-        // Button states
-        bool handInProgress = _game.CurrentState == GameState.PlayerTurn;
-        bool awaitingInsurance = _game.CurrentState == GameState.AwaitingInsurance;
-
-        ActionControls.IsVisible = handInProgress;
-        BettingPanel.IsVisible = !handInProgress && !awaitingInsurance;
-        InsuranceControls.IsVisible = awaitingInsurance;
-
-        // Button visibility
-        bool canDoubleDown = handInProgress && _game.Player.CurrentHand.Count == 2 && _game.Player.Money >= _game.CurrentBet;
-        bool canSplit = handInProgress && _game.Player.CurrentHand.Count == 2 && _game.Player.CurrentHand[0].Value == _game.Player.CurrentHand[1].Value && _game.Player.Money >= _game.CurrentBet;
-
-        btnDoubleDown.IsVisible = canDoubleDown;
-        btnSplit.IsVisible = canSplit;
-
-        if (awaitingInsurance)
-        {
-            lblStatus.Text = "Insurance?";
         }
     }
 
@@ -196,6 +280,7 @@ public partial class MainPage : ContentPage
 
 
         UpdateUI(); // Final update to show dealer's full hand and final scores
+        DrawHands();
 
         if (_game.Player.Money <= 0)
         {
@@ -318,6 +403,7 @@ public partial class MainPage : ContentPage
 
         // Update all labels and button visibility for a fresh start
         UpdateUI();
+        DrawHands();
     }
 
     private async void btnSettings_Click(object sender, EventArgs e)
@@ -341,6 +427,7 @@ public partial class MainPage : ContentPage
         {
             _game.PlayerDoublesDown();
             UpdateUI();
+            DrawHands();
             EndHand();
         }
         catch (InvalidOperationException ex)
@@ -360,6 +447,7 @@ public partial class MainPage : ContentPage
                 EndHand();
             }
             UpdateUI();
+            DrawHands();
         }
         catch (InvalidOperationException ex)
         {
@@ -376,6 +464,7 @@ public partial class MainPage : ContentPage
             EndHand();
         }
         UpdateUI();
+        DrawHands();
     }
 
     private void btnSplit_Click(object sender, EventArgs e)
@@ -384,6 +473,7 @@ public partial class MainPage : ContentPage
         {
             _game.PlayerSplits();
             UpdateUI();
+            DrawHands();
         }
         catch (InvalidOperationException ex)
         {
