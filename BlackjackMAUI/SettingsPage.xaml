@@ -67,15 +67,20 @@
                 FontAttributes="Bold"
                 FontSize="18"
                 Text="BGM Volume" />
-            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
                 <Slider
+                    Grid.Column="0"
                     x:Name="sliderBgmVolume"
                     Maximum="1"
                     Minimum="0"
-                    HorizontalOptions="FillAndExpand"
                     ValueChanged="sliderBgmVolume_ValueChanged" />
-                <Button x:Name="btnMuteBgm" Clicked="btnMuteBgm_Click" FontFamily="MaterialIcons" FontSize="30" />
-            </HorizontalStackLayout>
+                <Button
+                    Grid.Column="1"
+                    x:Name="btnMuteBgm"
+                    Clicked="btnMuteBgm_Click"
+                    FontFamily="MaterialIcons"
+                    FontSize="30" />
+            </Grid>
 
 
             <!--  Sound Effects Volume  -->
@@ -83,14 +88,19 @@
                 FontAttributes="Bold"
                 FontSize="18"
                 Text="Sound Effects Volume" />
-            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
                 <Slider
+                    Grid.Column="0"
                     x:Name="sliderSfxVolume"
                     Maximum="1"
-                    Minimum="0"
-                    HorizontalOptions="FillAndExpand" />
-                <Button x:Name="btnMuteSfx" Clicked="btnMuteSfx_Click" FontFamily="MaterialIcons" FontSize="30" />
-            </HorizontalStackLayout>
+                    Minimum="0" />
+                <Button
+                    Grid.Column="1"
+                    x:Name="btnMuteSfx"
+                    Clicked="btnMuteSfx_Click"
+                    FontFamily="MaterialIcons"
+                    FontSize="30" />
+            </Grid>
 
             <!--  Action Buttons  -->
             <HorizontalStackLayout
