@@ -98,6 +98,11 @@
                         IsVisible="False"
                         Text="Double Down" />
                     <Button
+                        x:Name="btnSplit"
+                        Clicked="btnSplit_Click"
+                        IsVisible="False"
+                        Text="Split" />
+                    <Button
 
                         x:Name="btnSaveQuit"
                         Clicked="btnSaveQuit_Click"
