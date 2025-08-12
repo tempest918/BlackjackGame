@@ -4,6 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     BackgroundColor="{StaticResource FeltGreen}">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save and Quit" Clicked="btnSaveQuit_Click" />
+    </ContentPage.ToolbarItems>
+
     <Grid Padding="10" RowDefinitions="Auto,*,Auto">
 
         <VerticalStackLayout Grid.Row="0" Spacing="10">
@@ -112,11 +116,6 @@
                         Clicked="btnSplit_Click"
                         IsVisible="False"
                         Text="Split" />
-                    <Button
-
-                        x:Name="btnSaveQuit"
-                        Clicked="btnSaveQuit_Click"
-                        Text="Save and Quit" />
                 </HorizontalStackLayout>
 
                 <VerticalStackLayout

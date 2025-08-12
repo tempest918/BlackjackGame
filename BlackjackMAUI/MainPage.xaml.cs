@@ -374,6 +374,7 @@ public partial class MainPage : ContentPage
             if (newBet <= _game.Player.Money)
             {
                 txtBet.Text = newBet.ToString();
+                PlaySound("chip.wav");
             }
         }
     }
