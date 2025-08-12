@@ -7,10 +7,13 @@ namespace BlackjackLogic
     {
         public string Name { get; set; }
         public List<List<Card>> Hands { get; set; }
+
         public int Money { get; set; }
         public int ActiveHandIndex { get; set; }
 
         public List<Card> CurrentHand => Hands.Count > ActiveHandIndex ? Hands[ActiveHandIndex] : null;
+
+        public Player() { }
 
         public Player() { }
 

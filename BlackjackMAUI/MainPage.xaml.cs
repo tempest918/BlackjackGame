@@ -99,6 +99,7 @@ public partial class MainPage : ContentPage
 
         pnlDealerHand.Clear();
         bool hideFirstCard = _game.CurrentState == GameState.PlayerTurn || _game.CurrentState == GameState.AwaitingInsurance;
+
         if (_game.Dealer.Hands != null && _game.Dealer.Hands.Count > 0)
         {
             foreach (var card in _game.Dealer.Hands[0])
@@ -133,6 +134,7 @@ public partial class MainPage : ContentPage
     {
         List<HandResultInfo> results = _game.DetermineHandResult();
         lblStatus.Text = GetResultMessage(results);
+
 
         UpdateUI(); // Final update to show dealer's full hand and final scores
 

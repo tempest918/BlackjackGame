@@ -103,6 +103,7 @@
                         IsVisible="False"
                         Text="Split" />
                     <Button
+
                         x:Name="btnSaveQuit"
                         Clicked="btnSaveQuit_Click"
                         Text="Save and Quit" />

@@ -36,6 +36,7 @@ namespace BlackjackLogic
 
         public bool DealerShowsAce => Dealer.Hands.Count > 0 && Dealer.Hands[0].Count > 1 && Dealer.Hands[0][1].Face == "A";
 
+
         public BlackjackGameLogic()
         {
             Player = new Player("Player");
