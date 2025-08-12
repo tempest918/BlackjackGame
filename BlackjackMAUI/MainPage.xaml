@@ -88,8 +88,8 @@
 
                     <Grid
                         x:Name="BettingShortcuts"
-                        ColumnDefinitions="*,*,*,*"
-                        HorizontalOptions="Fill"
+                        ColumnDefinitions="Auto,Auto,Auto,Auto"
+                        HorizontalOptions="Center"
                         ColumnSpacing="10">
                         <Button
                             Grid.Column="0"
