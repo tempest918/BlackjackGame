@@ -93,7 +93,8 @@
                     Grid.Column="0"
                     x:Name="sliderSfxVolume"
                     Maximum="1"
-                    Minimum="0" />
+                    Minimum="0"
+                    ValueChanged="sliderSfxVolume_ValueChanged" />
                 <Button
                     Grid.Column="1"
                     x:Name="btnMuteSfx"

@@ -357,7 +357,7 @@ public partial class MainPage : ContentPage
                 HandResult.Win => $"Win (${_game.Bets[i]})",
                 HandResult.Loss => "Loss",
                 HandResult.Push => "Push",
-                HandResult.Blackjack => $"Blackjack! You win (${_game.Bets[i] * 1.5 + _game.Bets[i]})",
+                HandResult.Blackjack => $"Blackjack! Win (${(int)(_game.Bets[i] * 1.5)})",
                 _ => ""
             });
             if (i < results.Count - 1) message.Append(" | ");

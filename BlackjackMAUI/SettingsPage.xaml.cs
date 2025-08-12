@@ -4,9 +4,6 @@ namespace MyBlackjackMAUI;
 
 public partial class SettingsPage : ContentPage
 {
-    private double _preMuteBgmVolume;
-    private double _preMuteSfxVolume;
-
     public SettingsPage()
     {
         InitializeComponent();
@@ -26,12 +23,9 @@ public partial class SettingsPage : ContentPage
         pickerCardBack.SelectedItem = Settings.CardBack;
 
         // Sound
-        switchSoundEnabled.IsToggled = Settings.SoundEffectsEnabled; // Assuming this is the master switch now
+        switchSoundEnabled.IsToggled = Settings.SoundEffectsEnabled;
         sliderBgmVolume.Value = Settings.BgmVolume;
         sliderSfxVolume.Value = Settings.SoundEffectsVolume;
-
-        _preMuteBgmVolume = Settings.BgmVolume > 0 ? Settings.BgmVolume : 0.5; // Default to 0.5 if saved as 0
-        _preMuteSfxVolume = Settings.SoundEffectsVolume > 0 ? Settings.SoundEffectsVolume : 0.5;
 
         UpdateMuteButtons();
     }
@@ -47,6 +41,22 @@ public partial class SettingsPage : ContentPage
         {
             AppShell.BgmPlayer.Volume = e.NewValue;
         }
+        // If user manually changes volume, update the pre-mute setting
+        if (e.NewValue > 0)
+        {
+            Settings.PreMuteBgmVolume = e.NewValue;
+        }
+        UpdateMuteButtons();
+    }
+
+    private void sliderSfxVolume_ValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        // If user manually changes volume, update the pre-mute setting
+        if (e.NewValue > 0)
+        {
+            Settings.PreMuteSfxVolume = e.NewValue;
+        }
+        UpdateMuteButtons();
     }
 
     private async void btnSave_Click(object sender, EventArgs e)
@@ -55,11 +65,12 @@ public partial class SettingsPage : ContentPage
         Settings.FeltColor = pickerFeltColor.SelectedItem.ToString();
         Settings.CardBack = pickerCardBack.SelectedItem.ToString();
         Settings.SoundEffectsEnabled = switchSoundEnabled.IsToggled;
+
+        // Save final slider values
         Settings.BgmVolume = sliderBgmVolume.Value;
         Settings.SoundEffectsVolume = sliderSfxVolume.Value;
 
-        // BGM volume is already set by the slider's ValueChanged event
-        // The master sound toggle now handles play/stop directly
+        // PreMute volumes are already updated by sliders, so they are implicitly saved
 
         await Shell.Current.GoToAsync("..");
     }
@@ -78,34 +89,34 @@ public partial class SettingsPage : ContentPage
     {
         if (sliderBgmVolume.Value > 0)
         {
-            _preMuteBgmVolume = sliderBgmVolume.Value;
+            // Muting: PreMute volume is already set by the ValueChanged event.
+            // Just set the slider to 0.
             sliderBgmVolume.Value = 0;
         }
         else
         {
-            sliderBgmVolume.Value = _preMuteBgmVolume;
+            // Unmuting: Restore from the persistent PreMute setting.
+            sliderBgmVolume.Value = Settings.PreMuteBgmVolume;
         }
-        UpdateMuteButtons();
     }
 
     private void btnMuteSfx_Click(object sender, EventArgs e)
     {
         if (sliderSfxVolume.Value > 0)
         {
-            _preMuteSfxVolume = sliderSfxVolume.Value;
+            // Muting
             sliderSfxVolume.Value = 0;
         }
         else
         {
-            sliderSfxVolume.Value = _preMuteSfxVolume;
+            // Unmuting
+            sliderSfxVolume.Value = Settings.PreMuteSfxVolume;
         }
-        UpdateMuteButtons();
     }
 
     private void UpdateMuteButtons()
     {
         // BGM Mute Button
-        // e050 is volume_up, e04f is volume_off
         btnMuteBgm.Text = sliderBgmVolume.Value > 0 ? "\ue050" : "\ue04f";
 
         // SFX Mute Button
