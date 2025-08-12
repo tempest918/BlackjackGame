@@ -30,8 +30,10 @@ public partial class SettingsPage : ContentPage
         sliderBgmVolume.Value = Settings.BgmVolume;
         sliderSfxVolume.Value = Settings.SoundEffectsVolume;
 
-        _preMuteBgmVolume = Settings.BgmVolume;
-        _preMuteSfxVolume = Settings.SoundEffectsVolume;
+        _preMuteBgmVolume = Settings.BgmVolume > 0 ? Settings.BgmVolume : 0.5; // Default to 0.5 if saved as 0
+        _preMuteSfxVolume = Settings.SoundEffectsVolume > 0 ? Settings.SoundEffectsVolume : 0.5;
+
+        UpdateMuteButtons();
     }
 
     private void sliderDecks_ValueChanged(object sender, ValueChangedEventArgs e)
@@ -56,18 +58,8 @@ public partial class SettingsPage : ContentPage
         Settings.BgmVolume = sliderBgmVolume.Value;
         Settings.SoundEffectsVolume = sliderSfxVolume.Value;
 
-        if (AppShell.BgmPlayer is not null)
-        {
-            AppShell.BgmPlayer.Volume = Settings.BgmVolume;
-            if (Settings.SoundEffectsEnabled)
-            {
-                if (!AppShell.BgmPlayer.IsPlaying) AppShell.BgmPlayer.Play();
-            }
-            else
-            {
-                AppShell.BgmPlayer.Stop();
-            }
-        }
+        // BGM volume is already set by the slider's ValueChanged event
+        // The master sound toggle now handles play/stop directly
 
         await Shell.Current.GoToAsync("..");
     }
@@ -88,13 +80,12 @@ public partial class SettingsPage : ContentPage
         {
             _preMuteBgmVolume = sliderBgmVolume.Value;
             sliderBgmVolume.Value = 0;
-            btnMuteBgm.Text = "Unmute";
         }
         else
         {
             sliderBgmVolume.Value = _preMuteBgmVolume;
-            btnMuteBgm.Text = "Mute";
         }
+        UpdateMuteButtons();
     }
 
     private void btnMuteSfx_Click(object sender, EventArgs e)
@@ -103,12 +94,35 @@ public partial class SettingsPage : ContentPage
         {
             _preMuteSfxVolume = sliderSfxVolume.Value;
             sliderSfxVolume.Value = 0;
-            btnMuteSfx.Text = "Unmute";
         }
         else
         {
             sliderSfxVolume.Value = _preMuteSfxVolume;
-            btnMuteSfx.Text = "Mute";
+        }
+        UpdateMuteButtons();
+    }
+
+    private void UpdateMuteButtons()
+    {
+        // BGM Mute Button
+        // e050 is volume_up, e04f is volume_off
+        btnMuteBgm.Text = sliderBgmVolume.Value > 0 ? "\ue050" : "\ue04f";
+
+        // SFX Mute Button
+        btnMuteSfx.Text = sliderSfxVolume.Value > 0 ? "\ue050" : "\ue04f";
+    }
+
+    private void switchSoundEnabled_Toggled(object sender, ToggledEventArgs e)
+    {
+        if (AppShell.BgmPlayer is null) return;
+
+        if (e.Value)
+        {
+            AppShell.BgmPlayer.Play();
+        }
+        else
+        {
+            AppShell.BgmPlayer.Stop();
         }
     }
 }

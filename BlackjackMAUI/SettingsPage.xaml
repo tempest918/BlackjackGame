@@ -59,7 +59,7 @@
                     FontSize="18"
                     Text="Enable Sound"
                     VerticalOptions="Center" />
-                <Switch x:Name="switchSoundEnabled" />
+                <Switch x:Name="switchSoundEnabled" Toggled="switchSoundEnabled_Toggled" />
             </HorizontalStackLayout>
 
             <!--  BGM Volume  -->
@@ -67,14 +67,14 @@
                 FontAttributes="Bold"
                 FontSize="18"
                 Text="BGM Volume" />
-            <HorizontalStackLayout Spacing="10">
+            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                 <Slider
                     x:Name="sliderBgmVolume"
                     Maximum="1"
                     Minimum="0"
                     HorizontalOptions="FillAndExpand"
                     ValueChanged="sliderBgmVolume_ValueChanged" />
-                <Button x:Name="btnMuteBgm" Text="Mute" Clicked="btnMuteBgm_Click" />
+                <Button x:Name="btnMuteBgm" Clicked="btnMuteBgm_Click" FontFamily="MaterialIcons" FontSize="30" />
             </HorizontalStackLayout>
 
 
@@ -83,13 +83,13 @@
                 FontAttributes="Bold"
                 FontSize="18"
                 Text="Sound Effects Volume" />
-            <HorizontalStackLayout Spacing="10">
+            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                 <Slider
                     x:Name="sliderSfxVolume"
                     Maximum="1"
                     Minimum="0"
                     HorizontalOptions="FillAndExpand" />
-                <Button x:Name="btnMuteSfx" Text="Mute" Clicked="btnMuteSfx_Click" />
+                <Button x:Name="btnMuteSfx" Clicked="btnMuteSfx_Click" FontFamily="MaterialIcons" FontSize="30" />
             </HorizontalStackLayout>
 
             <!--  Action Buttons  -->
