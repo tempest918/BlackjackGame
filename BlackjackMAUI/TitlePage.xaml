@@ -15,10 +15,6 @@
             Clicked="btnNewGame_Click"
             Text="New Game" />
 
-        <Button
-            x:Name="btnContinue"
-            Clicked="btnContinue_Click"
-            Text="Continue" />
 
         <Button
             x:Name="btnSettings"

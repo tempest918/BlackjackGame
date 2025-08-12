@@ -5,7 +5,7 @@
     BackgroundColor="{StaticResource FeltGreen}">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Clicked="btnSaveQuit_Click" Text="Save and Quit" />
+        <ToolbarItem Clicked="btnStats_Click" Text="Stats" />
         <ToolbarItem Clicked="btnSettings_Click" Text="Settings" />
         <ToolbarItem Clicked="btnQuit_Click" Text="Quit" />
     </ContentPage.ToolbarItems>

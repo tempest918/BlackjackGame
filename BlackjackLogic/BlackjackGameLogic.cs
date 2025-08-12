@@ -33,13 +33,15 @@ namespace BlackjackLogic
         public List<int> Bets { get; set; }
         public int CurrentBet => Player.ActiveHandIndex < Bets.Count ? Bets[Player.ActiveHandIndex] : 0;
         public int InsuranceBet { get; private set; }
+        public PlayerStats Stats { get; private set; }
 
         public bool DealerShowsAce => Dealer.Hands.Count > 0 && Dealer.Hands[0].Count > 1 && Dealer.Hands[0][1].Face == "A";
 
 
         public BlackjackGameLogic()
         {
-            Player = new Player("Player");
+            Stats = PersistenceService.LoadStats();
+            Player = new Player("Player", Stats.PlayerMoney);
             Dealer = new Dealer();
 
             CurrentState = GameState.HandOver;
@@ -267,6 +269,41 @@ namespace BlackjackLogic
             }
 
             return results;
+        }
+
+        public void UpdateStatsAndSave(List<HandResultInfo> results)
+        {
+            Stats.HandsPlayed += results.Count;
+            int totalWinnings = 0;
+
+            foreach (var result in results)
+            {
+                switch (result.MainHandResult)
+                {
+                    case HandResult.Win:
+                        Stats.Wins++;
+                        totalWinnings += Bets[results.IndexOf(result)];
+                        break;
+                    case HandResult.Loss:
+                        Stats.Losses++;
+                        break;
+                    case HandResult.Push:
+                        Stats.Pushes++;
+                        break;
+                    case HandResult.Blackjack:
+                        Stats.Blackjacks++;
+                        totalWinnings += (int)(Bets[results.IndexOf(result)] * 1.5);
+                        break;
+                }
+            }
+
+            if (totalWinnings > Stats.LargestPotWon)
+            {
+                Stats.LargestPotWon = totalWinnings;
+            }
+
+            Stats.PlayerMoney = Player.Money;
+            PersistenceService.SaveStats(Stats);
         }
     }
 }

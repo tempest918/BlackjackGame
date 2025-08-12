@@ -4,7 +4,6 @@ using Plugin.Maui.Audio;
 
 namespace MyBlackjackMAUI;
 
-[QueryProperty(nameof(LoadedGame), "LoadedGame")]
 public partial class MainPage : ContentPage
 {
     private BlackjackGameLogic _game;
@@ -23,19 +22,9 @@ public partial class MainPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        _game = new BlackjackGameLogic();
+        UpdateUI();
         ApplySettings();
-    }
-
-    public BlackjackGameLogic LoadedGame
-    {
-        set
-        {
-            if (value != null)
-            {
-                _game = value;
-                UpdateUI();
-            }
-        }
     }
 
     private async void PlaySound(string fileName)
@@ -190,6 +179,8 @@ public partial class MainPage : ContentPage
         List<HandResultInfo> results = _game.DetermineHandResult();
         lblStatus.Text = GetResultMessage(results);
 
+        _game.UpdateStatsAndSave(results);
+
         // Determine overall win/loss for sound effect
         bool playerWon = results.Any(r => r.MainHandResult == HandResult.Win || r.MainHandResult == HandResult.Blackjack || r.InsuranceResult == HandResult.InsuranceWin);
         bool playerLost = results.Any(r => r.MainHandResult == HandResult.Loss);
@@ -314,8 +305,10 @@ public partial class MainPage : ContentPage
 
     private void btnNewGame_Click(object sender, EventArgs e)
     {
-        // Create a fresh instance of the game logic to reset everything
+        _game.Stats.Reset();
+        PersistenceService.SaveStats(_game.Stats);
         _game = new BlackjackGameLogic();
+
 
         // Reset the UI
         GameOverControls.IsVisible = false;
@@ -332,15 +325,14 @@ public partial class MainPage : ContentPage
         await Shell.Current.GoToAsync(nameof(SettingsPage));
     }
 
+    private async void btnStats_Click(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(StatsPage));
+    }
+
     private void btnQuit_Click(object sender, EventArgs e)
     {
         Application.Current.Quit();
-    }
-
-    private async void btnSaveQuit_Click(object sender, EventArgs e)
-    {
-        GameSaves.SaveGame(_game);
-        await Shell.Current.GoToAsync("..");
     }
 
     private void btnDoubleDown_Click(object sender, EventArgs e)
