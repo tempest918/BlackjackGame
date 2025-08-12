@@ -10,11 +10,13 @@ public partial class MainPage : ContentPage
     private readonly IAudioManager _audioManager;
     private readonly Random _random = new();
 
-    public MainPage(IAudioManager audioManager)
+    public bool GameInProgress { get; set; }
+
+    public MainPage(IAudioManager audioManager, BlackjackGameLogic game)
     {
         InitializeComponent();
         _audioManager = audioManager;
-        _game = new BlackjackGameLogic();
+        _game = game;
 
         ApplySettings();
         UpdateUI();
@@ -24,7 +26,6 @@ public partial class MainPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        _game = new BlackjackGameLogic();
         UpdateUI();
         DrawHands(false);
         ApplySettings();
@@ -340,9 +341,6 @@ public partial class MainPage : ContentPage
 
             // Show the betting controls for the next hand
             BettingPanel.IsVisible = true;
-
-            // Clear the previous bet amount
-            txtBet.Text = "";
         }
     }
 
@@ -452,22 +450,28 @@ public partial class MainPage : ContentPage
         GameOverControls.IsVisible = true;
     }
 
-    private void btnNewGame_Click(object sender, EventArgs e)
+    public void StartOrResetGame(bool newGame)
     {
-        _game.Stats.ArchiveAndReset();
-        PersistenceService.SaveStats(_game.Stats);
-        _game = new BlackjackGameLogic();
-
+        GameInProgress = true;
+        if (newGame)
+        {
+            _game.Stats.ArchiveAndReset();
+            _game.Reset();
+        }
 
         // Reset the UI
         GameOverControls.IsVisible = false;
         pnlPlayerHand.Clear();
         pnlDealerHand.Clear();
-        txtBet.Text = "";
 
         // Update all labels and button visibility for a fresh start
         UpdateUI();
         DrawHands(false);
+    }
+
+    private void btnNewGame_Click(object sender, EventArgs e)
+    {
+        StartOrResetGame(true);
     }
 
     private async void btnSettings_Click(object sender, EventArgs e)
@@ -480,9 +484,10 @@ public partial class MainPage : ContentPage
         await Shell.Current.GoToAsync(nameof(StatsPage));
     }
 
-    private void btnQuit_Click(object sender, EventArgs e)
+    private async void btnQuit_Click(object sender, EventArgs e)
     {
-        Application.Current.Quit();
+        GameInProgress = false;
+        await Shell.Current.GoToAsync($"//{nameof(TitlePage)}");
     }
 
     private async void btnDoubleDown_Click(object sender, EventArgs e)

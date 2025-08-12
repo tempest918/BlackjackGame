@@ -47,6 +47,15 @@ namespace BlackjackLogic
             CurrentState = GameState.HandOver;
         }
 
+        public void Reset()
+        {
+            Stats = PersistenceService.LoadStats();
+            Player = new Player("Player", Stats.PlayerMoney);
+            Dealer = new Dealer();
+
+            CurrentState = GameState.HandOver;
+        }
+
         public void StartNewHand(int bet, int numberOfDecks)
         {
             if (bet <= 0 || bet > Player.Money)

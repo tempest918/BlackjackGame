@@ -22,7 +22,11 @@ namespace MyBlackjackMAUI
 #endif
             builder.Services.AddSingleton(AudioManager.Current);
             builder.Services.AddSingleton<AppShell>();
+            builder.Services.AddSingleton<BlackjackLogic.BlackjackGameLogic>();
             builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddTransient<StatsPage>();
+            builder.Services.AddTransient<SettingsPage>();
+            builder.Services.AddTransient<TitlePage>();
 
             return builder.Build();
         }
