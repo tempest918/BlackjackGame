@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Plugin.Maui.Audio;
 
 namespace MyBlackjackMAUI
 {
@@ -18,7 +19,7 @@ namespace MyBlackjackMAUI
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-
+            builder.Services.AddSingleton(AudioManager.Current);
             return builder.Build();
         }
     }
