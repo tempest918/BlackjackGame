@@ -316,13 +316,13 @@ public partial class MainPage : ContentPage
     {
         if (sender is Button button && int.TryParse(button.CommandParameter?.ToString(), out int chipValue))
         {
-            if (int.TryParse(txtBet.Text, out int currentBet))
+            int.TryParse(txtBet.Text, out int currentBet); // Defaults to 0 if parsing fails
+
+            int newBet = currentBet + chipValue;
+
+            if (newBet <= _game.Player.Money)
             {
-                txtBet.Text = (currentBet + chipValue).ToString();
-            }
-            else
-            {
-                txtBet.Text = chipValue.ToString();
+                txtBet.Text = newBet.ToString();
             }
         }
     }
