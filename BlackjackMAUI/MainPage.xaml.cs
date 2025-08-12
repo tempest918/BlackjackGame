@@ -2,6 +2,7 @@
 
 namespace MyBlackjackMAUI;
 
+[QueryProperty(nameof(LoadedGame), "LoadedGame")]
 public partial class MainPage : ContentPage
 {
     private BlackjackGameLogic _game;
@@ -11,6 +12,18 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         _game = new BlackjackGameLogic();
         UpdateUI();
+    }
+
+    public BlackjackGameLogic LoadedGame
+    {
+        set
+        {
+            if (value != null)
+            {
+                _game = value;
+            }
+            UpdateUI();
+        }
     }
 
     private void btnBet_Click(object sender, EventArgs e)
@@ -134,7 +147,7 @@ public partial class MainPage : ContentPage
 
         if (isHidden)
         {
-            border.BackgroundColor = Colors.DarkGreen;
+            border.BackgroundColor = (Color)Application.Current.Resources["FeltGreenDark"];
         }
         else
         {
@@ -179,5 +192,11 @@ public partial class MainPage : ContentPage
     private void btnQuit_Click(object sender, EventArgs e)
     {
         Application.Current.Quit();
+    }
+
+    private async void btnSaveQuit_Click(object sender, EventArgs e)
+    {
+        GameSaves.SaveGame(_game);
+        await Shell.Current.GoToAsync("..");
     }
 }

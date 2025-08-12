@@ -7,6 +7,8 @@ namespace BlackjackLogic
         public string Face { get; set; }
         public int Value { get; set; }
 
+        public Card() { }
+
         public Card(string suit, string face, int value)
         {
             Suit = suit;
