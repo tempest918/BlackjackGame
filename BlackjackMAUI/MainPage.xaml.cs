@@ -272,7 +272,7 @@ public partial class MainPage : ContentPage
 
     private void GameOver()
     {
-        PlaySound("lose.wav");
+        PlaySound("game_over.wav");
         // Hide all other controls
         ActionControls.IsVisible = false;
         BettingPanel.IsVisible = false;

@@ -1,32 +1,29 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MyBlackjackMAUI.TitlePage"
-             Title="Blackjack">
-    <VerticalStackLayout
-        Spacing="20"
-        VerticalOptions="Center"
-        HorizontalOptions="Center">
+<ContentPage
+    x:Class="MyBlackjackMAUI.TitlePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Blackjack"
+    BackgroundColor="{StaticResource FeltGreen}">
 
-        <Label
-            Text="Blackjack"
-            FontSize="Large"
-            FontAttributes="Bold"
-            HorizontalOptions="Center" />
+    <VerticalStackLayout
+        HorizontalOptions="Center"
+        Spacing="20"
+        VerticalOptions="Center">
 
         <Button
             x:Name="btnNewGame"
-            Text="New Game"
-            Clicked="btnNewGame_Click" />
+            Clicked="btnNewGame_Click"
+            Text="New Game" />
 
         <Button
             x:Name="btnContinue"
-            Text="Continue"
-            Clicked="btnContinue_Click" />
+            Clicked="btnContinue_Click"
+            Text="Continue" />
 
         <Button
             x:Name="btnQuit"
-            Text="Quit Game"
-            Clicked="btnQuit_Click" />
+            Clicked="btnQuit_Click"
+            Text="Quit Game" />
 
     </VerticalStackLayout>
 </ContentPage>

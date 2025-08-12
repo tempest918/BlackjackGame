@@ -5,7 +5,7 @@
     BackgroundColor="{StaticResource FeltGreen}">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Save and Quit" Clicked="btnSaveQuit_Click" />
+        <ToolbarItem Clicked="btnSaveQuit_Click" Text="Save and Quit" />
     </ContentPage.ToolbarItems>
 
     <Grid Padding="10" RowDefinitions="Auto,*,Auto">
@@ -61,25 +61,44 @@
             <VerticalStackLayout x:Name="ControlPanels" HorizontalOptions="Center">
 
                 <VerticalStackLayout x:Name="BettingPanel" Spacing="10">
-                    <HorizontalStackLayout x:Name="BettingControls" Spacing="10" HorizontalOptions="Center">
+                    <HorizontalStackLayout
+                        x:Name="BettingControls"
+                        HorizontalOptions="Center"
+                        Spacing="10">
                         <Label Text="Bet:" VerticalOptions="Center" />
                         <Entry
                             x:Name="txtBet"
                             Keyboard="Numeric"
                             Placeholder="Amount"
+                            PlaceholderColor="White"
                             WidthRequest="100" />
                         <Button
                             x:Name="btnBet"
                             Clicked="btnBet_Click"
                             Text="Bet" />
-                        <Button Text="Clear" Clicked="ClearBetButton_Click" />
+                        <Button Clicked="ClearBetButton_Click" Text="Clear" />
                     </HorizontalStackLayout>
 
-                    <HorizontalStackLayout x:Name="BettingShortcuts" HorizontalOptions="Center" Spacing="10">
-                        <Button Text="$5" Clicked="ChipButton_Click" CommandParameter="5" />
-                        <Button Text="$10" Clicked="ChipButton_Click" CommandParameter="10" />
-                        <Button Text="$25" Clicked="ChipButton_Click" CommandParameter="25" />
-                        <Button Text="$100" Clicked="ChipButton_Click" CommandParameter="100" />
+                    <HorizontalStackLayout
+                        x:Name="BettingShortcuts"
+                        HorizontalOptions="Center"
+                        Spacing="10">
+                        <Button
+                            Clicked="ChipButton_Click"
+                            CommandParameter="5"
+                            Text="$5" />
+                        <Button
+                            Clicked="ChipButton_Click"
+                            CommandParameter="10"
+                            Text="$10" />
+                        <Button
+                            Clicked="ChipButton_Click"
+                            CommandParameter="25"
+                            Text="$25" />
+                        <Button
+                            Clicked="ChipButton_Click"
+                            CommandParameter="100"
+                            Text="$100" />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
 
@@ -87,10 +106,16 @@
                     x:Name="InsuranceControls"
                     IsVisible="False"
                     Spacing="10">
-                    <Label Text="Dealer has an Ace. Insurance?" HorizontalOptions="Center" />
-                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Button x:Name="btnInsuranceYes" Text="Yes" Clicked="btnInsuranceYes_Click" />
-                        <Button x:Name="btnInsuranceNo" Text="No" Clicked="btnInsuranceNo_Click" />
+                    <Label HorizontalOptions="Center" Text="Dealer has an Ace. Insurance?" />
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                        <Button
+                            x:Name="btnInsuranceYes"
+                            Clicked="btnInsuranceYes_Click"
+                            Text="Yes" />
+                        <Button
+                            x:Name="btnInsuranceNo"
+                            Clicked="btnInsuranceNo_Click"
+                            Text="No" />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
 
