@@ -48,6 +48,18 @@ namespace MyBlackjackMAUI
             set => Preferences.Set(nameof(SoundEffectsVolume), value);
         }
 
+        public static double PreMuteBgmVolume
+        {
+            get => Preferences.Get(nameof(PreMuteBgmVolume), DefaultBgmVolume);
+            set => Preferences.Set(nameof(PreMuteBgmVolume), value);
+        }
+
+        public static double PreMuteSfxVolume
+        {
+            get => Preferences.Get(nameof(PreMuteSfxVolume), DefaultSoundEffectsVolume);
+            set => Preferences.Set(nameof(PreMuteSfxVolume), value);
+        }
+
         public static void ResetToDefaults()
         {
             Preferences.Clear();

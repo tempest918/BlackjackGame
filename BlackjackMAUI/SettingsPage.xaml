@@ -52,14 +52,14 @@
                 </Picker.ItemsSource>
             </Picker>
 
-            <!--  Sound Effects  -->
+            <!--  Sound Enable/Disable  -->
             <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                 <Label
                     FontAttributes="Bold"
                     FontSize="18"
-                    Text="Sound Effects"
+                    Text="Enable Sound"
                     VerticalOptions="Center" />
-                <Switch x:Name="switchSoundEffects" />
+                <Switch x:Name="switchSoundEnabled" Toggled="switchSoundEnabled_Toggled" />
             </HorizontalStackLayout>
 
             <!--  BGM Volume  -->
@@ -67,21 +67,41 @@
                 FontAttributes="Bold"
                 FontSize="18"
                 Text="BGM Volume" />
-            <Slider
-                x:Name="sliderBgmVolume"
-                Maximum="1"
-                Minimum="0"
-                ValueChanged="sliderBgmVolume_ValueChanged" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                <Slider
+                    Grid.Column="0"
+                    x:Name="sliderBgmVolume"
+                    Maximum="1"
+                    Minimum="0"
+                    ValueChanged="sliderBgmVolume_ValueChanged" />
+                <Button
+                    Grid.Column="1"
+                    x:Name="btnMuteBgm"
+                    Clicked="btnMuteBgm_Click"
+                    FontFamily="MaterialIcons"
+                    FontSize="30" />
+            </Grid>
+
 
             <!--  Sound Effects Volume  -->
             <Label
                 FontAttributes="Bold"
                 FontSize="18"
                 Text="Sound Effects Volume" />
-            <Slider
-                x:Name="sliderSfxVolume"
-                Maximum="1"
-                Minimum="0" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                <Slider
+                    Grid.Column="0"
+                    x:Name="sliderSfxVolume"
+                    Maximum="1"
+                    Minimum="0"
+                    ValueChanged="sliderSfxVolume_ValueChanged" />
+                <Button
+                    Grid.Column="1"
+                    x:Name="btnMuteSfx"
+                    Clicked="btnMuteSfx_Click"
+                    FontFamily="MaterialIcons"
+                    FontSize="30" />
+            </Grid>
 
             <!--  Action Buttons  -->
             <HorizontalStackLayout
