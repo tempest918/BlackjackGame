@@ -386,7 +386,7 @@ public partial class MainPage : ContentPage
         await lblStatus.ScaleTo(1.0, 500, Easing.CubicIn);
 
         // Reset to default style
-        lblStatus.TextColor = Colors.Default;
+        lblStatus.ClearValue(Label.TextColorProperty);
         lblStatus.FontSize = 14;
         lblStatus.FontAttributes = FontAttributes.None;
     }
