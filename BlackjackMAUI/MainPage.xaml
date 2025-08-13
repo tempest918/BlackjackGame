@@ -26,7 +26,7 @@
                 Wrap="Wrap" />
         </VerticalStackLayout>
 
-        <ScrollView Grid.Row="1">
+        <ScrollView Grid.Row="1" x:Name="PlayerHandsScrollView">
             <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
 
                 <Label
