@@ -18,16 +18,16 @@ public partial class MainPage : ContentPage
         _audioManager = audioManager;
         _game = game;
 
+        // ApplySettings calls UpdateUI and DrawHands, so they are not needed here.
         ApplySettings();
-        UpdateUI();
-        DrawHands(false);
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        UpdateUI();
-        DrawHands(false);
+        // All UI updates and settings applications are handled here.
+        // This ensures that when we return from the Settings page,
+        // the UI is refreshed with the latest settings.
         ApplySettings();
     }
 
