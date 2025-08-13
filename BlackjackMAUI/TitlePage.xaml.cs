@@ -19,7 +19,7 @@ public partial class TitlePage : ContentPage
         {
             _mainPage.StartOrResetGame(true);
         }
-        await Shell.Current.GoToAsync(nameof(MainPage));
+        await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
     }
 
     private void btnQuit_Click(object sender, EventArgs e)
