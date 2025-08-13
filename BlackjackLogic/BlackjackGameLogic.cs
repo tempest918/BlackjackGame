@@ -329,6 +329,7 @@ namespace BlackjackLogic
         {
             Stats.CurrentRun.HandsPlayed += results.Count;
             int totalWinnings = 0;
+            int totalLoss = 0;
 
             foreach (var result in results)
             {
@@ -341,6 +342,7 @@ namespace BlackjackLogic
                         break;
                     case HandResult.Loss:
                         Stats.CurrentRun.Losses++;
+                        totalLoss += betAmount;
                         break;
                     case HandResult.Push:
                         Stats.CurrentRun.Pushes++;
@@ -357,7 +359,13 @@ namespace BlackjackLogic
                 Stats.CurrentRun.LargestPotWon = totalWinnings;
             }
 
+            if (totalLoss > Stats.CurrentRun.BiggestLoss)
+            {
+                Stats.CurrentRun.BiggestLoss = totalLoss;
+            }
+
             Stats.PlayerMoney = Player.Money;
+            Stats.CurrentRun.MoneyHistory.Add(Player.Money);
             PersistenceService.SaveStats(Stats);
         }
     }

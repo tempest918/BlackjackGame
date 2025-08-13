@@ -25,6 +25,7 @@ namespace BlackjackLogic
 
             // Reset player's money for the new run
             PlayerMoney = 100;
+            CurrentRun.MoneyHistory.Add(PlayerMoney);
         }
     }
 }
