@@ -1,10 +1,10 @@
-﻿using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.MediaElement;
 
 namespace MyBlackjackMAUI
 {
     public partial class AppShell : Shell
     {
-        public static MediaElement? GlobalBgmPlayer { get; private set; }
+        public static CommunityToolkit.Maui.MediaElement.MediaElement? GlobalBgmPlayer { get; private set; }
         public AppShell()
         {
             InitializeComponent();

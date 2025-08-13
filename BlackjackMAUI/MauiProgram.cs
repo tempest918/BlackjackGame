@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui;
+﻿using CommunityToolkit.Maui.MediaElement;
 using Microsoft.Extensions.Logging;
 using Plugin.Maui.Audio;
 
@@ -11,7 +11,7 @@ namespace MyBlackjackMAUI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
-                .UseMauiCommunityToolkit()
+                .UseMauiCommunityToolkitMediaElement()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
