@@ -6,32 +6,41 @@
     Title="Blackjack"
     BackgroundColor="{StaticResource FeltGreen}">
 
-    <VerticalStackLayout
-        HorizontalOptions="Center"
-        Spacing="20"
-        VerticalOptions="Center">
+    <Grid>
+        <VerticalStackLayout
+            HorizontalOptions="Center"
+            Spacing="20"
+            VerticalOptions="Center">
 
-        <Image
-            x:Name="logoImage"
-            Source="blackjack_logo.png"
-            WidthRequest="300"
-            Margin="0,0,0,50"/>
+            <Image
+                x:Name="logoImage"
+                Source="blackjack_logo.png"
+                WidthRequest="300"
+                Margin="0,0,0,50"/>
 
-        <Button
-            x:Name="btnNewGame"
-            Clicked="btnNewGame_Click"
-            Text="Start Game" />
+            <Button
+                x:Name="btnNewGame"
+                Clicked="btnNewGame_Click"
+                Text="Start Game" />
 
 
-        <Button
-            x:Name="btnSettings"
-            Clicked="btnSettings_Click"
-            Text="Settings" />
+            <Button
+                x:Name="btnSettings"
+                Clicked="btnSettings_Click"
+                Text="Settings" />
 
-        <Button
-            x:Name="btnQuit"
-            Clicked="btnQuit_Click"
-            Text="Quit Game" />
+            <Button
+                x:Name="btnQuit"
+                Clicked="btnQuit_Click"
+                Text="Quit Game" />
 
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+
+        <Label
+            Text="A Game by Anthony Barnes"
+            FontSize="Small"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            Margin="10"/>
+    </Grid>
 </ContentPage>
