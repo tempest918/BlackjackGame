@@ -73,12 +73,19 @@
                                 <ColumnDefinition Width="*" />
                             </ColumnDefinitionCollection>
                         </OnIdiom.Tablet>
+                        <OnIdiom.Desktop>
+                            <ColumnDefinitionCollection>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </ColumnDefinitionCollection>
+                        </OnIdiom.Desktop>
                     </OnIdiom>
                 </Grid.ColumnDefinitions>
                 <Grid.ColumnSpacing>
                     <OnIdiom x:TypeArguments="x:Double">
                         <OnIdiom.Phone>0</OnIdiom.Phone>
                         <OnIdiom.Tablet>20</OnIdiom.Tablet>
+                        <OnIdiom.Desktop>20</OnIdiom.Desktop>
                     </OnIdiom>
                 </Grid.ColumnSpacing>
 
@@ -146,6 +153,7 @@
                         <OnIdiom x:TypeArguments="x:Int32">
                             <OnIdiom.Phone>1</OnIdiom.Phone>
                             <OnIdiom.Tablet>2</OnIdiom.Tablet>
+                            <OnIdiom.Desktop>2</OnIdiom.Desktop>
                         </OnIdiom>
                     </Grid.ColumnSpan>
                     <Label HorizontalOptions="Center" Text="Dealer has an Ace. Insurance?" />
@@ -172,6 +180,7 @@
                         <OnIdiom x:TypeArguments="x:Int32">
                             <OnIdiom.Phone>0</OnIdiom.Phone>
                             <OnIdiom.Tablet>1</OnIdiom.Tablet>
+                            <OnIdiom.Desktop>1</OnIdiom.Desktop>
                         </OnIdiom>
                     </Grid.Column>
                     <Button
@@ -208,6 +217,7 @@
                         <OnIdiom x:TypeArguments="x:Int32">
                             <OnIdiom.Phone>1</OnIdiom.Phone>
                             <OnIdiom.Tablet>2</OnIdiom.Tablet>
+                            <OnIdiom.Desktop>2</OnIdiom.Desktop>
                         </OnIdiom>
                     </Grid.ColumnSpan>
 
