@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using MyBlackjackMAUI.Services;
 using Plugin.Maui.Audio;
 
 namespace MyBlackjackMAUI
@@ -23,6 +24,7 @@ namespace MyBlackjackMAUI
     		builder.Logging.AddDebug();
 #endif
             builder.Services.AddSingleton(AudioManager.Current);
+            builder.Services.AddSingleton<BgmManagerService>();
             builder.Services.AddSingleton<AppShell>();
             builder.Services.AddSingleton<BlackjackLogic.BlackjackGameLogic>();
             builder.Services.AddSingleton<MainPage>();

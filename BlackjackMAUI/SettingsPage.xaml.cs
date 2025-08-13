@@ -1,12 +1,16 @@
 using BlackjackLogic;
+using MyBlackjackMAUI.Services;
 
 namespace MyBlackjackMAUI;
 
 public partial class SettingsPage : ContentPage
 {
-    public SettingsPage()
+    private readonly BgmManagerService _bgmManager;
+
+    public SettingsPage(BgmManagerService bgmManager)
     {
         InitializeComponent();
+        _bgmManager = bgmManager;
         LoadSettings();
     }
 
@@ -37,10 +41,7 @@ public partial class SettingsPage : ContentPage
 
     private void sliderBgmVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
-        if (AppShell.GlobalBgmPlayer is not null)
-        {
-            AppShell.GlobalBgmPlayer.Volume = e.NewValue;
-        }
+        _bgmManager.SetVolume(e.NewValue);
         // If user manually changes volume, update the pre-mute setting
         if (e.NewValue > 0)
         {
@@ -78,10 +79,7 @@ public partial class SettingsPage : ContentPage
     private async void btnCancel_Click(object sender, EventArgs e)
     {
         // Revert BGM volume to its state when the page was opened
-        if (AppShell.GlobalBgmPlayer is not null)
-        {
-            AppShell.GlobalBgmPlayer.Volume = Settings.BgmVolume;
-        }
+        _bgmManager.SetVolume(Settings.BgmVolume);
         await Shell.Current.GoToAsync("..");
     }
 
