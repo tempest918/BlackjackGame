@@ -47,7 +47,7 @@ public partial class StatsPage : ContentPage
                 {
                     Label = (i + 1).ToString(),
                     ValueLabel = stats.CurrentRun.MoneyHistory[i].ToString(),
-                    Color = SKColor.Parse("#006a4e")
+                    Color = SKColor.Parse("#FFD700")
                 });
             }
 
