@@ -26,26 +26,20 @@
                 Wrap="Wrap" />
         </VerticalStackLayout>
 
-        <VerticalStackLayout
-            Grid.Row="1"
-            HorizontalOptions="Center"
-            Spacing="10"
-            VerticalOptions="Center">
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
 
-            <Label
-                x:Name="lblStatus"
-                FontAttributes="Bold"
-                FontSize="24"
-                HorizontalOptions="Center"
-                Text="Place your bet!"
-                VerticalOptions="Center" />
+                <Label
+                    x:Name="lblStatus"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    HorizontalOptions="Center"
+                    Text="Place your bet!"
+                    VerticalOptions="Center" />
 
-            <FlexLayout
-                x:Name="pnlPlayerHand"
-                JustifyContent="Center"
-                MinimumHeightRequest="130"
-                Wrap="Wrap" />
-        </VerticalStackLayout>
+                <VerticalStackLayout x:Name="pnlPlayerHand" Spacing="10" />
+            </VerticalStackLayout>
+        </ScrollView>
 
 
         <VerticalStackLayout Grid.Row="2" Spacing="15">
@@ -67,9 +61,12 @@
                     <Grid
                         x:Name="BettingControls"
                         ColumnDefinitions="Auto,*,Auto,Auto"
-                        HorizontalOptions="Fill"
-                        ColumnSpacing="10">
-                        <Label Grid.Column="0" Text="Bet:" VerticalOptions="Center" />
+                        ColumnSpacing="10"
+                        HorizontalOptions="Fill">
+                        <Label
+                            Grid.Column="0"
+                            Text="Bet:"
+                            VerticalOptions="Center" />
                         <Entry
                             x:Name="txtBet"
                             Grid.Column="1"
@@ -90,8 +87,8 @@
                     <Grid
                         x:Name="BettingShortcuts"
                         ColumnDefinitions="Auto,Auto,Auto,Auto"
-                        HorizontalOptions="Center"
-                        ColumnSpacing="10">
+                        ColumnSpacing="10"
+                        HorizontalOptions="Center">
                         <Button
                             Grid.Column="0"
                             Clicked="ChipButton_Click"
@@ -135,9 +132,9 @@
                 <Grid
                     x:Name="ActionControls"
                     ColumnDefinitions="Auto,Auto,Auto,Auto"
+                    ColumnSpacing="10"
                     HorizontalOptions="Center"
-                    IsVisible="False"
-                    ColumnSpacing="10">
+                    IsVisible="False">
                     <Button
                         x:Name="btnHit"
                         Grid.Column="0"

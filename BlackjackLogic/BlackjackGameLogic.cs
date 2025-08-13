@@ -69,6 +69,19 @@ namespace BlackjackLogic
             Deck = new Deck(numberOfDecks);
             Deck.Shuffle();
 
+            /*
+            // START: Temporary code for testing multi-split
+            Deck.Cards.Insert(0, new Card("Diamonds", "8", 8));
+            Deck.Cards.Insert(0, new Card("Clubs", "8", 8));
+            Deck.Cards.Insert(0, new Card("Spades", "8", 8));
+            Deck.Cards.Insert(0, new Card("Hearts", "8", 8));
+            Deck.Cards.Insert(0, new Card("Diamonds", "8", 8));
+            Deck.Cards.Insert(0, new Card("Clubs", "8", 8));
+            Deck.Cards.Insert(0, new Card("Spades", "8", 8));
+            Deck.Cards.Insert(0, new Card("Hearts", "8", 8));
+            // END: Temporary code for testing multi-split
+            */
+
             Player.ClearHands();
             Dealer.ClearHands();
 
@@ -171,32 +184,42 @@ namespace BlackjackLogic
 
         public void PlayerSplits()
         {
+            if (Player.Hands.Count >= 4)
+            {
+                // Most casinos limit splits to 4 hands total
+                return;
+            }
+
             if (CurrentState != GameState.PlayerTurn || Player.CurrentHand.Count != 2 || Player.CurrentHand[0].Value != Player.CurrentHand[1].Value)
             {
                 // Can only split a pair on the first turn of a hand
                 return;
             }
 
-            if (Player.Money < CurrentBet)
+            var currentBet = Bets[Player.ActiveHandIndex];
+            if (Player.Money < currentBet)
             {
                 throw new InvalidOperationException("Not enough money to split.");
             }
 
-            // Move the second card into a new hand
-            var secondCard = Player.CurrentHand[1];
-            Player.CurrentHand.RemoveAt(1);
+            // Move the second card into a new hand, inserting it after the current hand
+            var handToSplit = Player.CurrentHand;
+            var secondCard = handToSplit[1];
+            handToSplit.RemoveAt(1);
+
             var newHand = new List<Card> { secondCard };
-            Player.Hands.Add(newHand);
+            Player.Hands.Insert(Player.ActiveHandIndex + 1, newHand);
 
-            // Add a bet for the new hand
-            Player.Money -= CurrentBet;
-            Bets.Add(CurrentBet);
+            // Add a bet for the new hand, also inserting it
+            Player.Money -= currentBet;
+            Bets.Insert(Player.ActiveHandIndex + 1, currentBet);
 
-            // Draw a new card for both hands
-            Player.DrawCard(Deck); // Draws for the original hand (now active)
-            Player.ActiveHandIndex++; // Move to the new hand
-            Player.DrawCard(Deck); // Draws for the new hand
-            Player.ActiveHandIndex = 0; // Return focus to the first hand
+            // Draw a new card for both the original hand and the new hand
+            handToSplit.Add(Deck.Draw());
+            newHand.Add(Deck.Draw());
+
+            // ActiveHandIndex remains on the first split hand, player plays it out.
+            // PlayerStays or a bust will naturally move to the next hand.
         }
 
         public void PlayerDoublesDown()
