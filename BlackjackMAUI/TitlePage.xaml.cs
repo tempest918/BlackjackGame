@@ -1,4 +1,5 @@
 using BlackjackLogic;
+using System.Threading.Tasks;
 
 namespace MyBlackjackMAUI;
 
@@ -29,5 +30,22 @@ public partial class TitlePage : ContentPage
     private async void btnSettings_Click(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(SettingsPage));
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _ = AnimateLogo();
+    }
+
+    private async Task AnimateLogo()
+    {
+        while (true)
+        {
+            if (!IsVisible) break;
+            await logoImage.ScaleTo(1.1, 1000, Easing.SinInOut);
+            if (!IsVisible) break;
+            await logoImage.ScaleTo(1.0, 1000, Easing.SinInOut);
+        }
     }
 }
