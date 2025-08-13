@@ -6,6 +6,7 @@ namespace MyBlackjackMAUI;
 public partial class TitlePage : ContentPage
 {
     private readonly MainPage _mainPage;
+    private bool _isQuitting;
 
     public TitlePage(MainPage mainPage)
 	{
@@ -22,8 +23,10 @@ public partial class TitlePage : ContentPage
         await Shell.Current.GoToAsync(nameof(MainPage));
     }
 
-    private void btnQuit_Click(object sender, EventArgs e)
+    private async void btnQuit_Click(object sender, EventArgs e)
     {
+        _isQuitting = true;
+        await Task.Delay(50);
         Application.Current.Quit();
     }
 
@@ -35,16 +38,17 @@ public partial class TitlePage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        _isQuitting = false;
         _ = AnimateLogo();
     }
 
     private async Task AnimateLogo()
     {
-        while (true)
+        while (!_isQuitting)
         {
             if (!IsVisible) break;
             await logoImage.ScaleTo(1.1, 1000, Easing.SinInOut);
-            if (!IsVisible) break;
+            if (!IsVisible || _isQuitting) break;
             await logoImage.ScaleTo(1.0, 1000, Easing.SinInOut);
         }
     }
