@@ -27,6 +27,7 @@
         </VerticalStackLayout>
 
         <ScrollView Grid.Row="1">
+
             <VerticalStackLayout
                 HorizontalOptions="Center"
                 Spacing="10">
@@ -42,6 +43,7 @@
                 <VerticalStackLayout
                     x:Name="pnlPlayerHand"
                     Spacing="10" />
+
             </VerticalStackLayout>
         </ScrollView>
 
@@ -65,9 +67,12 @@
                     <Grid
                         x:Name="BettingControls"
                         ColumnDefinitions="Auto,*,Auto,Auto"
-                        HorizontalOptions="Fill"
-                        ColumnSpacing="10">
-                        <Label Grid.Column="0" Text="Bet:" VerticalOptions="Center" />
+                        ColumnSpacing="10"
+                        HorizontalOptions="Fill">
+                        <Label
+                            Grid.Column="0"
+                            Text="Bet:"
+                            VerticalOptions="Center" />
                         <Entry
                             x:Name="txtBet"
                             Grid.Column="1"
@@ -88,8 +93,8 @@
                     <Grid
                         x:Name="BettingShortcuts"
                         ColumnDefinitions="Auto,Auto,Auto,Auto"
-                        HorizontalOptions="Center"
-                        ColumnSpacing="10">
+                        ColumnSpacing="10"
+                        HorizontalOptions="Center">
                         <Button
                             Grid.Column="0"
                             Clicked="ChipButton_Click"
@@ -133,9 +138,9 @@
                 <Grid
                     x:Name="ActionControls"
                     ColumnDefinitions="Auto,Auto,Auto,Auto"
+                    ColumnSpacing="10"
                     HorizontalOptions="Center"
-                    IsVisible="False"
-                    ColumnSpacing="10">
+                    IsVisible="False">
                     <Button
                         x:Name="btnHit"
                         Grid.Column="0"

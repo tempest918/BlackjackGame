@@ -69,6 +69,19 @@ namespace BlackjackLogic
             Deck = new Deck(numberOfDecks);
             Deck.Shuffle();
 
+            /*
+            // START: Temporary code for testing multi-split
+            Deck.Cards.Insert(0, new Card("Diamonds", "8", 8));
+            Deck.Cards.Insert(0, new Card("Clubs", "8", 8));
+            Deck.Cards.Insert(0, new Card("Spades", "8", 8));
+            Deck.Cards.Insert(0, new Card("Hearts", "8", 8));
+            Deck.Cards.Insert(0, new Card("Diamonds", "8", 8));
+            Deck.Cards.Insert(0, new Card("Clubs", "8", 8));
+            Deck.Cards.Insert(0, new Card("Spades", "8", 8));
+            Deck.Cards.Insert(0, new Card("Hearts", "8", 8));
+            // END: Temporary code for testing multi-split
+            */
+
             Player.ClearHands();
             Dealer.ClearHands();
 
