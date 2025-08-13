@@ -5,28 +5,26 @@
     Title="Blackjack"
     BackgroundColor="{StaticResource FeltGreen}">
 
-    <Grid x:Name="mainGrid">
-        <VerticalStackLayout
-            HorizontalOptions="Center"
-            Spacing="20"
-            VerticalOptions="Center">
+    <VerticalStackLayout
+        HorizontalOptions="Center"
+        Spacing="20"
+        VerticalOptions="Center">
 
-            <Button
-                x:Name="btnNewGame"
-                Clicked="btnNewGame_Click"
-                Text="New Game" />
+        <Button
+            x:Name="btnNewGame"
+            Clicked="btnNewGame_Click"
+            Text="New Game" />
 
 
-            <Button
-                x:Name="btnSettings"
-                Clicked="btnSettings_Click"
-                Text="Settings" />
+        <Button
+            x:Name="btnSettings"
+            Clicked="btnSettings_Click"
+            Text="Settings" />
 
-            <Button
-                x:Name="btnQuit"
-                Clicked="btnQuit_Click"
-                Text="Quit Game" />
+        <Button
+            x:Name="btnQuit"
+            Clicked="btnQuit_Click"
+            Text="Quit Game" />
 
-        </VerticalStackLayout>
-    </Grid>
+    </VerticalStackLayout>
 </ContentPage>
