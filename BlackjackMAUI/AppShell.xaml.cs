@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Maui.Core.Primitives;
 
 namespace MyBlackjackMAUI
 {
@@ -13,11 +14,16 @@ namespace MyBlackjackMAUI
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(StatsPage), typeof(StatsPage));
 
-            GlobalBgmPlayer = this.BgmPlayer;
-            if (GlobalBgmPlayer is not null)
+            GlobalBgmPlayer = new MediaElement
             {
-                GlobalBgmPlayer.Volume = Settings.BgmVolume;
-            }
+                Source = MediaSource.FromResource("bgm.mp3"),
+                ShouldLoopPlayback = true,
+                IsVisible = false,
+                Volume = Settings.BgmVolume,
+                ShouldAutoPlay = true
+            };
+
+            playerHolder.Children.Add(GlobalBgmPlayer);
         }
     }
 }
