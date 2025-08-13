@@ -4,7 +4,7 @@ namespace BlackjackLogic
 {
     public class GameRunStats
     {
-        public DateTime EndTime { get; set; }
+        public System.DateTime EndTime { get; set; }
         public int HandsPlayed { get; set; } = 0;
         public int Wins { get; set; } = 0;
         public int Losses { get; set; } = 0;
