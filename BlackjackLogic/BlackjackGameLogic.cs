@@ -171,6 +171,12 @@ namespace BlackjackLogic
 
         public void PlayerSplits()
         {
+            if (Player.Hands.Count >= 4)
+            {
+                // Most casinos limit splits to 4 hands total
+                return;
+            }
+
             if (CurrentState != GameState.PlayerTurn || Player.CurrentHand.Count != 2 || Player.CurrentHand[0].Value != Player.CurrentHand[1].Value)
             {
                 // Can only split a pair on the first turn of a hand

@@ -26,26 +26,24 @@
                 Wrap="Wrap" />
         </VerticalStackLayout>
 
-        <VerticalStackLayout
-            Grid.Row="1"
-            HorizontalOptions="Center"
-            Spacing="10"
-            VerticalOptions="Center">
-
-            <Label
-                x:Name="lblStatus"
-                FontAttributes="Bold"
-                FontSize="24"
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout
                 HorizontalOptions="Center"
-                Text="Place your bet!"
-                VerticalOptions="Center" />
+                Spacing="10">
 
-            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Auto">
-                <HorizontalStackLayout
+                <Label
+                    x:Name="lblStatus"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    HorizontalOptions="Center"
+                    Text="Place your bet!"
+                    VerticalOptions="Center" />
+
+                <VerticalStackLayout
                     x:Name="pnlPlayerHand"
-                    MinimumHeightRequest="130" />
-            </ScrollView>
-        </VerticalStackLayout>
+                    Spacing="10" />
+            </VerticalStackLayout>
+        </ScrollView>
 
 
         <VerticalStackLayout Grid.Row="2" Spacing="15">
