@@ -27,7 +27,6 @@ public partial class SettingsPage : ContentPage
         pickerCardBack.SelectedItem = Settings.CardBack;
 
         // Sound
-        switchSoundEnabled.IsToggled = Settings.SoundEffectsEnabled;
         sliderBgmVolume.Value = Settings.BgmVolume;
         sliderSfxVolume.Value = Settings.SoundEffectsVolume;
 
@@ -65,7 +64,6 @@ public partial class SettingsPage : ContentPage
         Settings.NumberOfDecks = (int)sliderDecks.Value;
         Settings.FeltColor = pickerFeltColor.SelectedItem.ToString();
         Settings.CardBack = pickerCardBack.SelectedItem.ToString();
-        Settings.SoundEffectsEnabled = switchSoundEnabled.IsToggled;
 
         // Save final slider values
         Settings.BgmVolume = sliderBgmVolume.Value;

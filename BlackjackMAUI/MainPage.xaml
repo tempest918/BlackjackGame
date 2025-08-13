@@ -8,7 +8,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Clicked="btnStats_Click" Text="Stats" />
         <ToolbarItem Clicked="btnSettings_Click" Text="Settings" />
-        <ToolbarItem Clicked="btnQuit_Click" Text="Quit" />
+        <ToolbarItem Clicked="btnQuit_Click" Text="Return To Title" />
     </ContentPage.ToolbarItems>
 
     <Shell.BackButtonBehavior>
@@ -30,7 +30,7 @@
                 Wrap="Wrap" />
         </VerticalStackLayout>
 
-        <ScrollView Grid.Row="1" x:Name="PlayerHandsScrollView">
+        <ScrollView x:Name="PlayerHandsScrollView" Grid.Row="1">
             <VerticalStackLayout VerticalOptions="End">
 
                 <Label
