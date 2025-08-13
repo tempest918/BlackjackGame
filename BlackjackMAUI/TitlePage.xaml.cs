@@ -6,7 +6,7 @@ namespace MyBlackjackMAUI;
 public partial class TitlePage : ContentPage
 {
     private readonly MainPage _mainPage;
-    private bool _isQuitting;
+    private CancellationTokenSource _animationCts;
 
     public TitlePage(MainPage mainPage)
 	{
@@ -23,10 +23,8 @@ public partial class TitlePage : ContentPage
         await Shell.Current.GoToAsync(nameof(MainPage));
     }
 
-    private async void btnQuit_Click(object sender, EventArgs e)
+    private void btnQuit_Click(object sender, EventArgs e)
     {
-        _isQuitting = true;
-        await Task.Delay(50);
         Application.Current.Quit();
     }
 
@@ -38,18 +36,32 @@ public partial class TitlePage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        _isQuitting = false;
-        _ = AnimateLogo();
+        _animationCts = new CancellationTokenSource();
+        _ = AnimateLogo(_animationCts.Token);
     }
 
-    private async Task AnimateLogo()
+    protected override void OnDisappearing()
     {
-        while (!_isQuitting)
+        base.OnDisappearing();
+        _animationCts?.Cancel();
+    }
+
+    private async Task AnimateLogo(CancellationToken token)
+    {
+        try
         {
-            if (!IsVisible) break;
-            await logoImage.ScaleTo(1.1, 1000, Easing.SinInOut);
-            if (!IsVisible || _isQuitting) break;
-            await logoImage.ScaleTo(1.0, 1000, Easing.SinInOut);
+            while (!token.IsCancellationRequested)
+            {
+                await logoImage.ScaleTo(1.1, 1000, Easing.SinInOut);
+                token.ThrowIfCancellationRequested();
+                await logoImage.ScaleTo(1.0, 1000, Easing.SinInOut);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // This is expected when the page disappears.
+            // Reset the scale to its original state.
+            logoImage.Scale = 1.0;
         }
     }
 }
