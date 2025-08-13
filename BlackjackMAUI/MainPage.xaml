@@ -27,10 +27,7 @@
         </VerticalStackLayout>
 
         <ScrollView Grid.Row="1">
-
-            <VerticalStackLayout
-                HorizontalOptions="Center"
-                Spacing="10">
+            <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
 
                 <Label
                     x:Name="lblStatus"
@@ -40,10 +37,7 @@
                     Text="Place your bet!"
                     VerticalOptions="Center" />
 
-                <VerticalStackLayout
-                    x:Name="pnlPlayerHand"
-                    Spacing="10" />
-
+                <VerticalStackLayout x:Name="pnlPlayerHand" Spacing="10" />
             </VerticalStackLayout>
         </ScrollView>
 
