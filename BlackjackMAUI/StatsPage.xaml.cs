@@ -63,7 +63,9 @@ public partial class StatsPage : ContentPage
                 PointMode = PointMode.Circle,
                 LabelOrientation = Orientation.Horizontal,
                 ValueLabelOrientation = Orientation.Horizontal,
-                BackgroundColor = SKColors.Transparent
+                BackgroundColor = SKColors.Transparent,
+                AnimationDuration = TimeSpan.Zero,
+                IsAnimated = false
             };
         }
         else
