@@ -18,16 +18,16 @@ public partial class MainPage : ContentPage
         _audioManager = audioManager;
         _game = game;
 
-        // ApplySettings calls UpdateUI and DrawHands, so they are not needed here.
         ApplySettings();
+        UpdateUI();
+        DrawHands(false);
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        // All UI updates and settings applications are handled here.
-        // This ensures that when we return from the Settings page,
-        // the UI is refreshed with the latest settings.
+        UpdateUI();
+        DrawHands(false);
         ApplySettings();
     }
 
@@ -77,6 +77,7 @@ public partial class MainPage : ContentPage
                 _game.StartNewHand(betAmount, Settings.NumberOfDecks);
                 lblStatus.Text = "Player's Turn";
                 await DealCardsWithAnimation();
+                DrawHands(false); // Redraw to apply active hand highlight, which animation doesn't do.
 
                 if (_game.CurrentState == GameState.HandOver)
                 {
