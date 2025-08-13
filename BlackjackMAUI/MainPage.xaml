@@ -11,6 +11,10 @@
         <ToolbarItem Clicked="btnQuit_Click" Text="Quit" />
     </ContentPage.ToolbarItems>
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </Shell.BackButtonBehavior>
+
     <Grid Padding="10" RowDefinitions="Auto,*,Auto">
 
         <VerticalStackLayout Grid.Row="0" Spacing="10">
