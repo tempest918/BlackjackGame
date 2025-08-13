@@ -1,4 +1,7 @@
 using BlackjackLogic;
+using Microcharts;
+using SkiaSharp;
+using System.Linq;
 
 namespace MyBlackjackMAUI;
 
@@ -7,6 +10,11 @@ public partial class StatsPage : ContentPage
     public StatsPage()
     {
         InitializeComponent();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
         LoadStats();
     }
 
@@ -21,6 +29,7 @@ public partial class StatsPage : ContentPage
         lblPushes.Text = stats.CurrentRun.Pushes.ToString();
         lblBlackjacks.Text = stats.CurrentRun.Blackjacks.ToString();
         lblLargestPotWon.Text = $"${stats.CurrentRun.LargestPotWon}";
+        lblBiggestLoss.Text = $"${stats.CurrentRun.BiggestLoss}";
 
         if (stats.CurrentRun.HandsPlayed > 0)
         {
@@ -32,6 +41,38 @@ public partial class StatsPage : ContentPage
         {
             lblWinLossPercentage.Text = "N/A";
         }
+
+        // Create the chart
+        if (stats.CurrentRun.MoneyHistory != null && stats.CurrentRun.MoneyHistory.Count > 1)
+        {
+            var entries = new List<ChartEntry>();
+            for (int i = 0; i < stats.CurrentRun.MoneyHistory.Count; i++)
+            {
+                entries.Add(new ChartEntry(stats.CurrentRun.MoneyHistory[i])
+                {
+                    Label = (i + 1).ToString(),
+                    ValueLabel = stats.CurrentRun.MoneyHistory[i].ToString(),
+                    Color = SKColor.Parse("#FFD700")
+                });
+            }
+
+            chartView.Chart = new LineChart
+            {
+                Entries = entries,
+                LineMode = LineMode.Straight,
+                PointMode = PointMode.Circle,
+                LabelOrientation = Orientation.Horizontal,
+                ValueLabelOrientation = Orientation.Horizontal,
+                BackgroundColor = SKColors.Transparent,
+                AnimationDuration = TimeSpan.Zero,
+                IsAnimated = false
+            };
+        }
+        else
+        {
+            chartView.IsVisible = false;
+        }
+
 
         // Bind historical data, ordered by most recent first
         HistoryListView.ItemsSource = stats.History.OrderByDescending(h => h.EndTime).ToList();

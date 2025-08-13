@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using MyBlackjackMAUI.Services;
 using Plugin.Maui.Audio;
+using Microcharts.Maui;
 
 namespace MyBlackjackMAUI
 {
@@ -12,6 +13,7 @@ namespace MyBlackjackMAUI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMicrocharts()
                 .UseMauiCommunityToolkitMediaElement()
                 .ConfigureFonts(fonts =>
                 {
