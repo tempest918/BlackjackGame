@@ -403,8 +403,8 @@ public partial class MainPage : ContentPage
 
         // Reset to default style
         lblStatus.ClearValue(Label.TextColorProperty);
-        lblStatus.ClearValue(Label.FontSizeProperty);
-        lblStatus.ClearValue(Label.FontAttributesProperty);
+        lblStatus.FontSize = 24;
+        lblStatus.FontAttributes = FontAttributes.Bold;
     }
 
     private async void ScrollToActiveHand()

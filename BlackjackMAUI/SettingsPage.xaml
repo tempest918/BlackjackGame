@@ -8,11 +8,18 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
+            <!--  Game Settings Header  -->
+            <Label
+                FontAttributes="Bold"
+                FontSize="22"
+                Text="Game Settings"
+                HorizontalOptions="Center"/>
+
             <!--  Number of Decks  -->
             <Label
                 FontAttributes="Bold"
                 FontSize="18"
-                Text="Number of Decks" />
+                Text="Number of Decks in Shoe" />
             <Label
                 x:Name="lblDecksValue"
                 HorizontalOptions="Center"
@@ -52,15 +59,12 @@
                 </Picker.ItemsSource>
             </Picker>
 
-            <!--  Sound Enable/Disable  -->
-            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="18"
-                    Text="Enable Sound"
-                    VerticalOptions="Center" />
-                <Switch x:Name="switchSoundEnabled" Toggled="switchSoundEnabled_Toggled" />
-            </HorizontalStackLayout>
+            <!--  Sound Settings Header  -->
+            <Label
+                FontAttributes="Bold"
+                FontSize="22"
+                Text="Sound Settings"
+                HorizontalOptions="Center"/>
 
             <!--  BGM Volume  -->
             <Label
