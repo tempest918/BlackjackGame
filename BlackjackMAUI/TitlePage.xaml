@@ -11,7 +11,7 @@
         VerticalOptions="Center">
 
         <Image
-            Source="BlackjackLogo.png"
+            Source="blackjack_logo.png"
             WidthRequest="300"
             Margin="0,0,0,50"/>
 
