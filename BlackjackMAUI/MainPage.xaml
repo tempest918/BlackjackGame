@@ -27,7 +27,7 @@
         </VerticalStackLayout>
 
         <ScrollView Grid.Row="1" x:Name="PlayerHandsScrollView">
-            <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
+            <VerticalStackLayout VerticalOptions="End">
 
                 <Label
                     x:Name="lblStatus"
