@@ -1,4 +1,5 @@
 ﻿using BlackjackLogic;
+using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Layouts;
 
 namespace MyBlackjackMAUI;
@@ -6,15 +7,13 @@ namespace MyBlackjackMAUI;
 public partial class MainPage : ContentPage
 {
     private BlackjackGameLogic _game;
-    private readonly IAudioManager _audioManager;
     private readonly Random _random = new();
 
     public bool GameInProgress { get; set; }
 
-    public MainPage(IAudioManager audioManager, BlackjackGameLogic game)
+    public MainPage(BlackjackGameLogic game)
     {
         InitializeComponent();
-        _audioManager = audioManager;
         _game = game;
 
         ApplySettings();
@@ -30,21 +29,13 @@ public partial class MainPage : ContentPage
         ApplySettings();
     }
 
-    private async void PlaySound(string fileName)
+    private void PlaySound(string fileName)
     {
         if (!Settings.SoundEffectsEnabled) return;
 
-        try
-        {
-            var player = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(fileName));
-            player.Volume = Settings.SoundEffectsVolume;
-            player.Play();
-        }
-        catch (Exception ex)
-        {
-            // Log or handle the exception
-            Console.WriteLine($"Error playing sound: {ex.Message}");
-        }
+        SfxPlayer.Source = MediaSource.FromResource(fileName);
+        SfxPlayer.Volume = Settings.SoundEffectsVolume;
+        SfxPlayer.Play();
     }
 
     private void PlayDealSound()
