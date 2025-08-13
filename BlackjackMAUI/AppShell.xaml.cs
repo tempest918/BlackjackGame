@@ -13,13 +13,10 @@ namespace MyBlackjackMAUI
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(StatsPage), typeof(StatsPage));
 
-            if(this.Resources.TryGetValue("BgmPlayer", out object player))
+            GlobalBgmPlayer = this.BgmPlayer;
+            if (GlobalBgmPlayer is not null)
             {
-                GlobalBgmPlayer = player as MediaElement;
-                if(GlobalBgmPlayer is not null)
-                {
-                    GlobalBgmPlayer.Volume = Settings.BgmVolume;
-                }
+                GlobalBgmPlayer.Volume = Settings.BgmVolume;
             }
         }
     }
