@@ -1,3 +1,4 @@
+using BlackjackLogic;
 using Plugin.Maui.Audio;
 using System.Threading.Tasks;
 
@@ -24,6 +25,8 @@ namespace MyBlackjackMAUI.Services
 
             _bgmPlayer = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("bgm.mp3"));
             _bgmPlayer.Loop = true;
+            _bgmPlayer.Volume = Settings.BgmVolume;
+            _currentVolume = Settings.BgmVolume;
             _bgmPlayer.PlaybackEnded += OnPlaybackEnded;
         }
 
