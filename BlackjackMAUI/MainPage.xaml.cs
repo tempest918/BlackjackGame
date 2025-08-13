@@ -304,6 +304,8 @@ public partial class MainPage : ContentPage
 
     private void EndHand()
     {
+        PlayerHandsScrollView.ScrollToAsync(lblStatus, ScrollToPosition.Start, true);
+
         List<HandResultInfo> results = _game.DetermineHandResult();
         lblStatus.Text = GetResultMessage(results);
 
