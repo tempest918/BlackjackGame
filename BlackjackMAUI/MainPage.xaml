@@ -2,6 +2,7 @@
     x:Class="MyBlackjackMAUI.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     BackgroundColor="{StaticResource FeltGreen}">
 
     <ContentPage.ToolbarItems>
@@ -63,45 +64,55 @@
             <VerticalStackLayout x:Name="ControlPanels" HorizontalOptions="Center">
 
                 <VerticalStackLayout x:Name="BettingPanel" Spacing="10">
-                    <HorizontalStackLayout
+                    <Grid
                         x:Name="BettingControls"
-                        HorizontalOptions="Center"
-                        Spacing="10">
-                        <Label Text="Bet:" VerticalOptions="Center" />
+                        ColumnDefinitions="Auto,*,Auto,Auto"
+                        HorizontalOptions="Fill"
+                        ColumnSpacing="10">
+                        <Label Grid.Column="0" Text="Bet:" VerticalOptions="Center" />
                         <Entry
                             x:Name="txtBet"
+                            Grid.Column="1"
                             Keyboard="Numeric"
                             Placeholder="Amount"
-                            PlaceholderColor="White"
-                            WidthRequest="100" />
+                            PlaceholderColor="White" />
                         <Button
                             x:Name="btnBet"
+                            Grid.Column="2"
                             Clicked="btnBet_Click"
                             Text="Bet" />
-                        <Button Clicked="ClearBetButton_Click" Text="Clear" />
-                    </HorizontalStackLayout>
-
-                    <HorizontalStackLayout
-                        x:Name="BettingShortcuts"
-                        HorizontalOptions="Center"
-                        Spacing="10">
                         <Button
+                            Grid.Column="3"
+                            Clicked="ClearBetButton_Click"
+                            Text="Clear" />
+                    </Grid>
+
+                    <Grid
+                        x:Name="BettingShortcuts"
+                        ColumnDefinitions="Auto,Auto,Auto,Auto"
+                        HorizontalOptions="Center"
+                        ColumnSpacing="10">
+                        <Button
+                            Grid.Column="0"
                             Clicked="ChipButton_Click"
                             CommandParameter="5"
                             Text="$5" />
                         <Button
+                            Grid.Column="1"
                             Clicked="ChipButton_Click"
                             CommandParameter="10"
                             Text="$10" />
                         <Button
+                            Grid.Column="2"
                             Clicked="ChipButton_Click"
                             CommandParameter="25"
                             Text="$25" />
                         <Button
+                            Grid.Column="3"
                             Clicked="ChipButton_Click"
                             CommandParameter="100"
                             Text="$100" />
-                    </HorizontalStackLayout>
+                    </Grid>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout
@@ -121,29 +132,35 @@
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
 
-                <HorizontalStackLayout
+                <Grid
                     x:Name="ActionControls"
+                    ColumnDefinitions="Auto,Auto,Auto,Auto"
+                    HorizontalOptions="Center"
                     IsVisible="False"
-                    Spacing="10">
+                    ColumnSpacing="10">
                     <Button
                         x:Name="btnHit"
+                        Grid.Column="0"
                         Clicked="btnHit_Click"
                         Text="Hit" />
                     <Button
                         x:Name="btnStay"
+                        Grid.Column="1"
                         Clicked="btnStay_Click"
                         Text="Stay" />
                     <Button
                         x:Name="btnDoubleDown"
+                        Grid.Column="2"
                         Clicked="btnDoubleDown_Click"
                         IsVisible="False"
                         Text="Double Down" />
                     <Button
                         x:Name="btnSplit"
+                        Grid.Column="3"
                         Clicked="btnSplit_Click"
                         IsVisible="False"
                         Text="Split" />
-                </HorizontalStackLayout>
+                </Grid>
 
                 <VerticalStackLayout
                     x:Name="GameOverControls"
@@ -161,7 +178,7 @@
                         <Button
                             x:Name="btnNewGame"
                             Clicked="btnNewGame_Click"
-                            Text="Start New Game" />
+                            Text="Start Game" />
                         <Button
                             x:Name="btnQuit"
                             Clicked="btnQuit_Click"

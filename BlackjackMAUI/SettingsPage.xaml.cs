@@ -37,9 +37,9 @@ public partial class SettingsPage : ContentPage
 
     private void sliderBgmVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
-        if (AppShell.BgmPlayer is not null)
+        if (AppShell.GlobalBgmPlayer is not null)
         {
-            AppShell.BgmPlayer.Volume = e.NewValue;
+            AppShell.GlobalBgmPlayer.Volume = e.NewValue;
         }
         // If user manually changes volume, update the pre-mute setting
         if (e.NewValue > 0)
@@ -78,9 +78,9 @@ public partial class SettingsPage : ContentPage
     private async void btnCancel_Click(object sender, EventArgs e)
     {
         // Revert BGM volume to its state when the page was opened
-        if (AppShell.BgmPlayer is not null)
+        if (AppShell.GlobalBgmPlayer is not null)
         {
-            AppShell.BgmPlayer.Volume = Settings.BgmVolume;
+            AppShell.GlobalBgmPlayer.Volume = Settings.BgmVolume;
         }
         await Shell.Current.GoToAsync("..");
     }
@@ -125,15 +125,7 @@ public partial class SettingsPage : ContentPage
 
     private void switchSoundEnabled_Toggled(object sender, ToggledEventArgs e)
     {
-        if (AppShell.BgmPlayer is null) return;
-
-        if (e.Value)
-        {
-            AppShell.BgmPlayer.Play();
-        }
-        else
-        {
-            AppShell.BgmPlayer.Stop();
-        }
+        // This switch now only controls sound effects, not BGM.
+        // The BGM is controlled by its own volume slider and mute button.
     }
 }
