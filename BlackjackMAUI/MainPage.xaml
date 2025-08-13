@@ -40,11 +40,11 @@
                 Text="Place your bet!"
                 VerticalOptions="Center" />
 
-            <FlexLayout
-                x:Name="pnlPlayerHand"
-                JustifyContent="Center"
-                MinimumHeightRequest="130"
-                Wrap="Wrap" />
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Auto">
+                <HorizontalStackLayout
+                    x:Name="pnlPlayerHand"
+                    MinimumHeightRequest="130" />
+            </ScrollView>
         </VerticalStackLayout>
 
 
