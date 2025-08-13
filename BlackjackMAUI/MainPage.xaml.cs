@@ -77,6 +77,7 @@ public partial class MainPage : ContentPage
                 _game.StartNewHand(betAmount, Settings.NumberOfDecks);
                 lblStatus.Text = "Player's Turn";
                 await DealCardsWithAnimation();
+                DrawHands(false); // Redraw to apply active hand highlight, which animation doesn't do.
 
                 if (_game.CurrentState == GameState.HandOver)
                 {
