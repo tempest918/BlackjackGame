@@ -219,6 +219,7 @@ public partial class MainPage : ContentPage
             // Still player's turn, but on a different hand. Update UI to reflect this.
             UpdateUI();
             DrawHands(false); // No animation needed for just switching focus
+            ScrollToActiveHand();
         }
     }
 
@@ -241,7 +242,7 @@ public partial class MainPage : ContentPage
 
         // Button visibility
         bool canDoubleDown = handInProgress && _game.Player.CurrentHand.Count == 2 && _game.Player.Money >= _game.CurrentBet;
-        bool canSplit = handInProgress && _game.Player.CurrentHand.Count == 2 && _game.Player.CurrentHand[0].Value == _game.Player.CurrentHand[1].Value && _game.Player.Money >= _game.CurrentBet;
+        bool canSplit = handInProgress && _game.Player.CurrentHand.Count == 2 && _game.Player.CurrentHand[0].Value == _game.Player.CurrentHand[1].Value && _game.Player.Money >= _game.CurrentBet && _game.Player.Hands.Count < 4;
 
         btnDoubleDown.IsVisible = canDoubleDown;
         btnSplit.IsVisible = canSplit;
@@ -303,6 +304,8 @@ public partial class MainPage : ContentPage
 
     private void EndHand()
     {
+        PlayerHandsScrollView.ScrollToAsync(lblStatus, ScrollToPosition.Start, true);
+
         List<HandResultInfo> results = _game.DetermineHandResult();
         lblStatus.Text = GetResultMessage(results);
 
@@ -401,6 +404,21 @@ public partial class MainPage : ContentPage
         lblStatus.ClearValue(Label.TextColorProperty);
         lblStatus.ClearValue(Label.FontSizeProperty);
         lblStatus.ClearValue(Label.FontAttributesProperty);
+    }
+
+    private async void ScrollToActiveHand()
+    {
+        // Give the UI a moment to update, especially the background color highlight
+        await Task.Delay(100);
+
+        if (_game.Player.ActiveHandIndex < pnlPlayerHand.Children.Count)
+        {
+            var activeHandView = pnlPlayerHand.Children[_game.Player.ActiveHandIndex];
+            if (activeHandView is View view)
+            {
+                await PlayerHandsScrollView.ScrollToAsync(view, ScrollToPosition.MakeVisible, true);
+            }
+        }
     }
 
 
