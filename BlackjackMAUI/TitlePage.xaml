@@ -10,10 +10,15 @@
         Spacing="20"
         VerticalOptions="Center">
 
+        <Image
+            Source="BlackjackLogo.png"
+            WidthRequest="300"
+            Margin="0,0,0,50"/>
+
         <Button
             x:Name="btnNewGame"
             Clicked="btnNewGame_Click"
-            Text="New Game" />
+            Text="Start Game" />
 
 
         <Button
