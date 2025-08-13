@@ -62,12 +62,24 @@
             <Grid x:Name="ControlPanels" HorizontalOptions="Center" RowSpacing="10">
                 <Grid.ColumnDefinitions>
                     <OnIdiom x:TypeArguments="ColumnDefinitionCollection">
-                        <OnIdiom.Phone>*</OnIdiom.Phone>
-                        <OnIdiom.Tablet>*,*</OnIdiom.Tablet>
+                        <OnIdiom.Phone>
+                            <ColumnDefinitionCollection>
+                                <ColumnDefinition Width="*" />
+                            </ColumnDefinitionCollection>
+                        </OnIdiom.Phone>
+                        <OnIdiom.Tablet>
+                            <ColumnDefinitionCollection>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </ColumnDefinitionCollection>
+                        </OnIdiom.Tablet>
                     </OnIdiom>
                 </Grid.ColumnDefinitions>
                 <Grid.ColumnSpacing>
-                    <OnIdiom x:TypeArguments="x:Double" Phone="0" Tablet="20" />
+                    <OnIdiom x:TypeArguments="x:Double">
+                        <OnIdiom.Phone>0</OnIdiom.Phone>
+                        <OnIdiom.Tablet>20</OnIdiom.Tablet>
+                    </OnIdiom>
                 </Grid.ColumnSpacing>
 
                 <VerticalStackLayout x:Name="BettingPanel" Spacing="10" Grid.Row="0" Grid.Column="0">
@@ -131,7 +143,10 @@
                     Spacing="10"
                     Grid.Row="0" Grid.Column="0">
                     <Grid.ColumnSpan>
-                        <OnIdiom x:TypeArguments="x:Int32" Phone="1" Tablet="2" />
+                        <OnIdiom x:TypeArguments="x:Int32">
+                            <OnIdiom.Phone>1</OnIdiom.Phone>
+                            <OnIdiom.Tablet>2</OnIdiom.Tablet>
+                        </OnIdiom>
                     </Grid.ColumnSpan>
                     <Label HorizontalOptions="Center" Text="Dealer has an Ace. Insurance?" />
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
@@ -154,7 +169,10 @@
                     IsVisible="False"
                     Grid.Row="0">
                     <Grid.Column>
-                        <OnIdiom x:TypeArguments="x:Int32" Phone="0" Tablet="1" />
+                        <OnIdiom x:TypeArguments="x:Int32">
+                            <OnIdiom.Phone>0</OnIdiom.Phone>
+                            <OnIdiom.Tablet>1</OnIdiom.Tablet>
+                        </OnIdiom>
                     </Grid.Column>
                     <Button
                         x:Name="btnHit"
@@ -187,7 +205,10 @@
                     Spacing="10"
                     Grid.Row="0" Grid.Column="0">
                     <Grid.ColumnSpan>
-                        <OnIdiom x:TypeArguments="x:Int32" Phone="1" Tablet="2" />
+                        <OnIdiom x:TypeArguments="x:Int32">
+                            <OnIdiom.Phone>1</OnIdiom.Phone>
+                            <OnIdiom.Tablet>2</OnIdiom.Tablet>
+                        </OnIdiom>
                     </Grid.ColumnSpan>
 
                     <Label
