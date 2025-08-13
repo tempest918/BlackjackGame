@@ -10,7 +10,7 @@
     <Shell.Resources>
         <ResourceDictionary>
             <toolkit:MediaElement
-                x:Name="BgmPlayer"
+                x:Key="BgmPlayer"
                 ShouldAutoPlay="True"
                 ShouldLoopPlayback="True"
                 Source="embed://bgm.mp3" />

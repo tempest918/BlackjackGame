@@ -13,8 +13,6 @@
 
     <Grid Padding="10" RowDefinitions="Auto,*,Auto">
 
-        <toolkit:MediaElement x:Name="SfxPlayer" IsVisible="False" />
-
         <VerticalStackLayout Grid.Row="0" Spacing="10">
             <Label
                 x:Name="lblDealerScore"
@@ -69,12 +67,9 @@
                     <Grid
                         x:Name="BettingControls"
                         ColumnDefinitions="Auto,*,Auto,Auto"
-                        ColumnSpacing="10"
-                        HorizontalOptions="Fill">
-                        <Label
-                            Grid.Column="0"
-                            Text="Bet:"
-                            VerticalOptions="Center" />
+                        HorizontalOptions="Fill"
+                        ColumnSpacing="10">
+                        <Label Grid.Column="0" Text="Bet:" VerticalOptions="Center" />
                         <Entry
                             x:Name="txtBet"
                             Grid.Column="1"
@@ -95,8 +90,8 @@
                     <Grid
                         x:Name="BettingShortcuts"
                         ColumnDefinitions="Auto,Auto,Auto,Auto"
-                        ColumnSpacing="10"
-                        HorizontalOptions="Center">
+                        HorizontalOptions="Center"
+                        ColumnSpacing="10">
                         <Button
                             Grid.Column="0"
                             Clicked="ChipButton_Click"
@@ -140,9 +135,9 @@
                 <Grid
                     x:Name="ActionControls"
                     ColumnDefinitions="Auto,Auto,Auto,Auto"
-                    ColumnSpacing="10"
                     HorizontalOptions="Center"
-                    IsVisible="False">
+                    IsVisible="False"
+                    ColumnSpacing="10">
                     <Button
                         x:Name="btnHit"
                         Grid.Column="0"
