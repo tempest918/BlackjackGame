@@ -8,7 +8,11 @@
     Title="MyBlackjackMAUI">
 
     <Shell.FlyoutHeader>
-        <VerticalStackLayout x:Name="playerHolder" />
+        <toolkit:MediaElement
+            x:Name="BgmPlayer"
+            ShouldAutoPlay="True"
+            ShouldLoopPlayback="True"
+            Source="embed://bgm.mp3" />
     </Shell.FlyoutHeader>
 
     <ShellContent ContentTemplate="{DataTemplate local:TitlePage}" Route="TitlePage" />
