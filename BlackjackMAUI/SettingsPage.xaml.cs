@@ -1,15 +1,12 @@
 using BlackjackLogic;
-using MyBlackjackMAUI.Services;
 
 namespace MyBlackjackMAUI;
 
 public partial class SettingsPage : ContentPage
 {
-    private readonly BgmManagerService _bgmManager;
-    public SettingsPage(BgmManagerService bgmManager)
+    public SettingsPage()
     {
         InitializeComponent();
-        _bgmManager = bgmManager;
         LoadSettings();
     }
 
@@ -40,7 +37,10 @@ public partial class SettingsPage : ContentPage
 
     private void sliderBgmVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
-        _bgmManager.SetVolume(e.NewValue);
+        if (AppShell.GlobalBgmPlayer is not null)
+        {
+            AppShell.GlobalBgmPlayer.Volume = e.NewValue;
+        }
         // If user manually changes volume, update the pre-mute setting
         if (e.NewValue > 0)
         {
@@ -78,7 +78,10 @@ public partial class SettingsPage : ContentPage
     private async void btnCancel_Click(object sender, EventArgs e)
     {
         // Revert BGM volume to its state when the page was opened
-        _bgmManager.SetVolume(Settings.BgmVolume);
+        if (AppShell.GlobalBgmPlayer is not null)
+        {
+            AppShell.GlobalBgmPlayer.Volume = Settings.BgmVolume;
+        }
         await Shell.Current.GoToAsync("..");
     }
 
@@ -124,15 +127,5 @@ public partial class SettingsPage : ContentPage
     {
         // This switch now only controls sound effects, not BGM.
         // The BGM is controlled by its own volume slider and mute button.
-        // We leave the method here in case we want to add a global mute in the future,
-        // but for now, it does nothing to the BGM.
-        if (e.Value)
-        {
-            // _bgmManager.Play(); // BGM should play unless muted
-        }
-        else
-        {
-            // _bgmManager.Stop(); // Don't stop BGM, just mute SFX
-        }
     }
 }

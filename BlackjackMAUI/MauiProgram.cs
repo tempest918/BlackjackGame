@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using Plugin.Maui.Audio;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 
 namespace MyBlackjackMAUI
 {
@@ -10,6 +10,7 @@ namespace MyBlackjackMAUI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -20,14 +21,12 @@ namespace MyBlackjackMAUI
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-            builder.Services.AddSingleton(AudioManager.Current);
             builder.Services.AddSingleton<AppShell>();
             builder.Services.AddSingleton<BlackjackLogic.BlackjackGameLogic>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<StatsPage>();
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddTransient<TitlePage>();
-            builder.Services.AddSingleton<MyBlackjackMAUI.Services.BgmManagerService>();
 
             return builder.Build();
         }

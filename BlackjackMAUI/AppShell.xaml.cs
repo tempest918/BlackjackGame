@@ -1,11 +1,11 @@
-﻿using MyBlackjackMAUI.Services;
-using Plugin.Maui.Audio;
+﻿using CommunityToolkit.Maui.Views;
 
 namespace MyBlackjackMAUI
 {
     public partial class AppShell : Shell
     {
-        public AppShell(BgmManagerService bgmManager)
+        public static MediaElement? GlobalBgmPlayer { get; private set; }
+        public AppShell()
         {
             InitializeComponent();
 
@@ -13,15 +13,14 @@ namespace MyBlackjackMAUI
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(StatsPage), typeof(StatsPage));
 
-            // Start BGM
-            _ = StartBgm(bgmManager);
-        }
-
-        private async Task StartBgm(BgmManagerService bgmManager)
-        {
-            await bgmManager.InitializeAsync();
-            bgmManager.SetVolume(Settings.BgmVolume);
-            bgmManager.Play();
+            if(this.Resources.TryGetValue("BgmPlayer", out object player))
+            {
+                GlobalBgmPlayer = player as MediaElement;
+                if(GlobalBgmPlayer is not null)
+                {
+                    GlobalBgmPlayer.Volume = Settings.BgmVolume;
+                }
+            }
         }
     }
 }
