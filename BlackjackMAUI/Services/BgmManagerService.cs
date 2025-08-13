@@ -23,6 +23,7 @@ namespace MyBlackjackMAUI.Services
             }
 
             _bgmPlayer = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("bgm.mp3"));
+            _bgmPlayer.Loop = true;
             _bgmPlayer.PlaybackEnded += OnPlaybackEnded;
         }
 
@@ -43,21 +44,31 @@ namespace MyBlackjackMAUI.Services
             }
         }
 
+        private double _currentVolume = 1.0;
         public void SetVolume(double volume)
         {
+            _currentVolume = volume;
             if (_bgmPlayer is not null)
             {
-                _bgmPlayer.Volume = volume;
+                _bgmPlayer.Volume = _currentVolume;
             }
         }
 
-        private void OnPlaybackEnded(object? sender, EventArgs e)
+        private async void OnPlaybackEnded(object? sender, EventArgs e)
         {
-            if (sender is IAudioPlayer player)
+            // Re-create the player to ensure it loops reliably on all platforms.
+            // This is a more drastic approach but is necessary if Seek(0) fails.
+            if (sender is IAudioPlayer oldPlayer)
             {
-                player.Seek(0);
-                player.Play();
+                oldPlayer.PlaybackEnded -= OnPlaybackEnded;
+                oldPlayer.Dispose();
             }
+
+            _bgmPlayer = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("bgm.mp3"));
+            _bgmPlayer.Loop = true;
+            _bgmPlayer.PlaybackEnded += OnPlaybackEnded;
+            _bgmPlayer.Volume = _currentVolume;
+            _bgmPlayer.Play();
         }
     }
 }
