@@ -60,9 +60,9 @@ public partial class MainPage : ContentPage
         // Felt Color
         this.BackgroundColor = Color.FromArgb(Settings.FeltColor switch
         {
-            "Blue" => "#FF0D47A1",
-            "Red" => "#FFB71C1C",
-            _ => "#FF1B5E20" // Green
+            "Blue" => "#054a8a",
+            "Red" => "#5b0506",
+            _ => "#006a4e" // Green
         });
 
         UpdateUI(); // Re-draw cards with new backs

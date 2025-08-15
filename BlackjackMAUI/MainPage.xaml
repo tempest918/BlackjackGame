@@ -95,21 +95,25 @@
                         HorizontalOptions="Center">
                         <Button
                             Grid.Column="0"
+                            BackgroundColor="Firebrick"
                             Clicked="ChipButton_Click"
                             CommandParameter="5"
                             Text="$5" />
                         <Button
                             Grid.Column="1"
+                            BackgroundColor="RoyalBlue"
                             Clicked="ChipButton_Click"
                             CommandParameter="10"
                             Text="$10" />
                         <Button
                             Grid.Column="2"
+                            BackgroundColor="Green"
                             Clicked="ChipButton_Click"
                             CommandParameter="25"
                             Text="$25" />
                         <Button
                             Grid.Column="3"
+                            BackgroundColor="Black"
                             Clicked="ChipButton_Click"
                             CommandParameter="100"
                             Text="$100" />
