@@ -428,7 +428,7 @@ public partial class MainPage : ContentPage
     {
         string face = card.Face.ToLower();
         string suit = card.Suit.ToLower();
-        return $"{face}_of_{suit}.png";
+        return $"card_{face}_of_{suit}.png";
     }
 
     private View CreateCardView(Card card, bool isHidden = false)
@@ -445,8 +445,8 @@ public partial class MainPage : ContentPage
         {
             string cardBackFile = Settings.CardBack switch
             {
-                "Blue" => "blue_1.png",
-                _ => "red_1.png" // Default to red
+                "Blue" => "card_back_blue_one.png",
+                _ => "card_back_red_one.png" // Default to red
             };
             cardImage.Source = cardBackFile;
         }
