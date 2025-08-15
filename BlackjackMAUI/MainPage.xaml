@@ -183,7 +183,7 @@
                         <Button
                             x:Name="btnNewGame"
                             Clicked="btnNewGame_Click"
-                            Text="Start Game" />
+                            Text="Start New Run" />
                         <Button
                             x:Name="btnQuit"
                             Clicked="btnQuit_Click"

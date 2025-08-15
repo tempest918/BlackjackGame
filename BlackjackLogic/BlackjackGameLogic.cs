@@ -49,7 +49,8 @@ namespace BlackjackLogic
 
         public void Reset()
         {
-            Stats = PersistenceService.LoadStats();
+            // Stats are now reset by the caller (via ArchiveAndReset) before this is called.
+            // We just need to reset the game state based on the updated stats.
             Player = new Player("Player", Stats.PlayerMoney);
             Dealer = new Dealer();
 
