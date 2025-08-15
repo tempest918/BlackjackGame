@@ -469,7 +469,6 @@ public partial class MainPage : ContentPage
         GameInProgress = true;
         if (newGame)
         {
-            _game.Stats.ArchiveAndReset();
             _game.Reset();
         }
 
