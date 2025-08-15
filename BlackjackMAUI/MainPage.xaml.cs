@@ -1,4 +1,5 @@
 ﻿using BlackjackLogic;
+using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
 using Plugin.Maui.Audio;
 
@@ -59,9 +60,9 @@ public partial class MainPage : ContentPage
         // Felt Color
         this.BackgroundColor = Color.FromArgb(Settings.FeltColor switch
         {
-            "Blue" => "#FF0D47A1",
-            "Red" => "#FFB71C1C",
-            _ => "#FF1B5E20" // Green
+            "Blue" => "#054a8a",
+            "Red" => "#5b0506",
+            _ => "#006a4e" // Green
         });
 
         UpdateUI(); // Re-draw cards with new backs
@@ -423,39 +424,33 @@ public partial class MainPage : ContentPage
     }
 
 
+    private string GetCardImageFilename(Card card)
+    {
+        string face = card.Face.ToLower();
+        string suit = card.Suit.ToLower();
+        return $"card_{face}_of_{suit}.png";
+    }
+
     private View CreateCardView(Card card, bool isHidden = false)
     {
-        var border = new Border
+        var cardImage = new Image
         {
-            Stroke = Colors.Black,
-            StrokeThickness = 2,
-            BackgroundColor = Colors.White,
-            HeightRequest = 120,
+            HeightRequest = 107,
             WidthRequest = 80,
-            Margin = new Thickness(5)
+            Margin = new Thickness(5),
+            Aspect = Aspect.AspectFit
         };
 
         if (isHidden)
         {
-            border.BackgroundColor = Color.FromArgb(Settings.CardBack switch
-            {
-                "Blue" => "#FF1565C0",
-                _ => "#FFD32F2F" // Red
-            });
+            cardImage.Source = Settings.CardBack;
         }
         else
         {
-            var grid = new Grid { Padding = 5 };
-            var suitColor = (card.Suit == "Hearts" || card.Suit == "Diamonds") ? Colors.Red : Colors.Black;
-
-            grid.Children.Add(new Label { Text = card.Face, FontSize = 18, FontAttributes = FontAttributes.Bold, TextColor = suitColor, HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Start });
-            grid.Children.Add(new Label { Text = card.GetSuitSymbol(), FontSize = 24, TextColor = suitColor, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center });
-            grid.Children.Add(new Label { Text = card.Face, FontSize = 18, FontAttributes = FontAttributes.Bold, TextColor = suitColor, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.End, Rotation = 180 });
-
-            border.Content = grid;
+            cardImage.Source = GetCardImageFilename(card);
         }
 
-        return border;
+        return cardImage;
     }
 
     private void GameOver()

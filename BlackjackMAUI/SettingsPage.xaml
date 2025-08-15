@@ -50,14 +50,7 @@
                 FontAttributes="Bold"
                 FontSize="18"
                 Text="Card Back Design" />
-            <Picker x:Name="pickerCardBack" Title="Select Card Back">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Red</x:String>
-                        <x:String>Blue</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
+            <Picker x:Name="pickerCardBack" Title="Select Card Back" />
 
             <!--  Sound Settings Header  -->
             <Label

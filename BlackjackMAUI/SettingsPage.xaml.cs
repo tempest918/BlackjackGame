@@ -6,6 +6,15 @@ namespace MyBlackjackMAUI;
 public partial class SettingsPage : ContentPage
 {
     private readonly BgmManagerService _bgmManager;
+    private readonly Dictionary<string, string> _cardBackOptions = new()
+    {
+        { "Red 1", "card_back_red_one.png" },
+        { "Red 2", "card_back_red_two.png" },
+        { "Blue 1", "card_back_blue_one.png" },
+        { "Blue 2", "card_back_blue_two.png" },
+        { "Grey 1", "card_back_grey_one.png" },
+        { "Grey 2", "card_back_grey_two.png" }
+    };
 
     public SettingsPage(BgmManagerService bgmManager)
     {
@@ -24,7 +33,17 @@ public partial class SettingsPage : ContentPage
         pickerFeltColor.SelectedItem = Settings.FeltColor;
 
         // Card Back
-        pickerCardBack.SelectedItem = Settings.CardBack;
+        pickerCardBack.ItemsSource = _cardBackOptions.Keys.ToList();
+        string savedCardBackFilename = Settings.CardBack;
+        var savedFriendlyName = _cardBackOptions.FirstOrDefault(x => x.Value == savedCardBackFilename).Key;
+        if (savedFriendlyName != null)
+        {
+            pickerCardBack.SelectedItem = savedFriendlyName;
+        }
+        else
+        {
+            pickerCardBack.SelectedIndex = 0; // Default to the first item if the saved one is not found
+        }
 
         // Sound
         sliderBgmVolume.Value = Settings.BgmVolume;
@@ -63,7 +82,9 @@ public partial class SettingsPage : ContentPage
     {
         Settings.NumberOfDecks = (int)sliderDecks.Value;
         Settings.FeltColor = pickerFeltColor.SelectedItem.ToString();
-        Settings.CardBack = pickerCardBack.SelectedItem.ToString();
+
+        string selectedFriendlyName = pickerCardBack.SelectedItem.ToString();
+        Settings.CardBack = _cardBackOptions[selectedFriendlyName];
 
         // Save final slider values
         Settings.BgmVolume = sliderBgmVolume.Value;
