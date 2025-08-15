@@ -7,7 +7,7 @@ namespace MyBlackjackMAUI
         // Default values
         private const int DefaultNumberOfDecks = 1;
         private const string DefaultFeltColor = "Green";
-        private const string DefaultCardBack = "Red";
+        private const string DefaultCardBack = "card_back_red_one.png";
         private const bool DefaultSoundEffectsEnabled = true;
         private const double DefaultBgmVolume = 0.5;
         private const double DefaultSoundEffectsVolume = 0.8;

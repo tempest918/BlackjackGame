@@ -435,20 +435,15 @@ public partial class MainPage : ContentPage
     {
         var cardImage = new Image
         {
-            HeightRequest = 120,
+            HeightRequest = 107,
             WidthRequest = 80,
             Margin = new Thickness(5),
-            Aspect = Aspect.AspectFill
+            Aspect = Aspect.AspectFit
         };
 
         if (isHidden)
         {
-            string cardBackFile = Settings.CardBack switch
-            {
-                "Blue" => "card_back_blue_one.png",
-                _ => "card_back_red_one.png" // Default to red
-            };
-            cardImage.Source = cardBackFile;
+            cardImage.Source = Settings.CardBack;
         }
         else
         {
