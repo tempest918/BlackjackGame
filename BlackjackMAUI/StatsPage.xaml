@@ -6,9 +6,8 @@
     xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
     Title="Player Statistics"
     BackgroundColor="{StaticResource FeltGreen}">
-    <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="20" RowSpacing="15">
-
-        <VerticalStackLayout Grid.Row="0" Spacing="15">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
             <Label
                 FontAttributes="Bold"
                 FontSize="Large"
@@ -87,9 +86,7 @@
                     Grid.Row="7"
                     Grid.Column="1" />
             </Grid>
-        </VerticalStackLayout>
 
-        <VerticalStackLayout Grid.Row="1" Spacing="15">
             <Label
                 Margin="0,20,0,0"
                 FontAttributes="Bold"
@@ -98,55 +95,11 @@
                 Text="Money Over Time" />
 
             <microcharts:ChartView x:Name="chartView" HeightRequest="200" />
-        </VerticalStackLayout>
 
-        <VerticalStackLayout Grid.Row="2" Spacing="15">
-            <Label
-                Margin="0,20,0,0"
-                FontAttributes="Bold"
-                FontSize="Large"
+            <Button
+                Clicked="BackButton_Click"
                 HorizontalOptions="Center"
-                Text="Historical Stats" />
-
-            <ListView x:Name="HistoryListView">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Padding="10" Spacing="5">
-                                <Label Text="{Binding EndTime, StringFormat='Run Ended: {0:yyyy-MM-dd HH:mm}'}" FontAttributes="Bold" />
-                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-                                    <Label Grid.Row="0" Grid.Column="0" Text="Final Money:" />
-                                    <Label Grid.Row="0" Grid.Column="1" Text="{Binding FinalMoney, StringFormat='${0}'}" />
-                                    <Label Grid.Row="1" Grid.Column="0" Text="Hands Played:" />
-                                    <Label Grid.Row="1" Grid.Column="1" Text="{Binding HandsPlayed}" />
-                                    <Label Grid.Row="2" Grid.Column="0" Text="Wins/Losses:" />
-                                    <Label Grid.Row="2" Grid.Column="1">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{Binding Wins}" />
-                                                <Span Text=" / " />
-                                                <Span Text="{Binding Losses}" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label Grid.Row="3" Grid.Column="0" Text="Pushes:" />
-                                    <Label Grid.Row="3" Grid.Column="1" Text="{Binding Pushes}" />
-                                    <Label Grid.Row="4" Grid.Column="0" Text="Blackjacks:" />
-                                    <Label Grid.Row="4" Grid.Column="1" Text="{Binding Blackjacks}" />
-                                    <Label Grid.Row="5" Grid.Column="0" Text="Largest Pot:" />
-                                    <Label Grid.Row="5" Grid.Column="1" Text="{Binding LargestPotWon, StringFormat='${0}'}" />
-                                </Grid>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                Text="Back to Game" />
         </VerticalStackLayout>
-
-        <Button
-            Grid.Row="3"
-            Clicked="BackButton_Click"
-            HorizontalOptions="Center"
-            Text="Back to Game" />
-    </Grid>
+    </ScrollView>
 </ContentPage>

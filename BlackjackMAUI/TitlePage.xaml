@@ -23,6 +23,10 @@
                 Clicked="btnNewGame_Click"
                 Text="Start Game" />
 
+            <Button
+                x:Name="btnHistory"
+                Clicked="btnHistory_Click"
+                Text="View History" />
 
             <Button
                 x:Name="btnSettings"
