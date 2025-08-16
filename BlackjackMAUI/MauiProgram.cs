@@ -14,6 +14,7 @@ namespace MyBlackjackMAUI
             builder
                 .UseMauiApp<App>()
                 .UseMicrocharts()
+                .UseMauiCommunityToolkit()
                 .UseMauiCommunityToolkitMediaElement()
                 .ConfigureFonts(fonts =>
                 {
@@ -33,6 +34,7 @@ namespace MyBlackjackMAUI
             builder.Services.AddTransient<StatsPage>();
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddTransient<TitlePage>();
+            builder.Services.AddTransient<HistoryPage>();
 
             return builder.Build();
         }

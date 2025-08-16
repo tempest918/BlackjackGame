@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="MyBlackjackMAUI.HistoryPage"
+             Title="Historical Stats"
+             BackgroundColor="{StaticResource FeltGreen}">
+    <Grid RowDefinitions="*, Auto" Padding="10">
+        <ListView x:Name="HistoryListView" Grid.Row="0" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <toolkit:Expander Padding="10">
+                            <toolkit:Expander.Header>
+                                <Label Text="{Binding EndTime, StringFormat='Run Ended: {0:yyyy-MM-dd HH:mm}'}" FontAttributes="Bold" FontSize="Medium" />
+                            </toolkit:Expander.Header>
+                            <toolkit:Expander.Content>
+                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Padding="0,10,0,0">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Final Money:" />
+                                    <Label Grid.Row="0" Grid.Column="1" Text="{Binding FinalMoney, StringFormat='${0}'}" />
+                                    <Label Grid.Row="1" Grid.Column="0" Text="Hands Played:" />
+                                    <Label Grid.Row="1" Grid.Column="1" Text="{Binding HandsPlayed}" />
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Wins/Losses:" />
+                                    <Label Grid.Row="2" Grid.Column="1">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding Wins}" />
+                                                <Span Text=" / " />
+                                                <Span Text="{Binding Losses}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label Grid.Row="3" Grid.Column="0" Text="Pushes:" />
+                                    <Label Grid.Row="3" Grid.Column="1" Text="{Binding Pushes}" />
+                                    <Label Grid.Row="4" Grid.Column="0" Text="Blackjacks:" />
+                                    <Label Grid.Row="4" Grid.Column="1" Text="{Binding Blackjacks}" />
+                                    <Label Grid.Row="5" Grid.Column="0" Text="Largest Pot:" />
+                                    <Label Grid.Row="5" Grid.Column="1" Text="{Binding LargestPotWon, StringFormat='${0}'}" />
+                                </Grid>
+                            </toolkit:Expander.Content>
+                        </toolkit:Expander>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button
+            Grid.Row="1"
+            Clicked="BackButton_Click"
+            HorizontalOptions="Center"
+            Text="Back" />
+    </Grid>
+</ContentPage>

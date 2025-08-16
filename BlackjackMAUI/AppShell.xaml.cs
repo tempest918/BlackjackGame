@@ -12,6 +12,7 @@ namespace MyBlackjackMAUI
             Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(StatsPage), typeof(StatsPage));
+            Routing.RegisterRoute(nameof(HistoryPage), typeof(HistoryPage));
 
             GlobalBgmPlayer = this.BgmPlayer;
             if (GlobalBgmPlayer is not null)

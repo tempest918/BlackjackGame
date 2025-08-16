@@ -469,11 +469,11 @@ public partial class MainPage : ContentPage
         GameInProgress = true;
         if (newGame)
         {
-            _game.Stats.ArchiveAndReset();
             _game.Reset();
         }
 
         // Reset the UI
+    txtBet.Text = string.Empty;
         GameOverControls.IsVisible = false;
         pnlPlayerHand.Clear();
         pnlDealerHand.Clear();

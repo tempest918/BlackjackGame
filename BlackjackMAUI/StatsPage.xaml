@@ -96,47 +96,6 @@
 
             <microcharts:ChartView x:Name="chartView" HeightRequest="200" />
 
-            <Label
-                Margin="0,20,0,0"
-                FontAttributes="Bold"
-                FontSize="Large"
-                HorizontalOptions="Center"
-                Text="Historical Stats" />
-
-            <ListView x:Name="HistoryListView">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Padding="10" Spacing="5">
-                                <Label Text="{Binding EndTime, StringFormat='Run Ended: {0:yyyy-MM-dd HH:mm}'}" FontAttributes="Bold" />
-                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-                                    <Label Grid.Row="0" Grid.Column="0" Text="Final Money:" />
-                                    <Label Grid.Row="0" Grid.Column="1" Text="{Binding FinalMoney, StringFormat='${0}'}" />
-                                    <Label Grid.Row="1" Grid.Column="0" Text="Hands Played:" />
-                                    <Label Grid.Row="1" Grid.Column="1" Text="{Binding HandsPlayed}" />
-                                    <Label Grid.Row="2" Grid.Column="0" Text="Wins/Losses:" />
-                                    <Label Grid.Row="2" Grid.Column="1">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{Binding Wins}" />
-                                                <Span Text=" / " />
-                                                <Span Text="{Binding Losses}" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label Grid.Row="3" Grid.Column="0" Text="Pushes:" />
-                                    <Label Grid.Row="3" Grid.Column="1" Text="{Binding Pushes}" />
-                                    <Label Grid.Row="4" Grid.Column="0" Text="Blackjacks:" />
-                                    <Label Grid.Row="4" Grid.Column="1" Text="{Binding Blackjacks}" />
-                                    <Label Grid.Row="5" Grid.Column="0" Text="Largest Pot:" />
-                                    <Label Grid.Row="5" Grid.Column="1" Text="{Binding LargestPotWon, StringFormat='${0}'}" />
-                                </Grid>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
             <Button
                 Clicked="BackButton_Click"
                 HorizontalOptions="Center"

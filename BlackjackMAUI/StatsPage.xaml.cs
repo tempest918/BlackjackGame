@@ -74,8 +74,7 @@ public partial class StatsPage : ContentPage
         }
 
 
-        // Bind historical data, ordered by most recent first
-        HistoryListView.ItemsSource = stats.History.OrderByDescending(h => h.EndTime).ToList();
+        // Historical data is now on its own page.
     }
 
     private async void BackButton_Click(object sender, EventArgs e)
