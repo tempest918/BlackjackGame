@@ -59,9 +59,37 @@
                     Text="Player Money: $100" />
             </HorizontalStackLayout>
 
-            <VerticalStackLayout x:Name="ControlPanels" HorizontalOptions="Center">
+            <Grid x:Name="ControlPanels" HorizontalOptions="Center" RowSpacing="10">
+                <Grid.ColumnDefinitions>
+                    <OnIdiom x:TypeArguments="ColumnDefinitionCollection">
+                        <OnIdiom.Phone>
+                            <ColumnDefinitionCollection>
+                                <ColumnDefinition Width="*" />
+                            </ColumnDefinitionCollection>
+                        </OnIdiom.Phone>
+                        <OnIdiom.Tablet>
+                            <ColumnDefinitionCollection>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </ColumnDefinitionCollection>
+                        </OnIdiom.Tablet>
+                        <OnIdiom.Desktop>
+                            <ColumnDefinitionCollection>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </ColumnDefinitionCollection>
+                        </OnIdiom.Desktop>
+                    </OnIdiom>
+                </Grid.ColumnDefinitions>
+                <Grid.ColumnSpacing>
+                    <OnIdiom x:TypeArguments="x:Double">
+                        <OnIdiom.Phone>0</OnIdiom.Phone>
+                        <OnIdiom.Tablet>20</OnIdiom.Tablet>
+                        <OnIdiom.Desktop>20</OnIdiom.Desktop>
+                    </OnIdiom>
+                </Grid.ColumnSpacing>
 
-                <VerticalStackLayout x:Name="BettingPanel" Spacing="10">
+                <VerticalStackLayout x:Name="BettingPanel" Spacing="10" Grid.Row="0" Grid.Column="0">
                     <Grid
                         x:Name="BettingControls"
                         ColumnDefinitions="Auto,*,Auto,Auto"
@@ -123,7 +151,15 @@
                 <VerticalStackLayout
                     x:Name="InsuranceControls"
                     IsVisible="False"
-                    Spacing="10">
+                    Spacing="10"
+                    Grid.Row="0" Grid.Column="0">
+                    <Grid.ColumnSpan>
+                        <OnIdiom x:TypeArguments="x:Int32">
+                            <OnIdiom.Phone>1</OnIdiom.Phone>
+                            <OnIdiom.Tablet>2</OnIdiom.Tablet>
+                            <OnIdiom.Desktop>2</OnIdiom.Desktop>
+                        </OnIdiom>
+                    </Grid.ColumnSpan>
                     <Label HorizontalOptions="Center" Text="Dealer has an Ace. Insurance?" />
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
                         <Button
@@ -142,7 +178,15 @@
                     ColumnDefinitions="Auto,Auto,Auto,Auto"
                     ColumnSpacing="10"
                     HorizontalOptions="Center"
-                    IsVisible="False">
+                    IsVisible="False"
+                    Grid.Row="0">
+                    <Grid.Column>
+                        <OnIdiom x:TypeArguments="x:Int32">
+                            <OnIdiom.Phone>0</OnIdiom.Phone>
+                            <OnIdiom.Tablet>1</OnIdiom.Tablet>
+                            <OnIdiom.Desktop>1</OnIdiom.Desktop>
+                        </OnIdiom>
+                    </Grid.Column>
                     <Button
                         x:Name="btnHit"
                         Grid.Column="0"
@@ -171,7 +215,15 @@
                     x:Name="GameOverControls"
                     Margin="0,20,0,0"
                     IsVisible="False"
-                    Spacing="10">
+                    Spacing="10"
+                    Grid.Row="0" Grid.Column="0">
+                    <Grid.ColumnSpan>
+                        <OnIdiom x:TypeArguments="x:Int32">
+                            <OnIdiom.Phone>1</OnIdiom.Phone>
+                            <OnIdiom.Tablet>2</OnIdiom.Tablet>
+                            <OnIdiom.Desktop>2</OnIdiom.Desktop>
+                        </OnIdiom>
+                    </Grid.ColumnSpan>
 
                     <Label
                         FontAttributes="Bold"
@@ -191,7 +243,7 @@
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
 
-            </VerticalStackLayout>
+            </Grid>
         </VerticalStackLayout>
     </Grid>
 
