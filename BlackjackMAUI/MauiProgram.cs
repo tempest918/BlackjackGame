@@ -36,6 +36,10 @@ namespace MyBlackjackMAUI
             builder.Services.AddTransient<TitlePage>();
             builder.Services.AddTransient<HistoryPage>();
 
+#if ANDROID
+            builder.Services.AddSingleton<IDeviceInfoService, Platforms.Android.DeviceInfoService>();
+#endif
+
             return builder.Build();
         }
     }

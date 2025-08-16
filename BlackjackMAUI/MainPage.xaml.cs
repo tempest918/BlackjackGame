@@ -1,6 +1,7 @@
 ﻿using BlackjackLogic;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
+using MyBlackjackMAUI.Services;
 using Plugin.Maui.Audio;
 
 namespace MyBlackjackMAUI;
@@ -11,13 +12,24 @@ public partial class MainPage : ContentPage
     private readonly IAudioManager _audioManager;
     private readonly Random _random = new();
 
+    public bool IsTablet { get; set; }
     public bool GameInProgress { get; set; }
 
-    public MainPage(IAudioManager audioManager, BlackjackGameLogic game)
+    public MainPage(IAudioManager audioManager, BlackjackGameLogic game, IDeviceInfoService deviceInfoService)
     {
         InitializeComponent();
         _audioManager = audioManager;
         _game = game;
+
+        if (deviceInfoService != null)
+        {
+            IsTablet = deviceInfoService.IsTablet();
+        }
+        else
+        {
+            IsTablet = false;
+        }
+
 
         ApplySettings();
         UpdateUI();

@@ -3,7 +3,15 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:converters="clr-namespace:MyBlackjackMAUI.Converters"
+    x:Name="this"
     BackgroundColor="{StaticResource FeltGreen}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Clicked="btnStats_Click" Text="Stats" />
@@ -16,6 +24,37 @@
     </Shell.BackButtonBehavior>
 
     <Grid Padding="10" RowDefinitions="Auto,*,Auto">
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="DeviceStates">
+                <VisualState x:Name="Phone">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{Binding Source={x:Reference this}, Path=IsTablet, Converter={StaticResource InvertedBoolConverter}}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!-- ControlPanels Grid -->
+                        <Setter TargetName="ControlPanels" Property="Grid.ColumnDefinitions" Value="*" />
+                        <Setter TargetName="ControlPanels" Property="Grid.ColumnSpacing" Value="0" />
+                        <Setter TargetName="ActionControls" Property="Grid.Column" Value="0" />
+                        <Setter TargetName="InsuranceControls" Property="Grid.ColumnSpan" Value="1" />
+                        <Setter TargetName="GameOverControls" Property="Grid.ColumnSpan" Value="1" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Tablet">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{Binding Source={x:Reference this}, Path=IsTablet}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!-- ControlPanels Grid -->
+                        <Setter TargetName="ControlPanels" Property="Grid.ColumnDefinitions" Value="*,*" />
+                        <Setter TargetName="ControlPanels" Property="Grid.ColumnSpacing" Value="20" />
+                        <Setter TargetName="ActionControls" Property="Grid.Column" Value="1" />
+                        <Setter TargetName="InsuranceControls" Property="Grid.ColumnSpan" Value="2" />
+                        <Setter TargetName="GameOverControls" Property="Grid.ColumnSpan" Value="2" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
         <VerticalStackLayout Grid.Row="0" Spacing="10">
             <Label
@@ -60,34 +99,7 @@
             </HorizontalStackLayout>
 
             <Grid x:Name="ControlPanels" HorizontalOptions="Center" RowSpacing="10">
-                <Grid.ColumnDefinitions>
-                    <OnIdiom x:TypeArguments="ColumnDefinitionCollection">
-                        <OnIdiom.Phone>
-                            <ColumnDefinitionCollection>
-                                <ColumnDefinition Width="*" />
-                            </ColumnDefinitionCollection>
-                        </OnIdiom.Phone>
-                        <OnIdiom.Tablet>
-                            <ColumnDefinitionCollection>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </ColumnDefinitionCollection>
-                        </OnIdiom.Tablet>
-                        <OnIdiom.Desktop>
-                            <ColumnDefinitionCollection>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </ColumnDefinitionCollection>
-                        </OnIdiom.Desktop>
-                    </OnIdiom>
-                </Grid.ColumnDefinitions>
-                <Grid.ColumnSpacing>
-                    <OnIdiom x:TypeArguments="x:Double">
-                        <OnIdiom.Phone>0</OnIdiom.Phone>
-                        <OnIdiom.Tablet>20</OnIdiom.Tablet>
-                        <OnIdiom.Desktop>20</OnIdiom.Desktop>
-                    </OnIdiom>
-                </Grid.ColumnSpacing>
+                <!-- ColumnDefinitions and ColumnSpacing are now set by the VisualStateManager -->
 
                 <VerticalStackLayout x:Name="BettingPanel" Spacing="10" Grid.Row="0" Grid.Column="0">
                     <Grid
@@ -153,13 +165,7 @@
                     IsVisible="False"
                     Spacing="10"
                     Grid.Row="0" Grid.Column="0">
-                    <Grid.ColumnSpan>
-                        <OnIdiom x:TypeArguments="x:Int32">
-                            <OnIdiom.Phone>1</OnIdiom.Phone>
-                            <OnIdiom.Tablet>2</OnIdiom.Tablet>
-                            <OnIdiom.Desktop>2</OnIdiom.Desktop>
-                        </OnIdiom>
-                    </Grid.ColumnSpan>
+                    <!-- ColumnSpan is now set by the VisualStateManager -->
                     <Label HorizontalOptions="Center" Text="Dealer has an Ace. Insurance?" />
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
                         <Button
@@ -180,13 +186,7 @@
                     HorizontalOptions="Center"
                     IsVisible="False"
                     Grid.Row="0">
-                    <Grid.Column>
-                        <OnIdiom x:TypeArguments="x:Int32">
-                            <OnIdiom.Phone>0</OnIdiom.Phone>
-                            <OnIdiom.Tablet>1</OnIdiom.Tablet>
-                            <OnIdiom.Desktop>1</OnIdiom.Desktop>
-                        </OnIdiom>
-                    </Grid.Column>
+                    <!-- Grid.Column is now set by the VisualStateManager -->
                     <Button
                         x:Name="btnHit"
                         Grid.Column="0"
@@ -217,13 +217,7 @@
                     IsVisible="False"
                     Spacing="10"
                     Grid.Row="0" Grid.Column="0">
-                    <Grid.ColumnSpan>
-                        <OnIdiom x:TypeArguments="x:Int32">
-                            <OnIdiom.Phone>1</OnIdiom.Phone>
-                            <OnIdiom.Tablet>2</OnIdiom.Tablet>
-                            <OnIdiom.Desktop>2</OnIdiom.Desktop>
-                        </OnIdiom>
-                    </Grid.ColumnSpan>
+                    <!-- ColumnSpan is now set by the VisualStateManager -->
 
                     <Label
                         FontAttributes="Bold"
