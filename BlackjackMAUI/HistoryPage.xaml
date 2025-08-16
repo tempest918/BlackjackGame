@@ -5,7 +5,7 @@
              Title="Historical Stats"
              BackgroundColor="{StaticResource FeltGreen}">
     <Grid RowDefinitions="*, Auto" Padding="10">
-        <ListView x:Name="HistoryListView" Grid.Row="0">
+        <ListView x:Name="HistoryListView" Grid.Row="0" HasUnevenRows="True">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
