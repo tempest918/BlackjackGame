@@ -473,6 +473,7 @@ public partial class MainPage : ContentPage
         }
 
         // Reset the UI
+    txtBet.Text = string.Empty;
         GameOverControls.IsVisible = false;
         pnlPlayerHand.Clear();
         pnlDealerHand.Clear();
