@@ -32,7 +32,16 @@ namespace MyBlackjackMAUI
             builder.Services.AddSingleton<BlackjackLogic.BlackjackGameLogic>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<StatsPage>();
-            builder.Services.AddTransient<SettingsPage>();
+            builder.Services.AddTransient(serviceProvider =>
+            {
+                var bgmManager = serviceProvider.GetRequiredService<BgmManagerService>();
+#if ANDROID
+                var deviceInfoService = serviceProvider.GetRequiredService<IDeviceInfoService>();
+#else
+                IDeviceInfoService deviceInfoService = null;
+#endif
+                return new SettingsPage(bgmManager, deviceInfoService);
+            });
             builder.Services.AddTransient<TitlePage>();
             builder.Services.AddTransient<HistoryPage>();
 

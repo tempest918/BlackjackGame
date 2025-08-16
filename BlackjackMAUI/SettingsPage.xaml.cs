@@ -6,6 +6,7 @@ namespace MyBlackjackMAUI;
 public partial class SettingsPage : ContentPage
 {
     private readonly BgmManagerService _bgmManager;
+    public bool IsTablet { get; set; }
     private readonly Dictionary<string, string> _cardBackOptions = new()
     {
         { "Red 1", "card_back_red_one.png" },
@@ -16,10 +17,18 @@ public partial class SettingsPage : ContentPage
         { "Grey 2", "card_back_grey_two.png" }
     };
 
-    public SettingsPage(BgmManagerService bgmManager)
+    public SettingsPage(BgmManagerService bgmManager, IDeviceInfoService deviceInfoService)
     {
         InitializeComponent();
         _bgmManager = bgmManager;
+        if (deviceInfoService != null)
+        {
+            IsTablet = deviceInfoService.IsTablet();
+        }
+        else
+        {
+            IsTablet = false;
+        }
         LoadSettings();
     }
 

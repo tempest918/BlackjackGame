@@ -3,105 +3,151 @@
     x:Class="MyBlackjackMAUI.SettingsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:MyBlackjackMAUI.Converters"
+    x:Name="this"
     Title="Settings"
     BackgroundColor="{StaticResource FeltGreen}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
+        <Grid Padding="20" x:Name="SettingsGrid">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="DeviceStates">
+                    <VisualState x:Name="Phone">
+                        <VisualState.StateTriggers>
+                            <StateTrigger IsActive="{Binding Source={x:Reference this}, Path=IsTablet, Converter={StaticResource InvertedBoolConverter}}" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter TargetName="SettingsGrid" Property="Grid.ColumnDefinitions" Value="*" />
+                            <Setter TargetName="SettingsGrid" Property="Grid.RowDefinitions" Value="Auto,Auto" />
+                            <Setter TargetName="GameSettingsPanel" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="GameSettingsPanel" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="SoundSettingsPanel" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="SoundSettingsPanel" Property="Grid.Row" Value="1" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Tablet">
+                        <VisualState.StateTriggers>
+                            <StateTrigger IsActive="{Binding Source={x:Reference this}, Path=IsTablet}" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter TargetName="SettingsGrid" Property="Grid.ColumnDefinitions" Value="*,*" />
+                            <Setter TargetName="SettingsGrid" Property="Grid.RowDefinitions" Value="*" />
+                            <Setter TargetName="SettingsGrid" Property="Grid.ColumnSpacing" Value="20" />
+                            <Setter TargetName="GameSettingsPanel" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="GameSettingsPanel" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="SoundSettingsPanel" Property="Grid.Column" Value="1" />
+                            <Setter TargetName="SoundSettingsPanel" Property="Grid.Row" Value="0" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
 
-            <!--  Game Settings Header  -->
-            <Label
-                FontAttributes="Bold"
-                FontSize="22"
-                Text="Game Settings"
-                HorizontalOptions="Center"/>
+            <VerticalStackLayout Spacing="20" x:Name="GameSettingsPanel">
+                <!--  Game Settings Header  -->
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="22"
+                    Text="Game Settings"
+                    HorizontalOptions="Center"/>
 
-            <!--  Number of Decks  -->
-            <Label
-                FontAttributes="Bold"
-                FontSize="18"
-                Text="Number of Decks in Shoe" />
-            <Label
-                x:Name="lblDecksValue"
-                HorizontalOptions="Center"
-                Text="1" />
-            <Slider
-                x:Name="sliderDecks"
-                Maximum="8"
-                Minimum="1"
-                ValueChanged="sliderDecks_ValueChanged" />
-
-            <!--  Felt Color  -->
-            <Label
-                FontAttributes="Bold"
-                FontSize="18"
-                Text="Felt Color" />
-            <Picker x:Name="pickerFeltColor" Title="Select Felt Color">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Green</x:String>
-                        <x:String>Blue</x:String>
-                        <x:String>Red</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
-
-            <!--  Card Back Design  -->
-            <Label
-                FontAttributes="Bold"
-                FontSize="18"
-                Text="Card Back Design" />
-            <Picker x:Name="pickerCardBack" Title="Select Card Back" />
-
-            <!--  Sound Settings Header  -->
-            <Label
-                FontAttributes="Bold"
-                FontSize="22"
-                Text="Sound Settings"
-                HorizontalOptions="Center"/>
-
-            <!--  BGM Volume  -->
-            <Label
-                FontAttributes="Bold"
-                FontSize="18"
-                Text="BGM Volume" />
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                <!--  Number of Decks  -->
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Number of Decks in Shoe" />
+                <Label
+                    x:Name="lblDecksValue"
+                    HorizontalOptions="Center"
+                    Text="1" />
                 <Slider
-                    Grid.Column="0"
-                    x:Name="sliderBgmVolume"
-                    Maximum="1"
-                    Minimum="0"
-                    ValueChanged="sliderBgmVolume_ValueChanged" />
-                <Button
-                    Grid.Column="1"
-                    x:Name="btnMuteBgm"
-                    Clicked="btnMuteBgm_Click"
-                    FontFamily="MaterialIcons"
-                    FontSize="30" />
-            </Grid>
+                    x:Name="sliderDecks"
+                    Maximum="8"
+                    Minimum="1"
+                    ValueChanged="sliderDecks_ValueChanged" />
+
+                <!--  Felt Color  -->
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Felt Color" />
+                <Picker x:Name="pickerFeltColor" Title="Select Felt Color">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Green</x:String>
+                            <x:String>Blue</x:String>
+                            <x:String>Red</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+
+                <!--  Card Back Design  -->
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Card Back Design" />
+                <Picker x:Name="pickerCardBack" Title="Select Card Back" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="20" x:Name="SoundSettingsPanel">
+                <!--  Sound Settings Header  -->
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="22"
+                    Text="Sound Settings"
+                    HorizontalOptions="Center"/>
+
+                <!--  BGM Volume  -->
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="BGM Volume" />
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                    <Slider
+                        Grid.Column="0"
+                        x:Name="sliderBgmVolume"
+                        Maximum="1"
+                        Minimum="0"
+                        ValueChanged="sliderBgmVolume_ValueChanged" />
+                    <Button
+                        Grid.Column="1"
+                        x:Name="btnMuteBgm"
+                        Clicked="btnMuteBgm_Click"
+                        FontFamily="MaterialIcons"
+                        FontSize="30" />
+                </Grid>
 
 
-            <!--  Sound Effects Volume  -->
-            <Label
-                FontAttributes="Bold"
-                FontSize="18"
-                Text="Sound Effects Volume" />
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
-                <Slider
-                    Grid.Column="0"
-                    x:Name="sliderSfxVolume"
-                    Maximum="1"
-                    Minimum="0"
-                    ValueChanged="sliderSfxVolume_ValueChanged" />
-                <Button
-                    Grid.Column="1"
-                    x:Name="btnMuteSfx"
-                    Clicked="btnMuteSfx_Click"
-                    FontFamily="MaterialIcons"
-                    FontSize="30" />
-            </Grid>
+                <!--  Sound Effects Volume  -->
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="Sound Effects Volume" />
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                    <Slider
+                        Grid.Column="0"
+                        x:Name="sliderSfxVolume"
+                        Maximum="1"
+                        Minimum="0"
+                        ValueChanged="sliderSfxVolume_ValueChanged" />
+                    <Button
+                        Grid.Column="1"
+                        x:Name="btnMuteSfx"
+                        Clicked="btnMuteSfx_Click"
+                        FontFamily="MaterialIcons"
+                        FontSize="30" />
+                </Grid>
+            </VerticalStackLayout>
 
             <!--  Action Buttons  -->
             <HorizontalStackLayout
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
                 Margin="0,20,0,0"
                 HorizontalOptions="Center"
                 Spacing="10">
@@ -115,6 +161,6 @@
                     Text="Cancel" />
             </HorizontalStackLayout>
 
-        </VerticalStackLayout>
+        </Grid>
     </ScrollView>
 </ContentPage>
