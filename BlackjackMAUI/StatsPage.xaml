@@ -6,8 +6,9 @@
     xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
     Title="Player Statistics"
     BackgroundColor="{StaticResource FeltGreen}">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+    <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="20" RowSpacing="15">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="15">
             <Label
                 FontAttributes="Bold"
                 FontSize="Large"
@@ -86,7 +87,9 @@
                     Grid.Row="7"
                     Grid.Column="1" />
             </Grid>
+        </VerticalStackLayout>
 
+        <VerticalStackLayout Grid.Row="1" Spacing="15">
             <Label
                 Margin="0,20,0,0"
                 FontAttributes="Bold"
@@ -95,7 +98,9 @@
                 Text="Money Over Time" />
 
             <microcharts:ChartView x:Name="chartView" HeightRequest="200" />
+        </VerticalStackLayout>
 
+        <VerticalStackLayout Grid.Row="2" Spacing="15">
             <Label
                 Margin="0,20,0,0"
                 FontAttributes="Bold"
@@ -136,11 +141,12 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-            <Button
-                Clicked="BackButton_Click"
-                HorizontalOptions="Center"
-                Text="Back to Game" />
         </VerticalStackLayout>
-    </ScrollView>
+
+        <Button
+            Grid.Row="3"
+            Clicked="BackButton_Click"
+            HorizontalOptions="Center"
+            Text="Back to Game" />
+    </Grid>
 </ContentPage>
